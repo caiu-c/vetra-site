@@ -2,6 +2,7 @@
 import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import PanelRuler from '@/components/PanelRuler.astro';
 import { SITE } from '@/config/site';
 
 interface Props {
@@ -48,7 +49,8 @@ const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
       Footer fica FORA do painel, ancorado ao paper, espelhando o mockup que termina em Methodology.
     */}
     <div class="mx-auto max-w-[1280px] px-6 pt-8 pb-8 sm:pt-12 sm:pb-12 md:px-16 md:pt-[50px] md:pb-[50px]">
-      <div class="mx-auto max-w-[1100px] border border-rule bg-canvas">
+      <div class="relative mx-auto max-w-[1100px] border border-rule bg-canvas">
+        <PanelRuler />
         <Header />
         <main>
           <slot />
