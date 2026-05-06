@@ -32,3 +32,6 @@ yarn-debug.log*
 
 # claude code (local-only settings)
 .claude/settings.local.json
+
+# capturas locais para review visual (não versionar)
+.screenshots/
