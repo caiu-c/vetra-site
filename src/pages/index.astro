@@ -1,80 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import MetaLine from '@/components/MetaLine.astro';
+import Hero from '@/components/Hero.astro';
+import Capabilities from '@/components/Capabilities.astro';
+import Methodology from '@/components/Methodology.astro';
 ---
 
 <BaseLayout>
-  <!-- TEST: remover na Fase 2. Exercita as 3 famílias de fonte e os 8 tokens de cor. -->
-  <section
-    class="mx-auto max-w-container px-6 py-20 md:px-16"
-    data-test-typography
-  >
-    <p
-      class="font-mono text-xs uppercase tracking-[0.18em] text-muted"
-      data-test-font="mono"
-    >
-      VS · 001 / FASE 1 · CHECKPOINT VISUAL
-    </p>
-
-    <h1
-      class="mt-6 font-serif text-5xl leading-[0.98] text-ink md:text-7xl"
-      data-test-font="serif"
-    >
-      A coluna vertebral dos
-      <em class="italic">seus dados.</em>
-    </h1>
-
-    <p
-      class="mt-6 max-w-2xl font-sans text-lg text-muted"
-      data-test-font="sans"
-    >
-      Construímos sistemas de dados, agentes de IA e automações com rigor de
-      engenharia. Resultado de negócio sustentado por arquitetura técnica.
-    </p>
-
-    <!-- Bloco de paleta — confirma os 8 tokens de cor -->
-    <div class="mt-12 grid grid-cols-2 gap-2 md:grid-cols-4" data-test-palette>
-      <div class="flex h-16 items-end bg-canvas p-2 ring-1 ring-rule">
-        <span class="font-mono text-[10px] uppercase tracking-wider">canvas</span>
-      </div>
-      <div class="flex h-16 items-end bg-paper p-2 ring-1 ring-rule">
-        <span class="font-mono text-[10px] uppercase tracking-wider">paper</span>
-      </div>
-      <div class="flex h-16 items-end bg-ink p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider text-canvas">
-          ink
-        </span>
-      </div>
-      <div class="flex h-16 items-end bg-accent p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider text-canvas">
-          accent
-        </span>
-      </div>
-      <div class="flex h-16 items-end bg-muted p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider text-canvas">
-          muted
-        </span>
-      </div>
-      <div class="flex h-16 items-end bg-rule p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider">rule</span>
-      </div>
-      <div class="flex h-16 items-end bg-rule-dark p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider text-canvas">
-          rule-dark
-        </span>
-      </div>
-      <div class="flex h-16 items-end bg-muted-on-dark p-2">
-        <span class="font-mono text-[10px] uppercase tracking-wider text-ink">
-          muted-on-dark
-        </span>
-      </div>
-    </div>
-
-    <!--
-      Critério de aceite (DevTools → Computed Style):
-      - [data-test-font="serif"]   → font-family resolve para "Instrument Serif"
-      - [data-test-font="sans"]    → font-family resolve para "Inter Tight"
-      - [data-test-font="mono"]    → font-family resolve para "JetBrains Mono"
-      Em todos: o primeiro nome resolvido NÃO pode ser fallback (Georgia / system-ui / ui-monospace).
-    -->
-  </section>
+  <MetaLine />
+  <Hero />
+  <Capabilities />
+  <Methodology />
 </BaseLayout>
