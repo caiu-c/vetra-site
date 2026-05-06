@@ -1,0 +1,45 @@
+---
+import { NAV, BOOKING_URL, SITE } from '@/config/site';
+---
+
+<header
+  class="sticky top-0 z-40 h-[92px] border-b border-rule bg-paper/90 backdrop-blur-sm"
+>
+  <div
+    class="mx-auto flex h-full max-w-container items-center justify-between px-6 md:px-16"
+  >
+    <a href="/" class="flex items-center gap-3" aria-label={SITE.name}>
+      <span aria-hidden="true" class="font-serif text-2xl leading-none">V</span>
+      <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+    </a>
+
+    <nav
+      class="hidden items-center gap-8 font-mono text-[11px] uppercase tracking-[0.18em] text-ink md:flex"
+      aria-label="Navegação principal"
+    >
+      {
+        NAV.map((item) => (
+          <a href={item.href} class="hover:text-accent">
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a
+      href={BOOKING_URL}
+      class="hidden h-7 w-[100px] items-center justify-center bg-ink font-mono text-[10px] uppercase tracking-[0.18em] text-canvas hover:bg-accent md:inline-flex"
+    >
+      AGENDAR ↗
+    </a>
+
+    <button
+      type="button"
+      class="md:hidden"
+      aria-label="Abrir menu"
+      data-mobile-menu-trigger
+    >
+      <span class="font-mono text-[11px] uppercase tracking-[0.18em]">MENU</span>
+    </button>
+  </div>
+</header>
