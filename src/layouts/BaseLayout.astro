@@ -41,13 +41,24 @@ const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
     <title>{fullTitle}</title>
   </head>
   <body>
-    <Header />
-    <main>
-      <slot />
-    </main>
+    {/*
+      Estrutura de duas camadas (PRD §4.3 + ADR-002):
+      body bg-paper → container 1280 → painel 1100 bg-canvas com moldura 1px rule.
+      Header e seções claras vivem dentro do painel; Methodology também (full-width).
+      Footer fica FORA do painel, ancorado ao paper, espelhando o mockup que termina em Methodology.
+    */}
+    <div class="mx-auto max-w-[1280px] px-6 pt-8 pb-8 sm:pt-12 sm:pb-12 md:px-16 md:pt-[50px] md:pb-[50px]">
+      <div class="mx-auto max-w-[1100px] border border-rule bg-canvas">
+        <Header />
+        <main>
+          <slot />
+        </main>
+      </div>
+    </div>
+
     <Footer />
 
-    <!-- Lenis precisa rodar antes do IntersectionObserver: ordem no <script> garante isso -->
+    {/* Lenis precisa rodar antes do IntersectionObserver: ordem no <script> garante isso */}
     <script>
       import '@/scripts/smooth-scroll';
       import '@/scripts/reveal';
