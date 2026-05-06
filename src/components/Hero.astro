@@ -1,0 +1,48 @@
+---
+import { BOOKING_URL } from '@/config/site';
+import Stats from './Stats.astro';
+---
+
+<section
+  class="mx-auto grid max-w-container gap-16 px-6 py-20 md:grid-cols-[1fr_auto] md:gap-24 md:px-16 md:py-28"
+>
+  <div class="flex flex-col gap-8">
+    <p
+      class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent"
+    >
+      ↳ ENGENHARIA DE DADOS &amp; IA
+    </p>
+
+    <h1
+      class="font-serif text-[48px] leading-[0.98] text-ink md:text-[76px]"
+    >
+      A coluna<br />
+      vertebral dos<br />
+      <em class="italic">seus dados.</em>
+    </h1>
+
+    <p class="max-w-[560px] font-sans text-[17px] leading-relaxed text-muted">
+      Construímos sistemas de dados, agentes de IA e automações com rigor de
+      engenharia. Resultado de negócio sustentado por arquitetura técnica.
+    </p>
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:gap-4">
+      <a
+        href={BOOKING_URL}
+        class="inline-flex h-[46px] w-[240px] items-center justify-center bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas transition-colors hover:bg-accent"
+      >
+        AGENDAR DIAGNÓSTICO ↗
+      </a>
+      <a
+        href="#metodologia"
+        class="inline-flex h-[46px] w-[200px] items-center justify-center border border-ink font-mono text-[12px] uppercase tracking-[0.18em] text-ink transition-colors hover:bg-ink hover:text-canvas"
+      >
+        VER METODOLOGIA
+      </a>
+    </div>
+  </div>
+
+  <aside class="md:self-end md:pb-2">
+    <Stats />
+  </aside>
+</section>
