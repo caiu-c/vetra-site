@@ -46,5 +46,11 @@ const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
       <slot />
     </main>
     <Footer />
+
+    <!-- Lenis precisa rodar antes do IntersectionObserver: ordem no <script> garante isso -->
+    <script>
+      import '@/scripts/smooth-scroll';
+      import '@/scripts/reveal';
+    </script>
   </body>
 </html>
