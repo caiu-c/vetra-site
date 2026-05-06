@@ -78,3 +78,38 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 - Se um redesign abandonar a metáfora "catálogo em capa" — improvável no v1, mas registrar.
 - Se uma página futura precisar full-bleed (ex.: landing de campanha sem moldura), criar variante de BaseLayout em vez de remover a moldura aqui.
 - Se acessibilidade reportar contraste insuficiente entre paper e canvas (são cores próximas; teste de contraste de bordas pode reabrir).
+
+### ADR-003 — Densidade visual sem fotos: SVG inline + tipografia + CSS
+
+**Status:** aceito (correção pré-Fase 5, 2026-05-06).
+
+**Contexto.** Após a correção da estrutura de duas camadas (ADR-002), o site estava estruturalmente correto mas visualmente esparso comparado a referências B2B premium (ASML, IBM, Siemens). Restrições do projeto: sem fotos próprias disponíveis, sem stock photos genéricas (descaracterizam a marca técnica), sem libs de runtime adicionais.
+
+**Decisão.** Adicionar densidade via 9 elementos planejados, todos atendendo `prefers-reduced-motion` e mantendo bundle JS shipado < 30 kB gzipped. Após avaliação visual, **8 elementos foram aceitos integralmente e 1 foi revertido**:
+
+1. ✅ Backdrop SVG no Hero (6 nodes conectados, fade-in estático opacity 0→0.15 em 1s).
+2. ✅ Seção Stack (10 tecnologias em prosa serif 24px com bullets).
+3. ✅ Seção Indicadores (4 métricas serif 96px com placeholders TODO).
+4. ✅ Seção Casos (3 cards verticais com placeholders TODO).
+5. ✅ Ruler ticks no painel (hairlines decorativas + numeração mono 8px, 60 ticks até 6000px).
+6. ✅ Microinterações (nav underline scaleX, CTA scale 1.02, capability hover number).
+7. ✅ Paper grain (SVG fractalNoise ~5% inline no body, fora do painel).
+8. ✅ Craft tipográfico (kerning negativo display, text-wrap balance, tabular-nums).
+9. ❌ SectionRule §NN tipográfico entre seções — **revertido após avaliação visual**.
+
+**Decisões dentro da decisão.**
+
+- **Backdrop estático e não animado progressivamente.** O usuário inicialmente sugeriu linhas se desenhando 1.2s easeOut, mas converteu para fade-in estático após argumentação: contenção institucional > gesto de portfólio criativo. Referências (ASML, IBM, Siemens) são sóbrias; animação dinâmica de linhas seria estética de portfólio criativo, não de consultoria institucional. Headline de 76px é o ponto focal e não pode ser disputado.
+- **SectionRule §NN — aceito condicionalmente, revertido após avaliação visual.** A solução criava um sistema de divisores indexados estilo spec-sheet (§02..§06) entre cada seção. A comparação visual em screenshots confirmou a hipótese de duplicação que motivou a cláusula condicional: cada transição mostrava três marcações idênticas em ~120px verticais (`§ NN` no SectionRule + `NN · NOME` no SectionLabel esquerda + `NN / NOME` no counterpart direita). Reversão executada antes deste ADR (commit isolado): restaurado `border-b` plano em Hero, Stack e Indicadores; componente `SectionRule.astro` deletado. **Aprendizado**: ideia válida em isolamento (sistema de numeração contínuo) falha quando colide com sistemas adjacentes que já carregam a mesma informação. Para projetos futuros: se SectionLabel tem numeração visível, SectionRule precisa adotar OUTRO eixo (ex.: nome de seção em vez de número, ou rule sem etiqueta).
+- **Casos com placeholders.** Conteúdo é fabricado para ocupar espaço editorial; cada cartão carrega comentário `TODO: substituir por casos reais`. Mesma regra que Stats e Indicadores. Antes do go-live (Fase 5+), os 3 casos precisam aprovação dos clientes citados (ou substituição por casos genéricos validados pelo marketing).
+
+**Consequências.**
+- Bundle medido após implementação: **5.25 kB JS gz** (inalterado de antes da fase — nenhum dos commits adicionou JS) e **~5.4 kB CSS gz**. Critério interno <30 kB JS mantido com folga de ~25 kB.
+- 5 componentes novos sobreviveram (HeroBackdrop, Stack, Indicators, Cases, PanelRuler). SectionRule criado e deletado na mesma fase.
+- Renumeração de seções: Methodology passa de 03 para 05 com a inserção de Stack (03) e Indicadores (04).
+- PRD §6 não é fonte canônica para Stack/Indicadores/Casos — são adições editoriais aprovadas em sessão e justificadas aqui. Caso o PRD seja atualizado, mover esta nota para §6.
+
+**Quando reverter.**
+- Se Lighthouse mobile cair abaixo das metas (≥95) por causa de qualquer um dos 8 elementos sobreviventes, isolar e remover. Ruler ticks é o primeiro candidato por ser puramente decorativo.
+- Se o paper grain causar issues de print/screen reader (não deveria — é background-image), desativar via `@media print { body { background-image: none; } }`.
+- Se o backdrop SVG do Hero atrapalhar contraste de leitura em algum tema futuro (ex.: alto contraste forçado), reduzir opacity ou desativar.
