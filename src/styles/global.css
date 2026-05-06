@@ -152,3 +152,14 @@ body {
   background-size: 200px 200px;
 }
 
+/* Craft tipográfico — detalhes editoriais discretos */
+.text-balance {
+  text-wrap: balance;
+}
+.tracking-display {
+  letter-spacing: -0.015em;
+}
+.numerals-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
