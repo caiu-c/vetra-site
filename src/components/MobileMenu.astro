@@ -1,0 +1,58 @@
+---
+import { NAV, BOOKING_URL } from '@/config/site';
+---
+
+<dialog
+  id="mobile-menu"
+  class="m-0 h-full max-h-screen w-full max-w-full bg-paper text-ink backdrop:bg-ink/60"
+  aria-label="Menu de navegação"
+>
+  <div class="flex h-full flex-col px-6 py-6">
+    <div class="flex h-[60px] items-center justify-between">
+      <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+      <button
+        type="button"
+        data-action="close-menu"
+        class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink"
+        aria-label="Fechar menu"
+      >
+        FECHAR ✕
+      </button>
+    </div>
+
+    <nav
+      class="mt-12 flex flex-col gap-6 font-serif text-[28px] leading-tight"
+      aria-label="Navegação mobile"
+    >
+      {
+        NAV.map((item) => (
+          <a href={item.href} data-action="close-menu" class="hover:text-accent">
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a
+      href={BOOKING_URL}
+      class="mt-auto inline-flex h-[46px] w-full items-center justify-center bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas hover:bg-accent"
+    >
+      AGENDAR DIAGNÓSTICO ↗
+    </a>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('mobile-menu') as HTMLDialogElement | null;
+  if (dialog) {
+    document.querySelectorAll('[data-action="open-menu"]').forEach((el) => {
+      el.addEventListener('click', () => dialog.showModal());
+    });
+    dialog.querySelectorAll('[data-action="close-menu"]').forEach((el) => {
+      el.addEventListener('click', () => dialog.close());
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+</script>

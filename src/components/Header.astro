@@ -1,5 +1,6 @@
 ---
 import { NAV, BOOKING_URL, SITE } from '@/config/site';
+import MobileMenu from './MobileMenu.astro';
 ---
 
 <header
@@ -37,9 +38,11 @@ import { NAV, BOOKING_URL, SITE } from '@/config/site';
       type="button"
       class="md:hidden"
       aria-label="Abrir menu"
-      data-mobile-menu-trigger
+      data-action="open-menu"
     >
       <span class="font-mono text-[11px] uppercase tracking-[0.18em]">MENU</span>
     </button>
   </div>
 </header>
+
+<MobileMenu />
