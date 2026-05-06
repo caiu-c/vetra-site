@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="256" height="256" aria-label="Vetra Solutions — symbol">
+  <g stroke="#0A1628" fill="none" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="square">
+    <path d="M8 10 L28 46 L48 10"></path>
+    <path d="M14 10 L28 38 L42 10"></path>
+    <path d="M20 10 L28 30 L36 10"></path>
+  </g>
+  <circle cx="28" cy="46" r="2.2" fill="#0A1628"></circle>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220" width="480" height="440" aria-label="Vetra Solutions — vertical lockup">
+  <g transform="translate(99,52)">
+    <g stroke="#0A1628" fill="none" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="M2 2 L21 44 L40 2"></path>
+      <path d="M7 2 L21 34 L35 2"></path>
+      <path d="M12 2 L21 22 L30 2"></path>
+    </g>
+    <circle cx="21" cy="44" r="1.8" fill="#0A1628"></circle>
+  </g>
+  <text x="120" y="142" text-anchor="middle" font-family="&#39;Instrument Serif&#39;, &#39;Times New Roman&#39;, Georgia, serif" font-weight="400" font-size="22" letter-spacing="0.6" fill="#0A1628">VETRA</text>
+  <text x="120" y="164" text-anchor="middle" font-family="&#39;Instrument Serif&#39;, &#39;Times New Roman&#39;, Georgia, serif" font-weight="400" font-size="22" letter-spacing="0.6" fill="#0A1628">SOLUTIONS</text>
+</svg>

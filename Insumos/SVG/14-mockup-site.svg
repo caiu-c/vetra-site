@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1700" width="1280" height="1700" aria-label="Vetra Solutions — Mockup do site">
+  <rect width="1280" height="1700" fill="#E8E4DA"></rect>
+  <text x="64" y="76" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="11" letter-spacing="2.4" fill="#5A6470">BRAND IDENTITY · VETRA SOLUTIONS</text>
+  <text x="64" y="118" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="42" fill="#0A1628">Mockup de site — homepage</text>
+  <line x1="64" y1="148" x2="1216" y2="148" stroke="#C8CDD4"></line>
+  <text x="1216" y="76" text-anchor="end" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="11" letter-spacing="2.4" fill="#5A6470">R · 06 / 07</text>
+
+  
+  <g transform="translate(90,200)">
+    <rect width="1100" height="1460" fill="#F5F3EE" stroke="#C8CDD4"></rect>
+    
+    <rect width="1100" height="36" fill="#E8E4DA"></rect>
+    <line x1="0" y1="36" x2="1100" y2="36" stroke="#C8CDD4"></line>
+    <circle cx="20" cy="18" r="5" fill="#FF5F57"></circle>
+    <circle cx="38" cy="18" r="5" fill="#FFBD2E"></circle>
+    <circle cx="56" cy="18" r="5" fill="#27C93F"></circle>
+    <rect x="370" y="9" width="360" height="20" fill="#fff" rx="3"></rect>
+    <text x="550" y="23" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" fill="#5A6470">⏵ vetra.solutions</text>
+
+    
+    <line x1="0" y1="92" x2="1100" y2="92" stroke="#C8CDD4"></line>
+    <g transform="translate(48,56)">
+      <g stroke="#0A1628" fill="none" stroke-width="1.2" stroke-linecap="square">
+        <path d="M2 2 L11 22 L20 2"></path>
+        <path d="M5 2 L11 16 L17 2"></path>
+      </g>
+      <circle cx="11" cy="22" r="1.1" fill="#0A1628"></circle>
+      <text x="32" y="18" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="14" fill="#0A1628">VETRA SOLUTIONS</text>
+    </g>
+    <g font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="11" letter-spacing="1.8" fill="#0A1628">
+      <text x="430" y="74">SISTEMAS</text>
+      <text x="540" y="74">METODOLOGIA</text>
+      <text x="680" y="74">CASOS</text>
+      <text x="760" y="74">SOBRE</text>
+    </g>
+    <rect x="952" y="56" width="100" height="28" fill="#0A1628"></rect>
+    <text x="1002" y="74" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="1.4" fill="#F5F3EE">AGENDAR ↗</text>
+
+    
+    <text x="48" y="124" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="2" fill="#5A6470">VS · 001 / VETRA SOLUTIONS</text>
+    <text x="1052" y="124" text-anchor="end" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="2" fill="#5A6470">FORTALEZA · CE · BRASIL</text>
+    <text x="48" y="200" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="11" letter-spacing="2.4" fill="#1E4D8C">↳ ENGENHARIA DE DADOS &amp; IA</text>
+    <text x="48" y="290" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="76" fill="#0A1628">A coluna</text>
+    <text x="48" y="364" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="76" fill="#0A1628">vertebral dos</text>
+    <text x="48" y="438" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-style="italic" font-size="76" fill="#0A1628">seus dados.</text>
+    <g font-family="&#39;Inter Tight&#39;,sans-serif" font-size="17" fill="#5A6470">
+      <text x="48" y="490">Construímos sistemas de dados, agentes de IA e automações com rigor de</text>
+      <text x="48" y="514">engenharia. Resultado de negócio sustentado por arquitetura técnica.</text>
+    </g>
+    <rect x="48" y="546" width="240" height="46" fill="#0A1628"></rect>
+    <text x="168" y="574" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="12" letter-spacing="1.6" fill="#F5F3EE">AGENDAR DIAGNÓSTICO ↗</text>
+    <rect x="304" y="546" width="200" height="46" fill="none" stroke="#0A1628"></rect>
+    <text x="404" y="574" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="12" letter-spacing="1.6" fill="#0A1628">VER METODOLOGIA</text>
+
+    
+    <g font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace">
+      <text x="788" y="568" text-anchor="end" font-size="9" letter-spacing="2.4" fill="#5A6470">PROJETOS</text>
+      <text x="788" y="600" text-anchor="end" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="28" fill="#0A1628">47+</text>
+      <text x="908" y="568" text-anchor="end" font-size="9" letter-spacing="2.4" fill="#5A6470">UPTIME</text>
+      <text x="908" y="600" text-anchor="end" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="28" fill="#0A1628">99.97%</text>
+      <text x="1052" y="568" text-anchor="end" font-size="9" letter-spacing="2.4" fill="#5A6470">ANOS</text>
+      <text x="1052" y="600" text-anchor="end" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="28" fill="#0A1628">04</text>
+    </g>
+
+    
+    <line x1="0" y1="660" x2="1100" y2="660" stroke="#C8CDD4"></line>
+    <text x="48" y="720" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="2.4" fill="#5A6470">02 · CAPACIDADES</text>
+    <text x="48" y="772" font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="38" fill="#0A1628">Quatro camadas. Um sistema.</text>
+    <text x="1052" y="772" text-anchor="end" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="1.8" fill="#5A6470">04 / SISTEMAS</text>
+
+    
+    <g transform="translate(48,820)">
+      <rect width="1004" height="220" fill="none" stroke="#C8CDD4"></rect>
+      <line x1="251" y1="0" x2="251" y2="220" stroke="#C8CDD4"></line>
+      <line x1="502" y1="0" x2="502" y2="220" stroke="#C8CDD4"></line>
+      <line x1="753" y1="0" x2="753" y2="220" stroke="#C8CDD4"></line>
+      <g font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace">
+        <text x="20" y="32" font-size="11" letter-spacing="1.8" fill="#1E4D8C">01</text>
+        <text x="271" y="32" font-size="11" letter-spacing="1.8" fill="#1E4D8C">02</text>
+        <text x="522" y="32" font-size="11" letter-spacing="1.8" fill="#1E4D8C">03</text>
+        <text x="773" y="32" font-size="11" letter-spacing="1.8" fill="#1E4D8C">04</text>
+      </g>
+      <g font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="20" fill="#0A1628">
+        <text x="20" y="170">Bancos de dados</text>
+        <text x="271" y="170">Dashboards</text>
+        <text x="522" y="170">Agentes de IA</text>
+        <text x="773" y="170">Automações</text>
+      </g>
+      <g font-family="&#39;Inter Tight&#39;,sans-serif" font-size="12" fill="#5A6470">
+        <text x="20" y="194">Modelagem, ETL/ELT,</text>
+        <text x="20" y="210">infraestrutura confiável.</text>
+        <text x="271" y="194">Camada analítica que vira</text>
+        <text x="271" y="210">decisão acionável.</text>
+        <text x="522" y="194">Sistemas autônomos com</text>
+        <text x="522" y="210">guardrails e observabilidade.</text>
+        <text x="773" y="194">RPA, orquestração,</text>
+        <text x="773" y="210">integração de sistemas.</text>
+      </g>
+    </g>
+
+    
+    <g transform="translate(0,1080)">
+      <rect width="1100" height="380" fill="#0A1628"></rect>
+      <text x="48" y="60" font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="10" letter-spacing="2.4" fill="#8a96a8">03 · METODOLOGIA</text>
+      <g font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="32" fill="#F5F3EE">
+        <text x="48" y="120">Não entregamos código —</text>
+        <text x="48" y="160">entregamos <tspan font-style="italic">estrutura</tspan>. Cada projeto começa</text>
+        <text x="48" y="200">com diagnóstico técnico, segue para fundação</text>
+        <text x="48" y="240">arquitetural, e só então vira operação.</text>
+      </g>
+      <line x1="48" y1="280" x2="1052" y2="280" stroke="#2a3a52"></line>
+      <g font-family="&#39;JetBrains Mono&#39;,ui-monospace,monospace" font-size="9" letter-spacing="2.4" fill="#8a96a8">
+        <text x="48" y="312">FASE 01</text>
+        <text x="386" y="312">FASE 02</text>
+        <text x="724" y="312">FASE 03</text>
+      </g>
+      <g font-family="&#39;Instrument Serif&#39;,Georgia,serif" font-size="18" fill="#fff">
+        <text x="48" y="338">Diagnóstico</text>
+        <text x="386" y="338">Fundação</text>
+        <text x="724" y="338">Operação</text>
+      </g>
+      <g font-family="&#39;Inter Tight&#39;,sans-serif" font-size="12" fill="#8a96a8">
+        <text x="48" y="358">Mapa do sistema, gargalos.</text>
+        <text x="386" y="358">Arquitetura e implantação.</text>
+        <text x="724" y="358">Monitoramento e SLA.</text>
+      </g>
+    </g>
+  </g>
+</svg>
