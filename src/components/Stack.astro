@@ -1,0 +1,45 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+const techs = [
+  'PostgreSQL',
+  'Snowflake',
+  'dbt',
+  'Airflow',
+  'Python',
+  'LangChain',
+  'Streamlit',
+  'Vercel',
+  'Docker',
+  'GitHub Actions',
+] as const;
+---
+
+<section
+  id="stack"
+  data-reveal
+  class="border-b border-rule px-6 py-20 md:px-12"
+>
+  <SectionLabel number="03" name="STACK" counterpart="10 / TECNOLOGIAS" />
+
+  <h2
+    class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
+  >
+    Stack técnica.
+  </h2>
+
+  <p
+    class="mt-12 flex max-w-[900px] flex-wrap items-baseline gap-x-3 gap-y-2"
+  >
+    {
+      techs.map((t, i) => (
+        <>
+          <span class="font-serif text-[24px] leading-none text-ink">{t}</span>
+          {i < techs.length - 1 && (
+            <span class="font-mono text-[18px] leading-none text-muted">·</span>
+          )}
+        </>
+      ))
+    }
+  </p>
+</section>
