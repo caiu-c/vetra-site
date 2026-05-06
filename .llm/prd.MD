@@ -114,8 +114,12 @@ fontFamily: {
 
 ### 4.3 Sistema de grid
 
-- **Container**: `max-width: 1280px`, padding lateral `64px` (desktop), `24px` (mobile).
-- **Painel interno**: `max-width: 1100px` centralizado dentro do container, com padding interno `48px`.
+**Estrutura visual de duas camadas.** A página é composta por duas tonalidades de bege em camadas: o `<body>` é renderizado em `paper` (#E8E4DA, mais quente) e abre uma moldura para um **painel** centralizado em `canvas` (#F5F3EE, mais claro), com **borda 1px solid `rule`** (#C8CDD4) e **cantos retos** (sem `border-radius` nem `box-shadow` — estética editorial). Todas as seções claras (Header, MetaLine, Hero, Capabilities) vivem **dentro** do painel; a seção Methodology também, ocupando 100% da largura do painel mas trocando o fundo interno para `ink`. O Footer fica **fora** do painel, ancorado novamente em `paper`. A leitura visual pretendida é a de "página de catálogo dentro de uma capa". Ver mockup `Insumos/SVG/14-mockup-site.svg` (rect 1100×1460 com stroke).
+
+**Métricas:**
+
+- **Container externo**: `max-width: 1280px`, padding lateral `64px` (desktop), `24px` (mobile). Padding vertical fluido para criar a margem de paper visível ao redor do painel: `32px` mobile / `48px` ≥640 / `50px` ≥768.
+- **Painel interno**: `max-width: 1100px` centralizado dentro do container, com padding interno `48px`. Fundo `canvas`, borda `1px solid rule`, sem raio nem sombra.
 - **Grid**: 12 colunas, `gap: 24px` (desktop), `gap: 16px` (mobile).
 - **Variáveis CSS** expostas em `:root` para uso pontual fora do Tailwind:
 
