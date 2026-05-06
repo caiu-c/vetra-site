@@ -36,8 +36,12 @@ const capabilities = [
     Quatro camadas. Um sistema.
   </h2>
 
+  {/*
+    Container dos 4 cards: borda externa 1px solid rule (rect 1004x220 do mockup) +
+    divisores internos verticais entre os cards (em md:) ou horizontais (em mobile).
+  */}
   <ul
-    class="mt-12 grid grid-cols-1 divide-y divide-rule md:grid-cols-4 md:divide-x md:divide-y-0"
+    class="mt-12 grid grid-cols-1 divide-y divide-rule border border-rule md:grid-cols-4 md:divide-x md:divide-y-0"
   >
     {
       capabilities.map(({ n, title, desc }) => (
