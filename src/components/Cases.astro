@@ -1,0 +1,65 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+/* TODO: substituir por casos reais, com aprovação do cliente para cada peça */
+const cases = [
+  {
+    sector: 'VAREJO · NORDESTE',
+    title: 'Pipeline analítico unificado',
+    impact:
+      'Migração de 14 fontes para data lake centralizado, com SLA de freshness de 5 minutos.',
+    highlight: '14×',
+    highlightLabel: 'fontes consolidadas',
+  },
+  {
+    sector: 'INDÚSTRIA · SUDESTE',
+    title: 'Agentes de IA em logística',
+    impact:
+      'Roteirização autônoma com guardrails humanos para exceções operacionais.',
+    highlight: '32%',
+    highlightLabel: 'redução em custo de frete',
+  },
+  {
+    sector: 'SERVIÇOS · BRASIL',
+    title: 'Camada semântica + dashboards executivos',
+    impact:
+      'Camada semântica em dbt + Streamlit para 7 áreas de negócio.',
+    highlight: '07',
+    highlightLabel: 'áreas atendidas',
+  },
+] as const;
+---
+
+<section id="casos" data-reveal class="px-6 py-20 md:px-12">
+  <SectionLabel number="06" name="CASOS" counterpart="03 / EXEMPLOS" />
+
+  <h2
+    class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
+  >
+    Trabalhos selecionados.
+  </h2>
+
+  <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+    {
+      cases.map(({ sector, title, impact, highlight, highlightLabel }) => (
+        <li class="flex flex-col gap-6 border border-rule p-8">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+            {sector}
+          </span>
+          <h3 class="text-balance font-serif text-[24px] leading-tight text-ink">
+            {title}
+          </h3>
+          <p class="font-sans text-[14px] leading-relaxed text-muted">{impact}</p>
+          <div class="mt-auto flex items-baseline gap-3">
+            <span class="numerals-tabular tracking-display font-serif text-[48px] leading-none text-ink">
+              {highlight}
+            </span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+              {highlightLabel}
+            </span>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
