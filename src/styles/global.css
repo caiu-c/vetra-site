@@ -163,3 +163,20 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Hero backdrop fade-in — única ocorrência, no carregamento da página */
+.hero-backdrop {
+  opacity: 0;
+  animation: hero-backdrop-in 1s 0.2s ease-out forwards;
+}
+@keyframes hero-backdrop-in {
+  to {
+    opacity: 0.15;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-backdrop {
+    animation: none;
+    opacity: 0.15;
+  }
+}
+

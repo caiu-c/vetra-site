@@ -1,16 +1,20 @@
 ---
 import { BOOKING_URL } from '@/config/site';
 import Stats from './Stats.astro';
+import HeroBackdrop from './HeroBackdrop.astro';
 ---
 
 {/*
   border-b border-rule fecha o Hero e separa visualmente do bloco Capabilities,
   espelhando a <line y=660> do mockup dentro do painel.
+  Position relative para o backdrop SVG se ancorar à direita.
 */}
 <section
-  class="grid gap-16 border-b border-rule px-6 py-20 md:grid-cols-[1fr_auto] md:gap-24 md:px-12 md:py-28"
+  class="relative grid gap-16 border-b border-rule px-6 py-20 md:grid-cols-[1fr_auto] md:gap-24 md:px-12 md:py-28"
 >
-  <div class="flex flex-col gap-8">
+  <HeroBackdrop />
+
+  <div class="relative z-10 flex flex-col gap-8">
     <p
       class="stagger stagger-1 font-mono text-[11px] uppercase tracking-[0.24em] text-accent"
     >
@@ -46,7 +50,7 @@ import Stats from './Stats.astro';
     </div>
   </div>
 
-  <aside class="md:self-end md:pb-2">
+  <aside class="relative z-10 md:self-end md:pb-2">
     <Stats />
   </aside>
 </section>

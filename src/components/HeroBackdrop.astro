@@ -1,0 +1,33 @@
+---
+/*
+  Diagrama abstrato de arquitetura de dados — 6 nodes conectados, decorativo.
+  Estática com fade-in suave (opacity 0 → 0.15 em 1s). NÃO compete com headline.
+  ADR-003 explicará a opção pelo estático em vez de animação progressiva de linhas.
+*/
+---
+
+<svg
+  class="hero-backdrop pointer-events-none absolute inset-y-0 right-0 hidden h-full w-[42%] text-accent md:block"
+  viewBox="0 0 400 500"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1"
+  aria-hidden="true"
+>
+  {/* Linhas de conexão — finas, opacidade herda do contêiner */}
+  <line x1="100" y1="80" x2="280" y2="120" />
+  <line x1="100" y1="80" x2="200" y2="240" />
+  <line x1="60" y1="200" x2="200" y2="240" />
+  <line x1="200" y1="240" x2="320" y2="320" />
+  <line x1="200" y1="240" x2="120" y2="380" />
+  <line x1="280" y1="120" x2="320" y2="320" />
+  <line x1="280" y1="120" x2="60" y2="200" />
+
+  {/* Nodes — circles preenchidos com accent */}
+  <circle cx="100" cy="80" r="6" fill="currentColor" />
+  <circle cx="280" cy="120" r="4" fill="currentColor" />
+  <circle cx="60" cy="200" r="5" fill="currentColor" />
+  <circle cx="200" cy="240" r="6" fill="currentColor" />
+  <circle cx="320" cy="320" r="4" fill="currentColor" />
+  <circle cx="120" cy="380" r="5" fill="currentColor" />
+</svg>
