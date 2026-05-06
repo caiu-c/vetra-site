@@ -7,7 +7,12 @@ const stats = [
 ] as const;
 ---
 
-<dl class="flex flex-row flex-wrap gap-x-6 gap-y-4 md:flex-col md:flex-nowrap md:gap-8">
+{/*
+  Layout horizontal em todos os breakpoints: o mockup posiciona os 3 stats lado a lado
+  no rail direito do Hero, alinhados verticalmente com os CTAs. Em mobile, descem juntos
+  para baixo dos CTAs mantendo a horizontalidade (não vira coluna vertical).
+*/}
+<dl class="flex flex-row flex-wrap gap-x-8 gap-y-4 md:gap-x-10">
   {
     stats.map(({ label, value }) => (
       <div class="flex flex-col gap-1">
