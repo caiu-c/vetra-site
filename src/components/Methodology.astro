@@ -1,0 +1,40 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+const phases = [
+  { n: 'FASE 01', title: 'Diagnóstico', desc: 'Mapa do sistema, gargalos.' },
+  { n: 'FASE 02', title: 'Fundação', desc: 'Arquitetura e implantação.' },
+  { n: 'FASE 03', title: 'Operação', desc: 'Monitoramento e SLA.' },
+] as const;
+---
+
+<section id="metodologia" class="mx-auto max-w-container px-6 py-12 md:px-16 md:py-16">
+  <div class="mx-auto max-w-panel bg-ink px-6 py-12 md:px-12 md:py-16">
+    <SectionLabel number="03" name="METODOLOGIA" variant="dark" />
+
+    <h2
+      class="mt-8 max-w-3xl font-serif text-[26px] leading-tight text-canvas md:text-[32px]"
+    >
+      Não entregamos código — entregamos <em class="italic">estrutura</em>. Cada
+      projeto começa com diagnóstico técnico, segue para fundação arquitetural,
+      e só então vira operação.
+    </h2>
+
+    <hr class="mt-12 border-rule-dark" />
+
+    <ul class="mt-10 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+      {
+        phases.map(({ n, title, desc }) => (
+          <li class="flex flex-col gap-3">
+            <span class="font-mono text-[10px] uppercase tracking-[0.24em] text-muted-on-dark">
+              {n} — {title}
+            </span>
+            <p class="font-sans text-[14px] leading-relaxed text-canvas">
+              {desc}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
