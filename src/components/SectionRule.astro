@@ -1,0 +1,27 @@
+---
+/*
+  Divisor tipográfico §NN — substitui border-b plano por uma linha rule com
+  o número da próxima seção sentado sobre ela em mono accent. Estilo spec-sheet.
+  ADR-003: a aprovação visual desta decisão fica condicional ao parecer do usuário —
+  se redundante com SectionLabel das seções, reverter para border-b.
+*/
+interface Props {
+  num: string;
+  variant?: 'light' | 'dark';
+}
+const { num, variant = 'light' } = Astro.props;
+const bg = variant === 'dark' ? 'bg-ink' : 'bg-canvas';
+const tone = variant === 'dark' ? 'text-muted-on-dark' : 'text-accent';
+---
+
+<div class="relative mx-6 h-px bg-rule md:mx-12">
+  <span
+    class:list={[
+      'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-3 font-mono text-[9px] uppercase tracking-[0.18em]',
+      bg,
+      tone,
+    ]}
+  >
+    § {num}
+  </span>
+</div>
