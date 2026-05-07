@@ -16,7 +16,7 @@ import HeroBackdrop from './HeroBackdrop.astro';
 
   <div class="relative z-10 flex flex-col gap-8">
     <p
-      class="stagger stagger-1 font-mono text-[11px] uppercase tracking-[0.24em] text-accent"
+      class="stagger stagger-1 font-mono text-[11px] uppercase tracking-[0.24em] text-azure"
     >
       ↳ ENGENHARIA DE DADOS &amp; IA
     </p>
@@ -37,9 +37,10 @@ import HeroBackdrop from './HeroBackdrop.astro';
     <div class="stagger stagger-6 flex flex-col gap-4 sm:flex-row sm:gap-4">
       <a
         href={BOOKING_URL}
-        class="inline-flex h-[46px] w-[240px] items-center justify-center bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas transition-[transform,background-color] duration-150 hover:scale-[1.02] hover:bg-accent motion-reduce:hover:scale-100"
+        class="inline-flex h-[46px] w-[240px] items-center justify-center gap-1 bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas transition-[transform,background-color] duration-150 hover:scale-[1.02] hover:bg-accent motion-reduce:hover:scale-100"
       >
-        AGENDAR DIAGNÓSTICO ↗
+        <span>AGENDAR DIAGNÓSTICO</span>
+        <span class="text-azure" aria-hidden="true">↗</span>
       </a>
       <a
         href="#metodologia"

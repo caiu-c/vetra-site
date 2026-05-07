@@ -28,9 +28,10 @@ import ApertureSymbol from './ApertureSymbol.astro';
 
     <a
       href={BOOKING_URL}
-      class="hidden h-7 w-[100px] items-center justify-center bg-ink font-mono text-[10px] uppercase tracking-[0.18em] text-canvas transition-transform duration-150 hover:scale-[1.02] hover:bg-accent motion-reduce:hover:scale-100 md:inline-flex"
+      class="hidden h-7 w-[100px] items-center justify-center gap-1 bg-ink font-mono text-[10px] uppercase tracking-[0.18em] text-canvas transition-transform duration-150 hover:scale-[1.02] hover:bg-accent motion-reduce:hover:scale-100 md:inline-flex"
     >
-      AGENDAR ↗
+      <span>AGENDAR</span>
+      <span class="text-azure" aria-hidden="true">↗</span>
     </a>
 
     <button

@@ -39,9 +39,10 @@ import ApertureSymbol from './ApertureSymbol.astro';
 
     <a
       href={BOOKING_URL}
-      class="mt-auto inline-flex h-[46px] w-full items-center justify-center bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas hover:bg-accent"
+      class="mt-auto inline-flex h-[46px] w-full items-center justify-center gap-1 bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas hover:bg-accent"
     >
-      AGENDAR DIAGNÓSTICO ↗
+      <span>AGENDAR DIAGNÓSTICO</span>
+      <span class="text-azure" aria-hidden="true">↗</span>
     </a>
   </div>
 </dialog>
