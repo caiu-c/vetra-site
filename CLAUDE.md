@@ -17,6 +17,7 @@ Sempre consulte o PRD antes de tomar decisões de implementação.
 - Commits em português, formato: "tipo: descrição curta" (ex: "feat: hero section").
 - **Validação obrigatória antes de cada commit:** rodar `pnpm typecheck && pnpm lint && pnpm build` antes de `git commit`, sem exceção — inclui commits de scripts e infra. Pular qualquer um é fonte conhecida de débito que vaza para commits posteriores (incidente da Fase 5: lint não rodou em commits de geração de assets em `scripts/`, erros surgiram em commit subsequente).
 - **Estrutura visual de duas camadas (PRD §4.3 + ADR-002):** seção clara nunca renderiza direto sobre `paper`. Toda seção clara (Header, MetaLine, Hero, Capabilities) vive **dentro** do painel `canvas` (1100px max, com borda 1px solid `rule`). Methodology também fica dentro do painel mas com fundo `ink` edge-to-edge. Footer é a única exceção: fica fora do painel, sobre `paper`. Cantos do painel são retos (sem `rounded-*`) e sem `shadow-*`.
+- **Sitemap:** gerado manualmente em `public/sitemap.xml`. Quando o site tiver 5+ rotas, considerar `src/pages/sitemap.xml.ts` dinâmico (com data do build e listagem de routes via `import.meta.glob`). `@astrojs/sitemap` foi avaliado e descartado em 2026-05-06: 3.7.2 incompatível com Astro 4 (mesmo padrão do `@astrojs/react@5`), e a alternativa manual cobre 100% do caso atual sem dependência.
 
 ## Comandos
 - pnpm dev — ambiente local
