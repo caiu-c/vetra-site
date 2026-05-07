@@ -11,6 +11,8 @@ export default {
         paper: '#E8E4DA',
         ink: '#0A1628',
         accent: '#1E4D8C',
+        azure: '#4A90E2',
+        bone: '#FAFAF7',
         muted: '#5A6470',
         rule: '#C8CDD4',
         'rule-dark': '#2A3A52',
