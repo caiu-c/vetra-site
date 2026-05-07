@@ -2,8 +2,9 @@ export const SITE = {
   name: 'Vetra Solutions',
   domain: 'vetrasolutions.com.br',
   url: 'https://vetrasolutions.com.br',
+  title: 'Vetra Solutions — Engenharia de Dados & IA',
   description:
-    'Consultoria B2B de Engenharia de Dados e IA. Bancos de dados, dashboards analíticos, agentes de IA e automações de processo.',
+    'Construímos sistemas de dados, agentes de IA e automações com rigor de engenharia. Resultado de negócio sustentado por arquitetura técnica.',
   city: 'Fortaleza/CE',
   founded: 2026,
 } as const;
@@ -16,6 +17,15 @@ export const CONTACT = {
   email: 'contato@vetrasolutions.com.br',
   linkedin: 'https://www.linkedin.com/company/vetra-solutions',
   cnpj: '00.000.000/0001-00',
+} as const;
+
+// TODO: confirmar endereço completo antes do go-live (validar com cliente)
+export const ADDRESS = {
+  streetAddress: 'TODO',
+  addressLocality: 'Fortaleza',
+  addressRegion: 'CE',
+  postalCode: 'TODO',
+  addressCountry: 'BR',
 } as const;
 
 export const NAV = [
