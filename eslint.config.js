@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import astro from 'eslint-plugin-astro';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import globals from 'globals';
 
 export default [
   { ignores: ['dist/', '.astro/', 'node_modules/', 'public/'] },
@@ -17,5 +18,13 @@ export default [
   {
     files: ['src/env.d.ts'],
     rules: { '@typescript-eslint/triple-slash-reference': 'off' },
+  },
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
   },
 ];
