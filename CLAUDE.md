@@ -11,7 +11,11 @@ Sempre consulte o PRD antes de tomar decisões de implementação.
 
 ## Convenções
 - Componentes Astro têm extensão .astro; React só quando há interatividade.
-- Cores: usar tokens do tailwind.config (canvas, paper, ink, accent, muted, rule).
+- Cores: usar tokens do tailwind.config (canvas, paper, ink, accent, azure, bone, muted, rule, rule-dark, muted-on-dark). Semântica conforme `Insumos/SVG/10-cor-tipografia.svg`:
+  - **`accent` (Steel Blue #1E4D8C)** — institucional/técnico: numeração de SectionLabel, símbolo aperture em watermarks, elementos de marca.
+  - **`azure` (#4A90E2)** — *highlight interativo*: setas ↗ de CTA, underline animado de nav, focus rings, eyebrow do Hero. Nunca usar como fundo de bloco grande (vira tom "vendedor", oposto ao registro institucional).
+  - **`bone` (#FAFAF7)** — *surface light*: terceira camada de profundidade quando `canvas` e `paper` não bastam (ex.: card destacado dentro de Indicadores; modal sobre canvas). Usar com parcimônia — as duas camadas paper+canvas já cobrem 95% dos casos.
+  - **TODO — alinhamento de nomenclatura com brand book:** o manual em `Insumos/SVG/10-cor-tipografia.svg` usa `paper`=#F5F3EE e `paper-2`=#E8E4DA, enquanto nossa config Tailwind usa `canvas`=#F5F3EE e `paper`=#E8E4DA — **trocados**. Mexer cascata por toda a base de componentes (~30 arquivos, regressão visual provável). Reservado para uma fase dedicada de "naming alignment" com checkpoint visual obrigatório.
 - Tipografia: classes utilitárias font-serif, font-sans, font-mono.
 - Não adicionar dependências sem justificar a escolha.
 - Commits em português, formato: "tipo: descrição curta" (ex: "feat: hero section").
