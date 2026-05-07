@@ -2,20 +2,32 @@
 import ApertureSymbol from './ApertureSymbol.astro';
 
 /*
-  Watermark decorativo: símbolo aperture em escala grande (~600px),
-  posicionado parcialmente fora do painel à direita, em accent (Steel Blue)
-  com opacidade 0.07. Container tem overflow:hidden para clipar a parte que
-  vaza, criando sensação de continuidade. Hidden em mobile (md:block) para
-  não poluir telas estreitas.
+  Watermark embutível: símbolo aperture posicionado absolute, designed para
+  ser embutido dentro de uma <section> com `relative overflow-hidden`.
+  Renderiza atrás do conteúdo da seção (z-0 implícito), criando sensação
+  de fundo de marca, não de elemento sobreposto.
+
+  Defaults: size=600, position="right" com -right-32, opacity=0.07.
+  Hidden em mobile (md:block) — em telas estreitas o watermark vira ruído.
   Decoração pura: aria-hidden + pointer-events-none.
 */
+interface Props {
+  size?: number;
+  position?: 'right' | 'left';
+  opacity?: number;
+}
+
+const { size = 600, position = 'right', opacity = 0.07 } = Astro.props;
+const positionClass = position === 'right' ? '-right-32' : '-left-32';
 ---
 
-<aside
+<div
   aria-hidden="true"
-  class="pointer-events-none relative hidden h-[200px] overflow-hidden md:block"
+  class:list={[
+    'pointer-events-none absolute top-1/2 z-0 hidden -translate-y-1/2 text-accent md:block',
+    positionClass,
+  ]}
+  style={`opacity: ${opacity}`}
 >
-  <div class="absolute -right-32 top-1/2 -translate-y-1/2 text-accent opacity-[0.07]">
-    <ApertureSymbol size={600} ariaLabel="" />
-  </div>
-</aside>
+  <ApertureSymbol size={size} ariaLabel="" />
+</div>

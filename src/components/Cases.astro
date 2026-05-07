@@ -1,5 +1,6 @@
 ---
 import SectionLabel from './SectionLabel.astro';
+import ApertureWatermark from './ApertureWatermark.astro';
 
 /* TODO: substituir por casos reais, com aprovação do cliente para cada peça */
 const cases = [
@@ -30,16 +31,23 @@ const cases = [
 ] as const;
 ---
 
-<section id="casos" data-reveal class="px-6 py-20 md:px-12">
-  <SectionLabel number="06" name="CASOS" counterpart="03 / EXEMPLOS" />
+<section
+  id="casos"
+  data-reveal
+  class="relative overflow-hidden px-6 py-20 md:px-12"
+>
+  <ApertureWatermark />
 
-  <h2
-    class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
-  >
-    Trabalhos selecionados.
-  </h2>
+  <div class="relative z-10">
+    <SectionLabel number="06" name="CASOS" counterpart="03 / EXEMPLOS" />
 
-  <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+    <h2
+      class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
+    >
+      Trabalhos selecionados.
+    </h2>
+
+    <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
     {
       cases.map(({ sector, title, impact, highlight, highlightLabel }) => (
         <li class="flex flex-col gap-6 border border-rule p-8">
@@ -61,5 +69,6 @@ const cases = [
         </li>
       ))
     }
-  </ul>
+    </ul>
+  </div>
 </section>
