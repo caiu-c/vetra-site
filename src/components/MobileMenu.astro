@@ -1,5 +1,6 @@
 ---
 import { NAV, BOOKING_URL } from '@/config/site';
+import ApertureSymbol from './ApertureSymbol.astro';
 ---
 
 <dialog
@@ -9,7 +10,10 @@ import { NAV, BOOKING_URL } from '@/config/site';
 >
   <div class="flex h-full flex-col px-6 py-6">
     <div class="flex h-[60px] items-center justify-between">
-      <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+      <div class="flex items-center gap-3 text-ink">
+        <ApertureSymbol size={24} ariaLabel="" />
+        <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+      </div>
       <button
         type="button"
         data-action="close-menu"

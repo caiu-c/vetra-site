@@ -1,0 +1,42 @@
+---
+/*
+  Símbolo aperture oficial (3 chevrons + ponto na base).
+  Source: Insumos/SVG/01-symbol-aperture.svg.
+  viewBox 56×56, stroke-width 1.6 (proporcional ao tamanho).
+  Cor herda via currentColor para permitir text-ink, text-accent etc no parent.
+*/
+interface Props {
+  size?: number;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  size = 28,
+  class: className = '',
+  ariaLabel = 'Vetra Solutions',
+} = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 56 56"
+  width={size}
+  height={size}
+  class={className}
+  aria-label={ariaLabel}
+  role="img"
+>
+  <g
+    stroke="currentColor"
+    fill="none"
+    stroke-width="1.6"
+    stroke-linejoin="miter"
+    stroke-linecap="square"
+  >
+    <path d="M8 10 L28 46 L48 10" />
+    <path d="M14 10 L28 38 L42 10" />
+    <path d="M20 10 L28 30 L36 10" />
+  </g>
+  <circle cx="28" cy="46" r="2.2" fill="currentColor" />
+</svg>
