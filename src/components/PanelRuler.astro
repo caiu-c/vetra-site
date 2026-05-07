@@ -17,7 +17,7 @@ const ticks = Array.from({ length: 60 }, (_, i) => ({
 
 <div
   aria-hidden="true"
-  class="pointer-events-none absolute inset-y-0 left-0 hidden w-12 md:block"
+  class="pointer-events-none absolute inset-y-0 left-0 hidden w-12 overflow-hidden md:block"
 >
   {
     ticks.map(({ y, hasNumber }) => (
