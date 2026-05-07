@@ -3,15 +3,41 @@ import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import PanelRuler from '@/components/PanelRuler.astro';
-import { SITE } from '@/config/site';
+import { SITE, ADDRESS, CONTACT } from '@/config/site';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const { title = SITE.name, description = SITE.description } = Astro.props;
-const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+const { title = SITE.title, description = SITE.description } = Astro.props;
+
+/* JSON-LD Organization (schema.org) — campos TODO ficam visíveis no source para
+   sinalizar pendências antes do go-live: telephone (formato E.164), email,
+   address (streetAddress + postalCode reais), sameAs (URLs validadas). */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+  foundingDate: String(SITE.founded),
+  // TODO: confirmar email institucional antes do go-live
+  email: CONTACT.email,
+  // TODO: adicionar telefone real em formato E.164 (+55 85 ...)
+  telephone: 'TODO',
+  // TODO: validar URLs de redes sociais antes do go-live
+  sameAs: [CONTACT.linkedin],
+  taxID: CONTACT.cnpj,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: ADDRESS.streetAddress,
+    addressLocality: ADDRESS.addressLocality,
+    addressRegion: ADDRESS.addressRegion,
+    postalCode: ADDRESS.postalCode,
+    addressCountry: ADDRESS.addressCountry,
+  },
+};
 ---
 
 <!doctype html>
@@ -39,7 +65,9 @@ const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
       crossorigin
     />
 
-    <title>{fullTitle}</title>
+    <title>{title}</title>
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     {/*
