@@ -1,0 +1,132 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BOOKING_URL, SITE } from '@/config/site';
+import { LEVELS, MAX_SCORE, QUESTIONS } from '@/data/maturity';
+import { emphasize } from '@/lib/emphasis';
+
+/*
+  Teste de maturidade de dados (ADR-012, auditoria de conversão C3): porta para quem
+  ainda está pesquisando. Resultado calculado no navegador pelo script desta página
+  (não entra no bundle das outras), com recomendação e convite ao diagnóstico.
+*/
+---
+
+<BaseLayout
+  title={`Teste de maturidade de dados (3 min) | ${SITE.name}`}
+  description="Responda 8 perguntas e descubra em que estágio estão os dados da sua empresa, com a recomendação de por onde começar. Gratuito, resultado na hora."
+  contactOnPage={false}
+>
+  <section class="bg-canvas">
+    <div class="wrap flex flex-col gap-6 pb-12 pt-32 md:pb-16 md:pt-40">
+      <h1
+        class="font-expanded max-w-[20ch] text-balance text-display font-semibold tracking-display text-ink"
+        set:html={emphasize('Teste de maturidade de dados em *3 minutos*.')}
+      />
+      <p class="max-w-measure text-pretty text-lead text-muted">
+        Oito perguntas sobre como a sua empresa usa dados hoje. O resultado sai na hora, com a
+        recomendação de por onde começar. Sem cadastro.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div class="wrap py-16 md:py-24">
+      <form class="flex max-w-[48rem] flex-col gap-6" data-maturity-form novalidate>
+        {
+          QUESTIONS.map((q, i) => (
+            <fieldset class="flex flex-col gap-4 rounded-[20px] bg-canvas p-6 md:p-8">
+              <legend class="contents">
+                <span class="flex items-baseline gap-3">
+                  <span class="numerals-tabular text-meta text-muted">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+                    {q.text}
+                  </span>
+                </span>
+              </legend>
+              <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {q.options.map((o, k) => (
+                  <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line-strong px-4 py-3 text-body text-ink transition-colors has-[:checked]:border-brand has-[:checked]:bg-brand-soft">
+                    <input
+                      type="radio"
+                      name={q.id}
+                      value={o.points}
+                      required
+                      class="mt-1 h-4 w-4 shrink-0 accent-[#1640D6]"
+                      id={`${q.id}-${k}`}
+                    />
+                    {o.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))
+        }
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <button type="submit" class="btn-primary self-start">Ver meu resultado</button>
+          <p class="text-meta text-danger" role="alert" data-maturity-error></p>
+        </div>
+        <noscript>
+          <p class="text-meta text-muted">
+            O resultado é calculado no navegador: ative o JavaScript para ver.
+          </p>
+        </noscript>
+      </form>
+
+      <div
+        class="mt-10 hidden max-w-[48rem] flex-col gap-6 rounded-[20px] bg-ink p-6 text-white outline-none md:p-10"
+        tabindex="-1"
+        aria-live="polite"
+        data-maturity-result
+      >
+        <p class="text-meta text-on-deep-muted">Seu resultado</p>
+        <h2 class="font-expanded text-h2 font-semibold tracking-heading" data-result-title>
+          Seu estágio
+        </h2>
+        <div class="flex items-center gap-4">
+          <div class="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
+            <div
+              class="h-full rounded-full bg-brand-light transition-[width] duration-700"
+              style="width:0%"
+              data-result-bar
+            >
+            </div>
+          </div>
+          <span class="numerals-tabular text-meta" data-result-score></span>
+        </div>
+        <p class="max-w-measure text-lead text-on-deep-muted" data-result-summary></p>
+        <p class="max-w-measure text-body">
+          <strong class="font-semibold text-white">Por onde começar:</strong>
+          <span data-result-next></span>
+        </p>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener"
+            data-booking
+            class="btn-inverse self-start"
+          >
+            Agendar diagnóstico gratuito
+          </a>
+          <a
+            href="/diagnostico/exemplo/"
+            class="text-body text-white underline underline-offset-4 hover:text-brand-light"
+          >
+            Ver um exemplo do mapa
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ levels: LEVELS, maxScore: MAX_SCORE }} is:inline>
+  window.__maturity = { levels, maxScore };
+</script>
+
+<script>
+  import { initMaturityTest } from '@/scripts/maturity';
+  initMaturityTest();
+</script>

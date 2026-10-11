@@ -4,7 +4,7 @@ import { SERVICES, serviceUrl } from '@/data/services';
 
 /* Sitemap gerado no build (o site passou de 5 rotas; ver CLAUDE.md → Sitemap).
    Ao criar uma página, acrescentá-la aqui. A 404 fica de fora (noindex). */
-const ROUTES = ['/', ...SERVICES.map((s) => serviceUrl(s.slug)), '/privacidade/'];
+const ROUTES = ['/', ...SERVICES.map((s) => serviceUrl(s.slug)), '/teste-de-maturidade/', '/privacidade/'];
 
 export const GET: APIRoute = () => {
   const lastmod = new Date().toISOString().slice(0, 10);
