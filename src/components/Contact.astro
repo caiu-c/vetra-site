@@ -1,6 +1,13 @@
 ---
 import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
 
+interface Props {
+  /** Assunto pré-selecionado (as páginas de serviço passam o próprio). */
+  subject?: (typeof CONTACT_SUBJECTS)[number]['value'];
+}
+
+const { subject = 'diagnostico' } = Astro.props;
+
 /*
   Contato + formulário (Web3Forms, ADR-006). Sem JS, o formulário faz POST direto para o
   serviço; com JS (src/scripts/contact-form.ts) o envio é inline, com estados de envio,
@@ -123,7 +130,7 @@ import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
           <select id="cf-topic" name="topic" class="field-input pr-10" data-contact-topic>
             {
               CONTACT_SUBJECTS.map((s) => (
-                <option value={s.label} data-key={s.value}>
+                <option value={s.label} data-key={s.value} selected={s.value === subject}>
                   {s.label}
                 </option>
               ))

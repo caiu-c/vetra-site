@@ -2,7 +2,7 @@
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
 import PipelineDiagram from './PipelineDiagram.astro';
-import { SERVICES } from '@/data/services';
+import { SERVICES, serviceUrl } from '@/data/services';
 
 /*
   Cada capacidade é uma das 4 peças do símbolo aperture (coordenadas de
@@ -32,7 +32,7 @@ const pieces = [
 
     <ul class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" data-layers>
       {
-        SERVICES.map(({ name, outcome, summary, highlights }, i) => (
+        SERVICES.map(({ slug, name, outcome, summary, highlights }, i) => (
           <li
             class="flex flex-col gap-5 rounded-[20px] border border-line p-6 md:p-10"
             data-layer={i}
@@ -78,6 +78,12 @@ const pieces = [
                 </li>
               ))}
             </ul>
+            <a
+              href={serviceUrl(slug)}
+              class="self-start text-body font-medium text-brand underline underline-offset-4 transition-colors hover:text-ink"
+            >
+              Mais sobre {name}
+            </a>
           </li>
         ))
       }

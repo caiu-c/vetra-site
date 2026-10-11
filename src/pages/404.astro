@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { HOME_CONTACT_URL, SITE } from '@/config/site';
+import { SERVICES, serviceUrl } from '@/data/services';
 ---
 
 {/* O Cloudflare Pages serve este 404.html com status 404 real (sem ele, qualquer URL
@@ -18,6 +19,20 @@ import { HOME_CONTACT_URL, SITE } from '@/config/site';
         <a href="/" class="btn-primary">Voltar para o início</a>
         <a href={HOME_CONTACT_URL} class="btn-secondary">Agendar diagnóstico gratuito</a>
       </div>
+      <nav class="flex flex-col gap-3 border-t border-line pt-8" aria-label="Serviços">
+        <p class="text-meta text-muted">Ou veja um dos serviços:</p>
+        <ul class="flex flex-wrap gap-x-6 gap-y-2">
+          {
+            SERVICES.map((s) => (
+              <li>
+                <a href={serviceUrl(s.slug)} class="text-body text-ink underline underline-offset-4 hover:text-brand">
+                  {s.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </section>
 </BaseLayout>

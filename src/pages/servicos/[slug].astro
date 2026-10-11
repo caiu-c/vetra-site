@@ -1,0 +1,143 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import Phases from '@/components/Phases.astro';
+import Contact from '@/components/Contact.astro';
+import { BOOKING_URL } from '@/config/site';
+import { SERVICES, serviceUrl, type Service } from '@/data/services';
+
+/*
+  Página de cada serviço (auditoria A10): uma URL por intenção de busca, com o detalhe
+  que não cabe na home. Conteúdo em src/data/services.ts (rascunho, TODO validar).
+  Fundos no ritmo do ADR-006: Papel → Névoa → Papel → Tinta → Névoa → Tinta (contato).
+*/
+export function getStaticPaths() {
+  return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const others = SERVICES.filter((s) => s.slug !== service.slug);
+---
+
+<BaseLayout title={service.seoTitle} description={service.seoDescription}>
+  <section class="bg-canvas">
+    <div class="wrap flex flex-col gap-8 pb-20 pt-32 md:pb-28 md:pt-40">
+      <a
+        href="/#servicos"
+        class="self-start text-meta text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+      >
+        Todos os serviços
+      </a>
+      <h1 class="flex max-w-[20ch] flex-col gap-4">
+        <span class="text-h4 font-semibold text-brand">{service.name}</span>
+        <span class="font-expanded text-balance text-display font-semibold tracking-display text-ink">
+          {service.outcome}
+        </span>
+      </h1>
+      <p class="text-pretty max-w-measure text-lead text-muted">
+        {service.audience}
+        {service.summary}
+      </p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href={BOOKING_URL} class="btn-primary" data-subject={service.subject} data-magnetic>
+          Agendar diagnóstico gratuito
+        </a>
+        <a href="#entregas" class="btn-secondary">O que entregamos</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div
+      class="wrap grid grid-cols-1 gap-12 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:gap-16 md:py-32"
+    >
+      <SectionHeader title="Sinais de que é a hora." description={service.pain} />
+      <ul class="flex flex-col border-t border-line-strong">
+        {
+          service.signals.map((signal) => (
+            <li class="flex items-baseline gap-3 border-b border-line-strong py-5 text-lead text-ink">
+              <span class="h-1.5 w-1.5 shrink-0 -translate-y-1 rounded-full bg-brand" aria-hidden="true" />
+              {signal}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="entregas" class="bg-canvas">
+    <div class="wrap py-24 md:py-32">
+      <SectionHeader title="O que entregamos." />
+      <ul class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+        {
+          service.deliverables.map(({ title, desc }) => (
+            <li class="flex flex-col gap-3 rounded-[20px] border border-line p-6 md:p-8">
+              <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">{title}</h3>
+              <p class="max-w-measure text-body text-muted">{desc}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-ink text-white">
+    <div class="wrap py-24 md:py-32">
+      {/* TODO: validar texto */}
+      <SectionHeader
+        title="Como funciona."
+        description="Todo projeto começa pelo diagnóstico gratuito: 30 minutos de conversa e, em até 5 dias úteis, o mapa por escrito com o que fazer primeiro."
+        variant="deep"
+      />
+      <div class="mt-14">
+        <Phases variant="deep" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div class="wrap grid grid-cols-1 gap-16 py-24 md:py-32 lg:grid-cols-2">
+      <div class="flex flex-col gap-8">
+        {/* TODO: validar texto e a lista de ferramentas (src/data/services.ts) */}
+        <SectionHeader
+          title="Ferramentas."
+          description="Escolhemos pelo que a sua equipe consegue manter depois. Se você já usa outras, partimos delas."
+        />
+        <ul class="flex flex-wrap gap-2">
+          {
+            service.tools.map((tool) => (
+              <li class="rounded-full border border-line-strong bg-canvas px-4 py-2 text-body text-ink">
+                {tool}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <nav class="flex flex-col gap-6" aria-label="Outros serviços">
+        <h2 class="font-expanded text-h3 font-semibold tracking-heading text-ink">Outros serviços</h2>
+        <ul class="flex flex-col border-t border-line-strong">
+          {
+            others.map((s) => (
+              <li class="border-b border-line-strong">
+                <a
+                  href={serviceUrl(s.slug)}
+                  class="group flex flex-col gap-1 py-5 transition-colors"
+                >
+                  <span class="text-body font-semibold text-ink group-hover:text-brand">{s.name}</span>
+                  <span class="text-body text-muted">{s.outcome}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <Contact subject={service.subject} />
+</BaseLayout>
