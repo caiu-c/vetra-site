@@ -1,5 +1,5 @@
 ---
-import { FOUNDER } from '@/config/site';
+import { BOOKING_URL, FOUNDER } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
 
 /*
@@ -48,7 +48,10 @@ const initials = (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length 
           <ul class="flex max-w-measure flex-col gap-3 border-t border-line pt-6">
             {credentials.map((c) => (
               <li class="flex items-baseline gap-3 text-body text-ink">
-                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
+                <span
+                  class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand"
+                  aria-hidden="true"
+                />
                 {c}
               </li>
             ))}
@@ -67,6 +70,15 @@ const initials = (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length 
           </a>
         )
       }
+      <a
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener"
+        data-booking
+        class="btn-primary self-start"
+      >
+        Agendar uma conversa com {name.split(' ')[0]}
+      </a>
     </div>
   </div>
 </section>

@@ -377,8 +377,9 @@ O dono escolheu usar as duas fontes de imagem e trocar a faixa de nomes por logo
 **Consequências.**
 - O JS das portas fica fora do bundle principal (página própria ou componente só na home); o embed da agenda custa zero até o clique.
 - A home ganhou duas seções (calculadora e FAQ), e o celular encurtou nos serviços.
+- Fundador preenchido em 2026-10-11 (Caio Cavalcanti): o bloco "Quem conduz" vem depois do manifesto (Sobre em Papel → Quem conduz em Névoa → FAQ em Papel) e entra no JSON-LD como `founder`.
+- **Analytics:** decisão em 2026-10-11 de não carregar nenhum provedor por ora. Visitas pelo Cloudflare Web Analytics (sem cookies) e agendamentos pelo Cal.com; os eventos ficam no `dataLayer` até o dono criar uma conta (recomendação: Umami ou Plausible, sem cookies, sem banner).
 - **Pendências do dono:**
-  - fundador (`FOUNDER`);
-  - chave do Web3Forms (sem ela, o exemplo do mapa não captura contato);
-  - provedor de analytics;
-  - validação dos textos do FAQ, do teste e do exemplo do mapa.
+  - retrato e LinkedIn do fundador;
+  - chave do Web3Forms (sem ela, o exemplo do mapa abre sem capturar o contato e o formulário mostra o aviso).
+  - Os textos do FAQ, do teste e do exemplo do mapa foram aprovados.
