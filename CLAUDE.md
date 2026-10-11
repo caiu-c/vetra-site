@@ -15,28 +15,32 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - Manter-se em Astro 4: integrações de versões mais novas (`@astrojs/react@5`, `@astrojs/sitemap@3.7`) são incompatíveis
 
 ## Arquitetura
-- `src/pages/index.astro` só compõe as seções em ordem; cada seção é um componente em `src/components/`.
-- `src/layouts/BaseLayout.astro` concentra `<head>` (meta, OG/Twitter, JSON-LD `Organization`, script inline que marca `.js`/`.preloaded` antes do primeiro paint), import da fonte Archivo, `Preloader`, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Não há moldura no layout: cada seção desenha a sua (ver Convenções → Grid).
-- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-intro`/`data-intro-title` (intro do hero após o preloader), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
-- Dados institucionais (SITE, CONTACT, ADDRESS, NAV, BOOKING_URL, CONTACT_FORM, CONTACT_SUBJECTS) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Os casos de clientes (texto + dados do gráfico) ficam em `src/data/cases.ts`.
+- Rotas em `src/pages/`: `index.astro` (home; só compõe as seções em ordem, cada seção é um componente em `src/components/`), `servicos/[slug].astro` (uma página por serviço, gerada de `src/data/services.ts`), `privacidade.astro`, `404.astro` (o Cloudflare Pages a serve com status 404) e `sitemap.xml.ts`.
+- `src/layouts/BaseLayout.astro` concentra `<head>` (meta, `canonical`, OG/Twitter, JSON-LD `Organization`, preload da fonte), import da fonte Archivo, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Props: `title`, `description`, `noindex` (404) e `contactOnPage` (`false` em páginas sem o formulário: os CTAs do cabeçalho e do rodapé levam ao da home). Não há preloader (ADR-009) nem moldura: cada seção desenha a sua.
+- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A entrada do hero é só CSS (`.hero-word`/`.hero-fade` em `global.css`, palavras divididas no build em `Hero.astro`), para pintar no primeiro quadro. A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico só com tela ≥ 768px e ponteiro fino. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
+- Dados institucionais (SITE, CONTACT com `whatsapp`, ADDRESS, NAV, BOOKING_URL/HOME_CONTACT_URL, CONTACT_FORM, CONTACT_SUBJECTS, FOUNDER) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Campos vazios escondem o que dependem deles: sem `CONTACT.whatsapp` não há link de WhatsApp; sem `FOUNDER.name` a home mostra o manifesto no lugar do bloco "Quem conduz" (`Founder.astro`). Os serviços (cards da home e páginas) ficam em `src/data/services.ts`; os casos de clientes (texto + dados do gráfico) em `src/data/cases.ts`.
 - Fonte do site: Archivo Variable (`@fontsource-variable/archivo/wdth.css`, eixos de peso e largura), empacotada pelo Vite. `public/og-image.png`, `favicon.ico` e `apple-touch-icon.png` são gerados por scripts (ver Comandos), não editados à mão.
 - Import alias `@/*` → `src/*`.
 
 ## Convenções
 - Componentes Astro têm extensão .astro; React só quando há interatividade.
-- Cores: usar os tokens do `tailwind.config.mjs` — `canvas` (Papel #FFF), `surface` (Névoa #F2F4F8), `ink` (Tinta #0C1838: texto e faixa escura), `brand` (Cobalto #1640D6: único acento), `muted` (Aço #586178: texto secundário), `line`/`line-strong` (bordas), `subtle` (#8A93A6: só decorativo ou texto ≥24px, falha AA em texto pequeno); na faixa escura, `line-deep` e `on-deep-muted`.
+- Cores: usar os tokens do `tailwind.config.mjs` — `canvas` (Papel #FFF), `surface` (Névoa #F2F4F8), `ink` (Tinta #0C1838: texto e faixa escura), `brand` (Cobalto #1640D6: único acento), `muted` (Aço #586178: texto secundário), `line`/`line-strong` (bordas decorativas; nunca como único limite de um campo), `line-input` (borda de campo, 6,2:1), `subtle` (#8A93A6: só decorativo ou texto ≥24px, falha AA em texto pequeno); na faixa escura, `line-deep` e `on-deep-muted`. Pares de contraste aprovados em `auditoria-ux/identidade-proposta.md`.
 - Tipografia: só Archivo. Títulos com `.font-expanded` (`font-stretch: 112%`) + `font-semibold` + `tracking-display`/`tracking-heading`. Tamanhos pela escala de Bringhurst (12 · 14 · 16 · 18 · 21 · 24 · 36 · 48 · 60 · 72) via utilitários `text-meta`, `text-body`, `text-lead`, `text-h4`, `text-h3`, `text-h2`, `text-cta`, `text-display`, `text-stat`. Nada acima de 72px.
-- **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só Metodologia e etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
-- **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta e uma única faixa Cobalto (Indicadores); a ordem está no ADR-006. Ao criar uma seção, escolher o fundo para manter a alternância.
-- **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem `backdrop-blur` (ver ADR-008).
-- **CTAs:** a ação principal se chama sempre "Agendar diagnóstico" e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject="diagnostico"` para pré-selecionar o assunto. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
+- **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só as fases de `Phases.astro` e as etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
+- **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta e uma única faixa Cobalto (Indicadores); a ordem da home está no ADR-009. Ao criar uma seção, escolher o fundo para manter a alternância.
+- **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta sólida e arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem transparência nem `backdrop-blur` (ADR-008/009).
+- **CTAs:** a ação principal se chama sempre "Agendar diagnóstico gratuito" (oferta: conversa de 30 min por vídeo, gratuita, mapa por escrito em até 5 dias úteis; resposta ao contato em até 1 dia útil) e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject` para pré-selecionar o assunto. O diagnóstico é explicado só em `Diagnosis.astro`; as outras seções apenas o referenciam. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
+- **Links entre páginas:** itens de menu e links para seções da home usam href absoluto (`/#diagnostico`), para funcionar em qualquer rota. Ao criar uma página, acrescentá-la ao `sitemap.xml.ts`.
+- **Raios:** botão `rounded-full`; card e cartão do formulário `rounded-[20px]`; campo `rounded-xl`; cabeçalho `rounded-2xl`; elementos internos de diagrama `rounded-lg`. Sem sombra.
+- **Números:** sempre em pt-BR (vírgula decimal, ponto de milhar), via `toLocaleString('pt-BR')`.
+- **Imagens:** sem banco de imagens. Preferência: retrato real do fundador → trabalho real → artefatos do serviço (diagramas, gráficos) → símbolo aperture. Direção completa em `auditoria-ux/identidade-proposta.md`.
 - Componentes de UI em `global.css` (`@layer components`): `.wrap`, `.btn-primary`, `.btn-secondary`, `.btn-inverse` e `.btn-outline-inverse` (fundos Tinta), `.btn-sm`, `.font-expanded`, `.field-label`/`.field-input` (formulário). Cabeçalho de seção padrão: `SectionHeader.astro` (título com `data-split` + descrição opcional; `variant` light/deep/brand conforme o fundo).
 - Gráficos dos casos (`CaseChart.astro`): seguir a skill `dataviz` (carregar antes de mexer). A série usa `brand-light` e o contexto `chart-context`, ambos validados com o script da skill contra o fundo Tinta; qualquer cor nova de gráfico precisa passar pelo validador.
-- Conteúdo placeholder (casos e seus gráficos, indicadores, setores, textos de serviço, FAQ, chave do Web3Forms) está marcado com `TODO` e precisa ser substituído ou ocultado antes de ligar o domínio.
+- Conteúdo placeholder (casos e seus gráficos, indicadores, setores, textos de serviço e das páginas de serviço, política de privacidade, FAQ, CNPJ/endereço/telefone, chave do Web3Forms) está marcado com `TODO`. Por decisão do dono (2026-10-11), casos, indicadores, setores e dados da empresa seguem no ar até ele preencher os oficiais; o FAQ fica fora da home até ter respostas.
 - Não adicionar dependências sem justificar a escolha.
 - Commits em português, formato: "tipo: descrição curta" (ex: "feat: hero section").
 - **Validação obrigatória antes de cada commit:** rodar `pnpm typecheck && pnpm lint && pnpm build` antes de `git commit`, sem exceção — inclui commits de scripts e infra. Pular qualquer um é fonte conhecida de débito que vaza para commits posteriores (incidente da Fase 5: lint não rodou em commits de geração de assets em `scripts/`, erros surgiram em commit subsequente).
-- **Sitemap:** gerado manualmente em `public/sitemap.xml`. Quando o site tiver 5+ rotas, considerar `src/pages/sitemap.xml.ts` dinâmico (com data do build e listagem de routes via `import.meta.glob`). `@astrojs/sitemap` foi avaliado e descartado em 2026-05-06: 3.7.2 incompatível com Astro 4 (mesmo padrão do `@astrojs/react@5`), e a alternativa manual cobre 100% do caso atual sem dependência.
+- **Sitemap:** gerado no build por `src/pages/sitemap.xml.ts` (home, serviços a partir de `services.ts` e privacidade; a 404 fica de fora). Ao criar uma página, acrescentá-la à lista `ROUTES`. `@astrojs/sitemap` foi avaliado e descartado em 2026-05-06: 3.7.2 incompatível com Astro 4 (mesmo padrão do `@astrojs/react@5`).
 
 ## Comandos
 - `pnpm dev` — ambiente local (porta 4321)
@@ -219,7 +223,7 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 - Scroll nativo. O que o Lenis fazia passou para:
   - rolagem suave das âncoras: `scroll-behavior: smooth` (só sem reduced motion);
   - desconto do header nas âncoras: `scroll-padding-top`;
-  - trava durante o preloader: classe `.scroll-locked` no `<html>`, posta e tirada pelo `main.ts`.
+  - trava durante o preloader: classe `.scroll-locked` no `<html>` (removida junto com o preloader no ADR-009).
 - Header sem `backdrop-blur`: com o fundo a 95%, o blur não aparecia.
 - Cursor com `mix-blend-mode` no ponto e no anel, e não numa camada `fixed; inset: 0`.
 - Lente com DPR máximo de 1,5 e `transmissionResolutionScale` 0,75 no tier alto.
@@ -228,3 +232,50 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 - O scroll roda no compositor, sem depender da thread principal, e o JS inicial perde o Lenis (~5 kB gz).
 - Some a inércia extra do Lenis; o trackpad e o mouse mantêm a inércia nativa do sistema.
 - **Não reintroduzir smooth scroll em JS** (Lenis, Locomotive etc.) nem `backdrop-filter`/`mix-blend-mode` em elementos fixos grandes sem medir no Safari com tela de 120 Hz.
+
+### ADR-009 — Ajustes da auditoria UX de 2026-10-11
+
+**Status:** aceito (2026-10-11). Ajusta o ADR-005 (preloader e intro do hero), o ADR-006 (ordem das seções) e o ADR-007 (onde a lente carrega).
+
+**Contexto.** A auditoria (`auditoria-ux/relatorio-2026-10-11.md`, skill `auditoria-ux-site-institucional`) mediu o site em produção.
+- **Celular (laboratório):** nota 39 e LCP de 5,8 s, dos quais 4,4 s de atraso de renderização. O título e os botões esperavam o preloader e a intro em JS, e o Three.js consumia 7 s de CPU.
+- **Proposta:** o topo não dizia o que a Vetra é, para quem trabalha nem onde fica.
+- **Repetição:** o diagnóstico era explicado em 4 seções, sem formato nem custo.
+- **Estrutura:** o site tinha uma página só.
+
+O dono aprovou aplicar tudo, menos A1 a A3 (contato, prova e dados da empresa), que ele preenche depois.
+
+**Decisão.**
+- **Sem preloader.** O hero pinta no primeiro quadro, e a entrada do título é só CSS: palavras divididas no build, subida mascarada e fade de opacidade no subtítulo e nos botões, sem `visibility: hidden`. A fonte do texto tem `preload`.
+- **Lente 3D só com tela ≥ 768px e ponteiro fino.** No celular fica o SVG estático, com opacidade 0,12 atrás do texto, e o Three.js não é baixado.
+- **Ordem da home:**
+
+  | # | Seção | Fundo |
+  |---|---|---|
+  | 1 | Hero | Papel |
+  | 2 | Diagnóstico | Névoa |
+  | 3 | Serviços | Papel |
+  | 4 | Stack | Tinta |
+  | 5 | Indicadores | Cobalto |
+  | 6 | Setores | Papel |
+  | 7 | Casos | Tinta |
+  | 8 | Sobre/Quem conduz | Papel |
+  | 9 | Contato + Rodapé | Tinta |
+
+  - A Metodologia foi incorporada ao Diagnóstico (`Phases.astro`).
+  - O FAQ saiu até ter respostas.
+- **Oferta de entrada:** diagnóstico gratuito de 30 min por vídeo, com mapa por escrito em até 5 dias úteis e resposta ao contato em até 1 dia útil. O CTA virou "Agendar diagnóstico gratuito".
+- **Várias rotas:**
+  - uma página por serviço (`servicos/[slug]`, de `src/data/services.ts`);
+  - `privacidade` (rascunho para validação jurídica);
+  - `404` real;
+  - sitemap gerado no build;
+  - `canonical` em todas as páginas;
+  - HSTS no `_headers`.
+- **Pronto, mas oculto até haver dados:** WhatsApp (`CONTACT.whatsapp`) e bloco "Quem conduz" (`FOUNDER`).
+
+**Consequências.**
+- **Lighthouse local (laboratório):** celular de 39 para 99 (LCP 1,7 s, TBT 80 ms, CLS 0); desktop 100; acessibilidade 100.
+- **JS inicial:** ~52 kB gz.
+- **Comprimento da home:** caiu no desktop (8.955 → 8.198 px), mas não no celular (~12.600 px). Indicadores, Setores e Casos ficaram no ar, e o diagnóstico ganhou oferta e fases. O próximo corte é rever o diagrama do pipeline e a faixa Stack no celular.
+- **Rodada seguinte da auditoria:** rodar o coletor contra o preview e comparar com `auditoria-ux/coletas/`.

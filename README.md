@@ -38,23 +38,25 @@ Geradores manuais para assets binários. Rodar antes do deploy quando o conteúd
 
 ```
 src/
-├── components/      # componentes Astro (Header, Hero, Stack, ...)
-├── config/          # site.ts (SITE, ADDRESS, CONTACT, NAV, BOOKING_URL)
+├── components/      # seções e componentes Astro (Header, Hero, Diagnosis, Founder…)
+├── config/          # site.ts (SITE, CONTACT, ADDRESS, NAV, BOOKING_URL, FOUNDER…)
+├── data/            # services.ts (serviços), cases.ts (casos)
 ├── layouts/         # BaseLayout.astro
-├── pages/           # index.astro
-├── scripts/         # main.ts + motion/ (GSAP, preloader, cursor, marquee…)
-└── styles/          # global.css (tokens, fonts, keyframes, paper grain)
+├── pages/           # index, servicos/[slug], privacidade, 404, sitemap.xml.ts
+├── scripts/         # main.ts + motion/ (GSAP, cursor, marquee, carrossel…) + three/ (lente 3D)
+└── styles/          # global.css (componentes, entrada do hero, cursor, carrossel)
 
-public/              # assets estáticos (fontes, og-image, favicons, robots.txt, sitemap.xml)
+public/              # og-image, favicons, robots.txt, _headers
 scripts/             # geradores Node.js (og-image, favicon ICO/PNG)
+auditoria-ux/        # auditoria UX (contexto, relatórios, identidade; coletas fora do Git)
 docs/superpowers/    # planos de implementação por fase
 ```
 
 ## Documentação
 
 - **PRD canônico**: `.llm/prd.MD`
-- **Mockup canônico**: `Insumos/SVG/14-mockup-site.svg`
-- **Decisões arquiteturais**: seção `## Decisões arquiteturais` em `CLAUDE.md` (ADR-001 sobre vanilla, ADR-002 sobre painel canvas, ADR-003 sobre densidade visual)
+- **Mockup original**: `Insumos/SVG/14-mockup-site.svg` (histórico; desde o ADR-004 o visual segue o `CLAUDE.md`)
+- **Decisões arquiteturais**: seção `## Decisões arquiteturais` em `CLAUDE.md` (ADR-001 a ADR-009; as vigentes para o visual são ADR-004 a ADR-009)
 - **Planos de fase**: `docs/superpowers/plans/`
 
 ## Validação pós-deploy

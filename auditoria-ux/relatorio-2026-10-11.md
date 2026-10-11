@@ -510,35 +510,35 @@ Busca local: "consultoria engenharia de dados Fortaleza" não trouxe nenhuma con
 
 | Ordem | Achado | Ação | Severidade | Esforço | Critério de aceite | Status |
 |---|---|---|---|---|---|---|
-| 1 | A1 | Email Routing + chave Web3Forms em `site.ts` | Crítica | Baixo | Envio de teste chega ao Gmail; sem `TODO` no HTML | Pendente |
-| 2 | A2 | Tirar Indicadores, Casos e Setores da home e "Casos" do menu | Crítica | Baixo | HTML sem "Projetos entregues"/"Casos de clientes"/"Setores" | Pendente |
-| 3 | A3 | Omitir CNPJ e campos `TODO` até haver dados reais | Crítica | Baixo | HTML sem `00.000.000` e sem `"TODO"` | Pendente |
+| 1 | A1 | Email Routing + chave Web3Forms em `site.ts` | Crítica | Baixo | Envio de teste chega ao Gmail; sem `TODO` no HTML | Mantido (decisão do dono) |
+| 2 | A2 | Tirar Indicadores, Casos e Setores da home e "Casos" do menu | Crítica | Baixo | HTML sem "Projetos entregues"/"Casos de clientes"/"Setores" | Mantido (decisão do dono) |
+| 3 | A3 | Omitir CNPJ e campos `TODO` até haver dados reais | Crítica | Baixo | HTML sem `00.000.000` e sem `"TODO"` | Mantido (decisão do dono) |
 
 **Ganhos rápidos**
 
 | Ordem | Achado | Ação | Severidade | Esforço | Critério de aceite | Status |
 |---|---|---|---|---|---|---|
-| 4 | A8 | Tirar o FAQ da home até haver respostas | Alta | Baixo | Sem "A definir" no HTML | Pendente |
-| 5 | A7 | Topo visível sem esperar preloader; sem lente abaixo de `md` | Alta | Baixo/Médio | LCP celular ≤ 2,5 s (laboratório); CTA na 1ª dobra no inventário | Pendente |
-| 6 | A13 | `404.astro`, `canonical`, HSTS no `_headers` | Média | Baixo | `/xyz` → 404; canonical e HSTS presentes | Pendente |
-| 7 | A15 | Borda de campo ≥ 3:1 | Média | Baixo | Contraste da borda ≥ 3:1 | Pendente |
-| 8 | A19 | Cabeçalho com fundo sólido | Baixa | Baixo | Sem texto fantasma nas capturas | Pendente |
-| 9 | A17 | Corrigir ARIA do manifesto e lista do carrossel | Baixa | Baixo | Audits do Lighthouse passam | Pendente |
-| 10 | A18 | Números em formato pt-BR | Baixa | Baixo | Decimais com vírgula | Pendente |
+| 4 | A8 | Tirar o FAQ da home até haver respostas | Alta | Baixo | Sem "A definir" no HTML | Verificado |
+| 5 | A7 | Topo visível sem esperar preloader; sem lente abaixo de `md` | Alta | Baixo/Médio | LCP celular ≤ 2,5 s (laboratório); CTA na 1ª dobra no inventário | Verificado |
+| 6 | A13 | `404.astro`, `canonical`, HSTS no `_headers` | Média | Baixo | `/xyz` → 404; canonical e HSTS presentes | Feito (404 verificado; HSTS e canonical no build) |
+| 7 | A15 | Borda de campo ≥ 3:1 | Média | Baixo | Contraste da borda ≥ 3:1 | Feito |
+| 8 | A19 | Cabeçalho com fundo sólido | Baixa | Baixo | Sem texto fantasma nas capturas | Verificado |
+| 9 | A17 | Corrigir ARIA do manifesto e lista do carrossel | Baixa | Baixo | Audits do Lighthouse passam | Verificado |
+| 10 | A18 | Números em formato pt-BR | Baixa | Baixo | Decimais com vírgula | Feito |
 
 **Estruturais** (dependem de decisões e conteúdo do dono)
 
 | Ordem | Achado | Ação | Severidade | Esforço | Critério de aceite | Status |
 |---|---|---|---|---|---|---|
-| 11 | A4 | Novo título e subtítulo (serviço + público + local) | Alta | Baixo | 1ª dobra responde CTX-01 | Pendente |
-| 12 | A6 | Descrever a oferta de entrada (duração, formato, custo, prazo) | Alta | Baixo | Seção e mensagem de sucesso com esses dados | Pendente |
-| 13 | A5 | Bloco "Quem conduz" com foto, nome, credenciais | Alta | Médio | 1 pessoa real com foto e LinkedIn | Pendente |
-| 14 | A9 | Página `/privacidade` (validação jurídica) | Alta | Médio | `/privacidade` 200 e linkada | Pendente |
-| 15 | A11 | Reescrever cards em dor → resultado → como | Média | Médio | Sem sigla sem explicação | Pendente |
-| 16 | A12 | Reorganizar a home em ~7 blocos | Média | Médio | ≤ 8 seções; altura no celular −30% | Pendente |
-| 17 | A10 | Páginas por serviço (começar pelo principal) | Média | Médio | URL própria + sitemap | Pendente |
-| 18 | A8 | Escrever respostas reais e devolver o FAQ | Média | Médio | 3–5 respostas com fatos | Pendente |
-| 19 | A20 | Versão `/en/` (se o exterior for prioridade) | Média | Alto | `hreflang` recíproco | Pendente |
+| 11 | A4 | Novo título e subtítulo (serviço + público + local) | Alta | Baixo | 1ª dobra responde CTX-01 | Verificado |
+| 12 | A6 | Descrever a oferta de entrada (duração, formato, custo, prazo) | Alta | Baixo | Seção e mensagem de sucesso com esses dados | Feito |
+| 13 | A5 | Bloco "Quem conduz" com foto, nome, credenciais | Alta | Médio | 1 pessoa real com foto e LinkedIn | Feito (oculto até os dados) |
+| 14 | A9 | Página `/privacidade` (validação jurídica) | Alta | Médio | `/privacidade` 200 e linkada | Feito (rascunho, falta validação jurídica) |
+| 15 | A11 | Reescrever cards em dor → resultado → como | Média | Médio | Sem sigla sem explicação | Feito |
+| 16 | A12 | Reorganizar a home em ~7 blocos | Média | Médio | ≤ 8 seções; altura no celular −30% | Parcial |
+| 17 | A10 | Páginas por serviço (começar pelo principal) | Média | Médio | URL própria + sitemap | Verificado |
+| 18 | A8 | Escrever respostas reais e devolver o FAQ | Média | Médio | 3–5 respostas com fatos | Pendente (dono) |
+| 19 | A20 | Versão `/en/` (se o exterior for prioridade) | Média | Alto | `hreflang` recíproco | Pendente (depende do mercado) |
 
 **Ações do dono fora do código**
 
@@ -554,6 +554,27 @@ Busca local: "consultoria engenharia de dados Fortaleza" não trouxe nenhuma con
 | Decidir sobre WhatsApp e idioma | — | A14, A20 |
 | Validar a política de privacidade com assessoria jurídica | — | A9 |
 | Criar link de agenda (Cal.com) se quiser agendamento direto | cal.com | A6 |
+
+## 9.1 Rodada 1 de correções (11/10/2026)
+
+Branch `feat/auditoria-ux`, um commit por achado. Verificação: coletor da skill contra o build local (`auditoria-ux/coletas/2026-10-11-16-11/`), comparado com a coleta de produção da mesma data.
+
+| Indicador | Antes (produção) | Depois (build local) |
+|---|---|---|
+| Lighthouse celular: performance | 39 | 99 |
+| LCP celular (laboratório) | 5,8 s | 1,7 s |
+| Total Blocking Time celular | 4.220 ms | 80 ms |
+| CLS celular | 0 | 0 |
+| Acessibilidade (Lighthouse) | 89–93 | 100 |
+| Botão principal na 1ª dobra do celular (inventário) | não | sim ("Agendar diagnóstico gratuito") |
+| Seções da home (com rodapé) | 12 | 10 |
+| Altura da home | 12.592 px celular · 8.955 px desktop | 12.597 px celular · 8.198 px desktop |
+| Páginas no sitemap | 1 | 6 |
+| JS inicial (gzip) | 52,7 kB | 52,0 kB |
+
+**A12 ficou parcial:** o diagnóstico passou a ser explicado num lugar só e saíram o FAQ e a Metodologia avulsa, mas a altura no celular não caiu. Os motivos são que Indicadores, Setores e Casos ficaram no ar (decisão do dono), e o topo e o diagnóstico ganharam texto (oferta e fases). Os próximos cortes possíveis são o diagrama do pipeline e a faixa Stack no celular.
+
+Ressalva: o build local não tem os scripts que a Cloudflare injeta (Web Analytics, ofuscação de e-mail). Rodar o coletor de novo contra o preview publicado.
 
 ## 10. Itens não verificados
 

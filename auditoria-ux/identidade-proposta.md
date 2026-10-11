@@ -1,6 +1,6 @@
 # Identidade visual — proposta
 
-Proposta para aprovação do dono, gerada pela auditoria de 11/10/2026 ([relatório](relatorio-2026-10-11.md), Anexo A).
+**Status: aprovada e aplicada em 11/10/2026** (rodada 1 de correções da auditoria): `line-input` = `muted` (#586178), um raio por componente, cabeçalho sólido, números em pt-BR. Seguem pendentes os atributos da marca e a sessão de fotos (fim do arquivo). Gerada pela auditoria de 11/10/2026 ([relatório](relatorio-2026-10-11.md), Anexo A).
 
 **Ponto de partida:** a Vetra não tem manual de marca, mas o site já tem um sistema visual definido, registrado nos ADR-004 a ADR-008 do `CLAUDE.md` e nos tokens do `tailwind.config.mjs`. Ele já funciona: uma família, paleta contida e contraste alto. Esta proposta **formaliza o que existe** como manual e acrescenta só o que os achados pedem:
 - direção de fotografia (A5);
@@ -159,9 +159,7 @@ O símbolo aperture (três chevrons convergindo para um ponto) e o logotipo "Vet
 
 ## Decisões pendentes do dono
 
-1. Aprovar os atributos (técnico, sóbrio, direto) e decidir se "próximo" entra quando o fundador aparecer.
-2. Escolher o tom de `line-input` (recomendação: `muted`).
-3. Aprovar a redução para um raio por componente.
-4. Agendar a sessão de fotos do retrato.
-
-Implementar no site só depois da aprovação (Etapa 6 da skill).
+1. Confirmar os atributos (técnico, sóbrio, direto) e decidir se "próximo" entra quando o fundador aparecer.
+2. ~~Escolher o tom de `line-input`~~ — aplicado `muted` em 11/10/2026.
+3. ~~Aprovar a redução para um raio por componente~~ — aplicado em 11/10/2026.
+4. Agendar a sessão de fotos do retrato (o bloco "Quem conduz" já está pronto em `Founder.astro`, oculto até `FOUNDER` ser preenchido).
