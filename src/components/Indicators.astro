@@ -9,6 +9,15 @@ const indicators = [
   { prefix: '', value: '99.97', unit: '%', label: 'Uptime contratado em SLA' },
   { prefix: '<', value: '200', unit: ' ms', label: 'Latência média de consulta' },
 ] as const;
+
+/** Texto inicial do número em pt-BR (vírgula decimal); `data-count` mantém o ponto para o parse. */
+const display = (value: string) => {
+  const decimals = value.split('.')[1]?.length ?? 0;
+  return Number(value).toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+};
 ---
 
 {/* Faixa única em Cobalto: o bloco de destaque do ritmo de cores (ADR-006). */}
@@ -30,7 +39,7 @@ const indicators = [
             <dt class="order-2 text-meta text-on-brand-muted">{label}</dt>
             <dd class="numerals-tabular font-expanded order-1 text-stat font-semibold tracking-display">
               {prefix}
-              <span data-count={value}>{value}</span>
+              <span data-count={value}>{display(value)}</span>
               {unit}
             </dd>
           </div>
