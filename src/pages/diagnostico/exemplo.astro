@@ -1,0 +1,261 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ReportMockup from '@/components/mockups/ReportMockup.astro';
+import { BOOKING_URL, SITE } from '@/config/site';
+import { emphasize } from '@/lib/emphasis';
+
+/*
+  Exemplo do mapa entregue no diagnóstico (ADR-012, auditoria de conversão C3): o que a
+  pessoa recebe, para quem ainda não está pronto para conversar ou precisa convencer
+  alguém. Liberado na home depois de nome e e-mail (SampleMapGate.astro). Empresa e
+  números FICTÍCIOS, rotulados como exemplo. noindex: o conteúdo não deve circular por
+  busca sem o contato.
+  TODO: validar o conteúdo com o dono.
+*/
+const sources = [
+  {
+    system: 'ERP',
+    holds: 'Pedidos, faturamento, contas a receber',
+    today: 'Exportação manual em CSV',
+    freq: 'Diária',
+  },
+  {
+    system: 'CRM',
+    holds: 'Clientes, visitas, oportunidades',
+    today: 'Relatório em PDF',
+    freq: 'Semanal',
+  },
+  {
+    system: 'Sistema de estoque',
+    holds: 'Saldo por depósito, giro, rupturas',
+    today: 'Planilha enviada por e-mail',
+    freq: 'Semanal',
+  },
+  {
+    system: 'Planilhas de metas',
+    holds: 'Metas por vendedor e região',
+    today: 'Arquivo compartilhado',
+    freq: 'Mensal',
+  },
+] as const;
+
+const flow = [
+  { step: 'Exportar', desc: 'Três pessoas exportam ERP, CRM e estoque, cada uma no seu horário.' },
+  {
+    step: 'Juntar',
+    desc: 'Uma planilha mestre cruza tudo com PROCV; versões diferentes circulam por e-mail.',
+  },
+  { step: 'Conferir', desc: 'Financeiro e comercial discutem por que os números não batem.' },
+  { step: 'Apresentar', desc: 'O resultado chega à diretoria no 3º dia útil do mês seguinte.' },
+] as const;
+
+const bottlenecks = [
+  {
+    level: 'Alto',
+    title: 'Conciliação de vendas feita à mão',
+    impact:
+      'Cerca de 2 pessoas por 3 dias a cada fechamento, e a diretoria decide com números de semanas atrás.',
+  },
+  {
+    level: 'Alto',
+    title: 'Estoque atualizado uma vez por semana',
+    impact: 'Rupturas só aparecem quando o cliente reclama; compras são feitas por estimativa.',
+  },
+  {
+    level: 'Médio',
+    title: 'Metas em planilhas soltas',
+    impact: 'Cada região calcula o atingimento de um jeito; a comissão gera retrabalho todo mês.',
+  },
+] as const;
+
+const plan = [
+  {
+    phase: 'Etapa 1',
+    title: 'Base central com vendas e estoque',
+    desc: 'ERP e estoque carregados todo dia numa base única, com testes que avisam quando um número sai do padrão.',
+  },
+  {
+    phase: 'Etapa 2',
+    title: 'Painel comercial com regra única',
+    desc: 'Receita, margem e atingimento de metas com a mesma definição para financeiro, comercial e diretoria.',
+  },
+  {
+    phase: 'Etapa 3',
+    title: 'Alertas de ruptura e metas no sistema',
+    desc: 'Aviso automático de estoque crítico e metas fora das planilhas, com o cálculo da comissão automatizado.',
+  },
+] as const;
+---
+
+<BaseLayout
+  title={`Exemplo do mapa do diagnóstico | ${SITE.name}`}
+  description="Exemplo ilustrativo do mapa que a Vetra entrega no diagnóstico gratuito: fontes de dados, fluxo atual, gargalos priorizados e plano de fundação."
+  noindex
+  contactOnPage={false}
+>
+  <section class="bg-canvas">
+    <div
+      class="wrap grid grid-cols-1 items-center gap-12 pb-16 pt-32 md:pb-24 md:pt-40 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
+    >
+      <div class="flex flex-col gap-6">
+        <p class="self-start rounded-full bg-brand-soft px-3 py-1 text-meta font-medium text-brand">
+          Exemplo ilustrativo, com empresa e dados fictícios
+        </p>
+        <h1
+          class="font-expanded text-balance text-display font-semibold tracking-display text-ink"
+          set:html={emphasize('O *mapa* que você recebe no diagnóstico.')}
+        />
+        <p class="max-w-measure text-pretty text-lead text-muted">
+          Este é o formato do documento entregue em até 5 dias úteis depois da conversa. Aqui, para
+          uma distribuidora fictícia de alimentos com 180 colaboradores e operação no Nordeste.
+        </p>
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener"
+          data-booking
+          class="btn-primary self-start"
+        >
+          Agendar diagnóstico gratuito
+        </a>
+      </div>
+      <ReportMockup class="justify-self-center lg:justify-self-end" />
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div class="wrap flex flex-col gap-10 py-20 md:py-28">
+      <div class="flex max-w-[44rem] flex-col gap-4">
+        <h2 class="font-expanded text-h2 font-semibold tracking-heading text-ink">
+          1. Fontes de dados
+        </h2>
+        <p class="text-lead text-muted">Onde cada informação mora hoje e como ela sai de lá.</p>
+      </div>
+      <div class="overflow-x-auto rounded-[20px] border border-line-strong bg-canvas">
+        <table class="w-full min-w-[640px] text-left">
+          <thead class="border-b border-line text-meta text-muted">
+            <tr>
+              <th scope="col" class="px-5 py-3 font-medium">Sistema</th>
+              <th scope="col" class="px-5 py-3 font-medium">O que guarda</th>
+              <th scope="col" class="px-5 py-3 font-medium">Como sai hoje</th>
+              <th scope="col" class="px-5 py-3 font-medium">Frequência</th>
+            </tr>
+          </thead>
+          <tbody class="text-body text-ink">
+            {
+              sources.map((s) => (
+                <tr class="border-b border-line last:border-0">
+                  <th scope="row" class="px-5 py-4 font-semibold">
+                    {s.system}
+                  </th>
+                  <td class="px-5 py-4">{s.holds}</td>
+                  <td class="px-5 py-4 text-muted">{s.today}</td>
+                  <td class="px-5 py-4 text-muted">{s.freq}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-canvas">
+    <div class="wrap flex flex-col gap-10 py-20 md:py-28">
+      <div class="flex max-w-[44rem] flex-col gap-4">
+        <h2 class="font-expanded text-h2 font-semibold tracking-heading text-ink">
+          2. Como o número chega à diretoria
+        </h2>
+        <p class="text-lead text-muted">
+          Hoje: <strong class="font-semibold text-ink">3 dias úteis</strong> por fechamento, com 4 passos
+          manuais.
+        </p>
+      </div>
+      <ol class="grid grid-cols-1 gap-4 md:grid-cols-4">
+        {
+          flow.map((f, i) => (
+            <li class="flex flex-col gap-3 rounded-[20px] border border-line p-6">
+              <span class="numerals-tabular font-expanded text-h3 font-medium text-muted">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+                {f.step}
+              </h3>
+              <p class="text-body text-muted">{f.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-ink text-white">
+    <div class="wrap flex flex-col gap-10 py-20 md:py-28">
+      <div class="flex max-w-[44rem] flex-col gap-4">
+        <h2 class="font-expanded text-h2 font-semibold tracking-heading">
+          3. Gargalos priorizados
+        </h2>
+        <p class="text-lead text-on-deep-muted">
+          Ordenados pelo impacto no negócio, não pela tecnologia.
+        </p>
+      </div>
+      <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {
+          bottlenecks.map((b) => (
+            <li class="flex flex-col gap-3 rounded-[20px] border border-line-deep p-6">
+              <span class="self-start rounded-full border border-white/25 px-3 py-1 text-xs font-medium">
+                Impacto {b.level.toLowerCase()}
+              </span>
+              <h3 class="font-expanded text-h4 font-semibold tracking-heading">{b.title}</h3>
+              <p class="text-body text-on-deep-muted">{b.impact}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-canvas">
+    <div class="wrap flex flex-col gap-10 py-20 md:py-28">
+      <div class="flex max-w-[44rem] flex-col gap-4">
+        <h2 class="font-expanded text-h2 font-semibold tracking-heading text-ink">
+          4. Plano de fundação
+        </h2>
+        <p class="text-lead text-muted">O que fazer primeiro, em etapas que já entregam valor.</p>
+      </div>
+      <ol class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {
+          plan.map((p) => (
+            <li class="flex flex-col gap-3 rounded-[20px] bg-surface p-6">
+              <span class="text-meta font-medium text-brand">{p.phase}</span>
+              <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+                {p.title}
+              </h3>
+              <p class="text-body text-muted">{p.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-surface">
+    <div
+      class="wrap flex flex-col gap-6 py-20 md:flex-row md:items-center md:justify-between md:py-24"
+    >
+      <h2
+        class="font-expanded max-w-[24ch] text-balance text-h2 font-semibold tracking-heading text-ink"
+        set:html={emphasize('Quer o mapa da *sua* empresa?')}
+      />
+      <a
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener"
+        data-booking
+        class="btn-primary shrink-0 self-start md:self-auto"
+      >
+        Agendar diagnóstico gratuito
+      </a>
+    </div>
+  </section>
+</BaseLayout>

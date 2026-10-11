@@ -1,0 +1,84 @@
+---
+import { CONTACT_FORM, SITE } from '@/config/site';
+
+/*
+  Porta para quem ainda não quer conversar (ADR-012, auditoria de conversão C3): troca
+  nome e e-mail pelo exemplo do mapa (/diagnostico/exemplo/). Envia ao Web3Forms
+  (src/scripts/sample-map.ts) e libera o link no sucesso. Sem JS, o POST vai direto e o
+  Web3Forms redireciona para o exemplo. Enquanto a chave for 'TODO', o link é liberado
+  sem captura.
+*/
+interface Props {
+  tone?: 'light' | 'dark';
+}
+const { tone = 'light' } = Astro.props;
+const dark = tone === 'dark';
+const exampleUrl = `${SITE.url}/diagnostico/exemplo/`;
+---
+
+<details class:list={['group', dark ? 'text-white' : 'text-ink']}>
+  <summary
+    class:list={[
+      'inline-flex cursor-pointer list-none items-center gap-2 text-body font-medium underline underline-offset-4 transition-colors [&::-webkit-details-marker]:hidden',
+      dark ? 'hover:text-brand-light' : 'text-brand hover:text-ink',
+    ]}
+    data-track="exemplo_mapa_aberto"
+  >
+    Ver um exemplo do mapa
+  </summary>
+  <form
+    action={CONTACT_FORM.endpoint}
+    method="POST"
+    class:list={[
+      'mt-4 flex max-w-[30rem] flex-col gap-3 rounded-[20px] p-5',
+      dark ? 'bg-white/5' : 'bg-canvas',
+    ]}
+    data-sample-gate
+  >
+    <input type="hidden" name="access_key" value={CONTACT_FORM.accessKey} />
+    <input type="hidden" name="subject" value="Exemplo do mapa do diagnóstico" />
+    <input type="hidden" name="from_name" value={`Site ${SITE.name}`} />
+    <input type="hidden" name="redirect" value={exampleUrl} />
+    <input
+      type="checkbox"
+      name="botcheck"
+      class="hidden"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+    <p class:list={['text-meta', dark ? 'text-on-deep-muted' : 'text-muted']}>
+      Veja o documento completo que entregamos, com uma empresa fictícia.
+    </p>
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <label class="sr-only" for={`sg-name-${tone}`}>Nome</label>
+      <input
+        id={`sg-name-${tone}`}
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        placeholder="Seu nome"
+        class="field-input"
+      />
+      <label class="sr-only" for={`sg-email-${tone}`}>E-mail corporativo</label>
+      <input
+        id={`sg-email-${tone}`}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder="E-mail corporativo"
+        class="field-input"
+      />
+    </div>
+    <button
+      type="submit"
+      class:list={['btn-sm self-start', dark ? 'btn-inverse' : 'btn-primary']}
+      data-sample-submit
+    >
+      Ver o exemplo
+    </button>
+    <p class="text-meta" role="status" aria-live="polite" data-sample-status></p>
+  </form>
+</details>

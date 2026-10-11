@@ -12,6 +12,7 @@ import { initContactForm } from './contact-form';
 import { initBooking } from './booking';
 import { initStickyCta } from './sticky-cta';
 import { initTracking } from './track';
+import { initSampleMapGates } from './sample-map';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -29,6 +30,7 @@ initContactForm();
 initTracking();
 initBooking();
 initStickyCta();
+initSampleMapGates();
 initCursor();
 initMagnetic();
 
