@@ -95,11 +95,16 @@ export const FOUNDER: {
   linkedin: string;
   credentials: readonly string[];
 } = {
-  name: '',
-  role: '',
+  name: 'Caio Cavalcanti',
+  role: 'Fundador e engenheiro de dados',
+  // TODO: retrato (photo) e LinkedIn pessoal quando o dono enviar.
   photo: '',
   linkedin: '',
-  credentials: [],
+  credentials: [
+    'Engenheiro mecatrônico de formação',
+    'Mais de 4 anos como engenheiro de dados',
+    'Mestrando em Ciência da Computação, com foco em inteligência artificial',
+  ],
 };
 
 // Seções da home com href absoluto: funcionam também nas outras páginas (na própria

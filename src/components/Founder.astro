@@ -4,7 +4,7 @@ import SectionHeader from './SectionHeader.astro';
 
 /*
   Quem conduz (auditoria A5): numa consultoria pequena, o cliente compra a pessoa.
-  Aparece na home no lugar do manifesto quando FOUNDER.name é preenchido em
+  Aparece na home, depois do manifesto, quando FOUNDER.name é preenchido em
   src/config/site.ts. Sem foto, mostra as iniciais.
 */
 const { name, role, photo, linkedin, credentials } = FOUNDER;
@@ -12,7 +12,7 @@ const parts = name.trim().split(/\s+/);
 const initials = (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1][0] : '');
 ---
 
-<section id="sobre" class="bg-canvas">
+<section id="quem-conduz" class="bg-surface">
   <div
     class="wrap grid grid-cols-1 gap-10 py-24 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] md:gap-16 md:py-32"
   >
@@ -25,11 +25,11 @@ const initials = (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length 
           height="1000"
           loading="lazy"
           decoding="async"
-          class="aspect-[4/5] w-full max-w-[18rem] rounded-[20px] bg-surface object-cover"
+          class="aspect-[4/5] w-full max-w-[18rem] rounded-[20px] bg-canvas object-cover"
         />
       ) : (
         <div
-          class="font-expanded flex aspect-[4/5] w-full max-w-[18rem] items-center justify-center rounded-[20px] bg-surface text-[clamp(56px,6vw,96px)] font-semibold tracking-display text-ink"
+          class="font-expanded flex aspect-[4/5] w-full max-w-[18rem] items-center justify-center rounded-[20px] bg-canvas text-[clamp(56px,6vw,96px)] font-semibold tracking-display text-ink"
           aria-hidden="true"
         >
           {initials}

@@ -27,8 +27,9 @@ import Contact from '@/components/Contact.astro';
   <Indicators />
   <Sectors />
   <Cases />
-  {/* Quem conduz aparece quando FOUNDER.name for preenchido (auditoria A5). */}
-  {FOUNDER.name ? <Founder /> : <Manifesto />}
+  <Manifesto />
+  {/* Quem conduz aparece quando FOUNDER.name está preenchido (auditoria A5). */}
+  {FOUNDER.name && <Founder />}
   <Faq />
   <Contact />
 </BaseLayout>
