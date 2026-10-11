@@ -1,0 +1,92 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { ADDRESS, CONTACT, SITE } from '@/config/site';
+
+/*
+  Política de privacidade (auditoria A9; LGPD arts. 6º, 9º e 18).
+  TODO: validar com assessoria jurídica antes de considerar definitiva (rascunho de
+  2026-10-11). Controlador, CNPJ e contato vêm de src/config/site.ts — conferir quando
+  os dados oficiais forem preenchidos. Prazo de retenção (12 meses) é proposta.
+*/
+const updated = '11 de outubro de 2026';
+
+const sections = [
+  {
+    title: 'Quem trata os seus dados',
+    body: [
+      `${SITE.name}, CNPJ ${CONTACT.cnpj}, com sede em ${ADDRESS.addressLocality}/${ADDRESS.addressRegion}, é a controladora dos dados pessoais coletados neste site. Para qualquer assunto sobre privacidade, escreva para ${CONTACT.email}.`,
+    ],
+  },
+  {
+    title: 'Que dados coletamos',
+    body: [
+      'Pelo formulário de contato: nome, empresa, e-mail, telefone (opcional), assunto e mensagem (opcional).',
+      'Pela navegação: métricas agregadas de visita (páginas vistas, país, tipo de dispositivo) pelo Cloudflare Web Analytics, que não usa cookies e não identifica você.',
+    ],
+  },
+  {
+    title: 'Para que usamos',
+    body: [
+      'Para responder ao seu contato, agendar o diagnóstico e, se você pedir, enviar uma proposta. Não enviamos newsletter sem o seu pedido e não vendemos dados.',
+    ],
+  },
+  {
+    title: 'Base legal',
+    body: [
+      'Os dados do formulário são tratados para procedimentos preliminares a um contrato, a seu pedido (LGPD, art. 7º, V). As métricas agregadas de visita se apoiam no legítimo interesse de manter e melhorar o site (art. 7º, IX).',
+    ],
+  },
+  {
+    title: 'Com quem compartilhamos',
+    body: [
+      'Web3Forms, serviço que recebe o formulário e o encaminha para o nosso e-mail. Cloudflare, que hospeda o site, protege contra ataques e gera as métricas agregadas. Esses fornecedores podem processar dados fora do Brasil, com as salvaguardas previstas na LGPD. Não compartilhamos dados com terceiros para publicidade.',
+    ],
+  },
+  {
+    title: 'Por quanto tempo guardamos',
+    body: [
+      'Mensagens de contato que não viram projeto são apagadas em até 12 meses. Se houver contratação, os dados ficam pelo tempo da relação comercial e pelos prazos legais depois dela.',
+    ],
+  },
+  {
+    title: 'Seus direitos',
+    body: [
+      `Você pode pedir confirmação de que tratamos seus dados, acesso, correção, anonimização ou eliminação, portabilidade, informação sobre com quem compartilhamos e revisão de consentimento (LGPD, art. 18). Basta escrever para ${CONTACT.email}; respondemos em até 15 dias.`,
+    ],
+  },
+  {
+    title: 'Cookies',
+    body: ['Este site não usa cookies de rastreamento nem de publicidade.'],
+  },
+] as const;
+---
+
+<BaseLayout
+  title={`Política de privacidade | ${SITE.name}`}
+  description={`Como a ${SITE.name} trata os dados pessoais enviados pelo site: o que coletamos, para quê, com quem compartilhamos e como exercer seus direitos.`}
+  contactOnPage={false}
+>
+  <section class="bg-canvas">
+    <div class="wrap pb-24 pt-32 md:pb-32 md:pt-40">
+      <div class="flex max-w-[44rem] flex-col gap-4">
+        <h1 class="font-expanded text-balance text-h2 font-semibold tracking-heading text-ink">
+          Política de privacidade
+        </h1>
+        <p class="text-meta text-muted">Última atualização: {updated}</p>
+      </div>
+
+      <div class="mt-14 flex max-w-measure flex-col gap-12">
+        {
+          sections.map(({ title, body }) => (
+            <section class="flex flex-col gap-4">
+              <h2 class="font-expanded text-h4 font-semibold tracking-heading text-ink">{title}</h2>
+              {body.map((p) => (
+                <p class="text-body text-muted">{p}</p>
+              ))}
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

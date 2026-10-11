@@ -150,8 +150,10 @@ const { subject = 'diagnostico' } = Astro.props;
             class="field-input h-auto min-h-[128px] py-3"></textarea>
         </div>
 
-        {/* TODO: linkar a política de privacidade (LGPD) quando a página existir */}
-        <p class="text-meta text-muted">Usamos seus dados só para responder a este contato.</p>
+        <p class="text-meta text-muted">
+          Usamos seus dados só para responder a este contato. Veja a
+          <a href="/privacidade/" class="underline underline-offset-2 hover:text-ink">política de privacidade</a>.
+        </p>
 
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
           <button type="submit" class="btn-primary self-start" data-contact-submit>
