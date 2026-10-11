@@ -55,10 +55,11 @@ const total = CASES.length;
     </div>
 
     <div class="mt-12 md:mt-14" data-carousel-viewport>
-      <ul data-carousel-track>
+      {/* Slides em div (padrão de carrossel da APG): `li` com role="group" invalidaria a lista. */}
+      <div data-carousel-track>
         {
           CASES.map((c, i) => (
-            <li
+            <div
               class="pr-4"
               role="group"
               aria-roledescription="slide"
@@ -98,10 +99,10 @@ const total = CASES.length;
                   <CaseChart chart={c.chart} id={`caso-${i + 1}`} />
                 </div>
               </article>
-            </li>
+            </div>
           ))
         }
-      </ul>
+      </div>
     </div>
 
     {/* TODO: validar texto (novo do redesign, não aprovado) */}
