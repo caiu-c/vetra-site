@@ -9,6 +9,7 @@ import { initCarousels } from './motion/carousel';
 import { initCounters } from './motion/counters';
 import { initChartScrubbers } from './charts';
 import { initContactForm } from './contact-form';
+import { initBooking } from './booking';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -23,6 +24,7 @@ if (env.webgl && env.finePointer && lensAnchor && window.matchMedia('(min-width:
 
 // Leves e ligados à interação: na hora.
 initContactForm();
+initBooking();
 initCursor();
 initMagnetic();
 

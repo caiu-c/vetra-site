@@ -1,5 +1,5 @@
 ---
-import { NAV, BOOKING_URL } from '@/config/site';
+import { NAV, BOOKING_URL, CONTACT_FORM_ANCHOR } from '@/config/site';
 import ApertureSymbol from './ApertureSymbol.astro';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
   contactHref?: string;
 }
 
-const { contactHref = BOOKING_URL } = Astro.props;
+const { contactHref = CONTACT_FORM_ANCHOR } = Astro.props;
 ---
 
 <dialog
@@ -47,9 +47,11 @@ const { contactHref = BOOKING_URL } = Astro.props;
 
     <div class="mt-auto flex flex-col gap-3">
       <a
-        href={contactHref}
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener"
+        data-booking
         data-action="close-menu"
-        data-subject="diagnostico"
         class="btn-primary w-full"
       >
         Agendar diagnóstico gratuito

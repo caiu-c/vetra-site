@@ -1,5 +1,5 @@
 ---
-import { NAV, SITE, CONTACT, BOOKING_URL, whatsappUrl } from '@/config/site';
+import { NAV, SITE, CONTACT, BOOKING_URL, CONTACT_FORM_ANCHOR, whatsappUrl } from '@/config/site';
 import ApertureSymbol from './ApertureSymbol.astro';
 import { SERVICES, serviceUrl } from '@/data/services';
 const year = new Date().getFullYear();
@@ -9,14 +9,16 @@ interface Props {
   contactHref?: string;
 }
 
-const { contactHref = BOOKING_URL } = Astro.props;
+const { contactHref = CONTACT_FORM_ANCHOR } = Astro.props;
 const whatsapp = whatsappUrl();
 ---
 
 {/* Continua o bloco Tinta do Contato, separado por uma linha. */}
 <footer class="bg-ink text-white">
   <div class="wrap">
-    <div class="grid grid-cols-2 gap-10 border-t border-line-deep py-16 md:grid-cols-[2fr_1fr_1fr_1fr]">
+    <div
+      class="grid grid-cols-2 gap-10 border-t border-line-deep py-16 md:grid-cols-[2fr_1fr_1fr_1fr]"
+    >
       <div class="col-span-2 flex flex-col gap-4 md:col-span-1">
         <div class="flex items-center gap-2.5">
           <ApertureSymbol size={24} ariaLabel="" class="text-brand-light" />
@@ -31,7 +33,10 @@ const whatsapp = whatsappUrl();
         <p class="text-meta font-medium">Serviços</p>
         {
           SERVICES.map((s) => (
-            <a href={serviceUrl(s.slug)} class="text-meta text-on-deep-muted transition-colors hover:text-white">
+            <a
+              href={serviceUrl(s.slug)}
+              class="text-meta text-on-deep-muted transition-colors hover:text-white"
+            >
               {s.name}
             </a>
           ))
@@ -42,7 +47,10 @@ const whatsapp = whatsappUrl();
         <p class="text-meta font-medium">Empresa</p>
         {
           NAV.map((item) => (
-            <a href={item.href} class="text-meta text-on-deep-muted transition-colors hover:text-white">
+            <a
+              href={item.href}
+              class="text-meta text-on-deep-muted transition-colors hover:text-white"
+            >
               {item.label}
             </a>
           ))
@@ -52,11 +60,19 @@ const whatsapp = whatsappUrl();
       <div class="flex flex-col gap-3">
         <p class="text-meta font-medium">Contato</p>
         <a
-          href={contactHref}
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener"
+          data-booking
           class="text-meta text-on-deep-muted transition-colors hover:text-white"
-          data-subject="diagnostico"
         >
           Agendar diagnóstico gratuito
+        </a>
+        <a
+          href={contactHref}
+          class="text-meta text-on-deep-muted transition-colors hover:text-white"
+        >
+          Formulário de contato
         </a>
         {
           whatsapp && (

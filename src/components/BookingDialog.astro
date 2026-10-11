@@ -1,0 +1,37 @@
+---
+import { BOOKING_URL } from '@/config/site';
+
+/*
+  Janela da agenda (ADR-012). src/scripts/booking.ts abre este <dialog> ao clicar em
+  qualquer link com `data-booking` e cria o iframe do Cal.com só nesse momento (nada
+  carrega antes do clique). Sem JS — ou sem suporte a <dialog> —, o link abre a agenda
+  em nova aba.
+*/
+---
+
+<dialog
+  data-booking-dialog
+  class="m-auto h-[min(92svh,780px)] w-[min(96vw,1040px)] max-w-none overflow-hidden rounded-[20px] bg-canvas p-0 text-ink backdrop:bg-ink/60 max-sm:h-full max-sm:max-h-none max-sm:w-full max-sm:rounded-none"
+  aria-label="Agendar diagnóstico gratuito"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex items-center justify-between gap-4 border-b border-line px-5 py-3">
+      <p class="text-meta font-medium">Escolha um horário</p>
+      <div class="flex items-center gap-4">
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener"
+          class="hidden text-meta text-muted underline underline-offset-2 hover:text-ink sm:inline"
+          data-booking-external>Abrir em nova aba</a
+        >
+        <button type="button" class="btn-secondary btn-sm" data-booking-close>Fechar</button>
+      </div>
+    </div>
+    <div class="relative flex-1 bg-canvas" data-booking-frame>
+      <p class="absolute inset-0 grid place-items-center text-meta text-muted">
+        Carregando a agenda…
+      </p>
+    </div>
+  </div>
+</dialog>

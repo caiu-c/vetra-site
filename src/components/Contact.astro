@@ -1,5 +1,13 @@
 ---
-import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE, whatsappUrl } from '@/config/site';
+import {
+  BOOKING_URL,
+  CONTACT,
+  CONTACT_FORM,
+  CONTACT_SUBJECTS,
+  QUICK_CALL_URL,
+  SITE,
+  whatsappUrl,
+} from '@/config/site';
 import { emphasize } from '@/lib/emphasis';
 
 interface Props {
@@ -29,9 +37,29 @@ const whatsapp = whatsappUrl();
       />
       {/* TODO: validar texto. Prazo de resposta (1 dia útil) definido pelo dono em 2026-10-11. */}
       <p class="max-w-measure text-pretty text-lead text-on-deep-muted">
-        Conte o que está travando os seus dados. Respondemos em até 1 dia útil com os próximos
-        passos e, se fizer sentido, marcamos o diagnóstico gratuito.
+        Escolha um horário na agenda e a conversa já fica marcada. Se preferir, escreva: respondemos
+        em até 1 dia útil.
       </p>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener"
+          data-booking
+          class="btn-inverse self-start"
+        >
+          Agendar diagnóstico gratuito
+        </a>
+        <a
+          href={QUICK_CALL_URL}
+          target="_blank"
+          rel="noopener"
+          data-booking
+          class="text-body text-white underline underline-offset-4 transition-colors hover:text-brand-light"
+        >
+          Ou uma conversa rápida de 15 min
+        </a>
+      </div>
 
       <dl class="flex flex-col gap-5 border-t border-line-deep pt-8 lg:mt-auto">
         <div class="flex flex-col gap-1">
@@ -86,6 +114,10 @@ const whatsapp = whatsappUrl();
     </div>
 
     <div class="rounded-[20px] bg-canvas p-6 text-ink md:p-10">
+      <div class="mb-6 flex flex-col gap-1">
+        <h3 class="font-expanded text-h4 font-semibold tracking-heading">Prefere escrever?</h3>
+        <p class="text-meta text-muted">Conte o desafio e respondemos em até 1 dia útil.</p>
+      </div>
       <form
         action={CONTACT_FORM.endpoint}
         method="POST"

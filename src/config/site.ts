@@ -10,12 +10,16 @@ export const SITE = {
   founded: 2026,
 } as const;
 
-// "Agendar diagnóstico gratuito" leva ao formulário de contato (assunto pré-selecionado via
-// data-subject="diagnostico"). TODO: trocar pelo link de agendamento (Cal.com /
-// Google Agenda) quando existir.
-// Âncora do formulário na própria página. Páginas sem o formulário (404, privacidade)
-// passam `contactOnPage={false}` ao BaseLayout, e o cabeçalho/rodapé usam HOME_CONTACT_URL.
-export const BOOKING_URL = '#contato';
+// Agenda online (Cal.com, ADR-012). Links com `data-booking` abrem a agenda numa janela
+// sobre a página (BookingDialog.astro + src/scripts/booking.ts); sem JS, abrem a página
+// da agenda em nova aba. Diagnóstico = 30 min; conversa rápida = 15 min.
+export const BOOKING_URL = 'https://cal.com/caiocavalcanti/30min';
+export const QUICK_CALL_URL = 'https://cal.com/caiocavalcanti/15min';
+
+// Formulário de contato (alternativa à agenda) na própria página. Páginas sem o
+// formulário (404, privacidade) passam `contactOnPage={false}` ao BaseLayout, e o
+// cabeçalho/rodapé usam HOME_CONTACT_URL.
+export const CONTACT_FORM_ANCHOR = '#contato';
 export const HOME_CONTACT_URL = '/#contato';
 
 // Formulário de contato via Web3Forms (https://web3forms.com): a chave é pública por

@@ -50,7 +50,15 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
           set:html={emphasize(`${service.audience} ${service.summary}`)}
         />
         <div class="flex flex-col gap-3 sm:flex-row">
-          <a href={BOOKING_URL} class="btn-primary" data-subject={service.subject} data-magnetic>
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener"
+            data-booking
+            class="btn-primary"
+            data-subject={service.subject}
+            data-magnetic
+          >
             Agendar diagnóstico gratuito
           </a>
           <a href="#entregas" class="btn-secondary">O que entregamos</a>

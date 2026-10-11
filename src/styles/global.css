@@ -146,6 +146,16 @@
   margin-block: -0.12em;
 }
 
+/* Com uma janela aberta (agenda, menu), o cursor customizado não acompanha o ponteiro
+   dentro do iframe: volta o cursor do sistema. */
+html:has(dialog[open]) #cursor {
+  display: none;
+}
+html.cursor-on:has(dialog[open]),
+html.cursor-on:has(dialog[open]) * {
+  cursor: auto !important;
+}
+
 /* Cursor customizado — branco + difference: escuro sobre claro, claro sobre escuro */
 .cursor-on,
 .cursor-on * {
