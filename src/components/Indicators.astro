@@ -2,12 +2,14 @@
 import SectionHeader from './SectionHeader.astro';
 
 /* TODO: validar números reais com cliente antes do go-live. Placeholders abaixo.
+   O <dd> é flex: os espaços de quebra de linha entre número e unidade não aparecem; o
+   espaço que deve aparecer vai como \u00a0 na própria unidade.
    `value` anima de 0 até o número (src/scripts/motion/counters.ts). */
 const indicators = [
   { prefix: '', value: '47', unit: '+', label: 'Projetos entregues' },
-  { prefix: '', value: '12', unit: ' TB', label: 'Processados por mês' },
+  { prefix: '', value: '12', unit: '\u00a0TB', label: 'Processados por mês' },
   { prefix: '', value: '99.97', unit: '%', label: 'Uptime contratado em SLA' },
-  { prefix: '<', value: '200', unit: ' ms', label: 'Latência média de consulta' },
+  { prefix: '<\u00a0', value: '200', unit: '\u00a0ms', label: 'Latência média de consulta' },
 ] as const;
 
 /** Texto inicial do número em pt-BR (vírgula decimal); `data-count` mantém o ponto para o parse. */
@@ -27,17 +29,19 @@ const display = (value: string) => {
       <SectionHeader title="Resultado que se mede." variant="brand" />
       {/* TODO: validar texto (novo do redesign, não aprovado) */}
       <p class="max-w-[22rem] text-body text-on-brand-muted">
-        Indicadores de operação acompanhados em cada contrato, do primeiro diagnóstico ao
-        SLA de produção.
+        Indicadores de operação acompanhados em cada contrato, do primeiro diagnóstico ao SLA de
+        produção.
       </p>
     </div>
 
-    <dl class="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-white/20 pt-10 md:grid-cols-4">
+    <dl
+      class="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-white/20 pt-10 md:grid-cols-4"
+    >
       {
         indicators.map(({ prefix, value, unit, label }) => (
           <div class="flex flex-col gap-3">
             <dt class="order-2 text-meta text-on-brand-muted">{label}</dt>
-            <dd class="numerals-tabular font-expanded order-1 text-stat font-semibold tracking-display">
+            <dd class="numerals-tabular font-expanded order-1 flex items-baseline text-stat font-semibold tracking-display">
               {prefix}
               <span data-count={value}>{display(value)}</span>
               {unit}
