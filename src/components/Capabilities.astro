@@ -1,13 +1,15 @@
 ---
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
-import PipelineDiagram from './PipelineDiagram.astro';
 import ApertureGlyph from './ApertureGlyph.astro';
 import { SERVICES, serviceUrl } from '@/data/services';
+import ServiceMockup from './mockups/ServiceMockup.astro';
 
-/* Serviços em linguagem de negócio (auditoria A11): resultado → o que fazemos →
-   três entregáveis em palavras simples. Os dados vêm de src/data/services.ts, a mesma
-   fonte das páginas /servicos/[slug]. */
+/*
+  Serviços (ADR-010): cada um numa linha com texto de um lado e a tela do que
+  entregamos do outro, alternando os lados — como as seções de produto da Vercel.
+  Texto em linguagem de negócio (auditoria A11), de src/data/services.ts.
+*/
 ---
 
 <section id="servicos" class="bg-canvas">
@@ -18,41 +20,50 @@ import { SERVICES, serviceUrl } from '@/data/services';
       description="Começamos pela base de dados e, sobre ela, entregamos indicadores, IA e automações. Cada serviço funciona sozinho e rende mais com o anterior."
     />
 
-    <ul class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" data-layers>
+    <ul class="mt-16 flex flex-col">
       {
-        SERVICES.map(({ slug, name, outcome, summary, highlights }, i) => (
-          <li
-            class="flex flex-col gap-5 rounded-[20px] border border-line p-6 md:p-10"
-            data-layer={i}
-          >
-            <div class="flex items-center gap-3">
-              <ApertureGlyph active={i} />
-              <h3 class="text-body font-semibold text-ink">{name}</h3>
-            </div>
-            <p class="font-expanded text-balance text-h3 font-semibold tracking-heading text-ink">
-              {outcome}
-            </p>
-            <p class="max-w-[30rem] text-body text-muted">{summary}</p>
-            <ul class="mt-auto flex flex-col gap-2.5 border-t border-line pt-5">
-              {highlights.map((d) => (
-                <li class="flex items-baseline gap-3 text-body text-ink">
-                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
-                  {d}
-                </li>
-              ))}
-            </ul>
-            <a
-              href={serviceUrl(slug)}
-              class="self-start text-body font-medium text-brand underline underline-offset-4 transition-colors hover:text-ink"
-            >
-              Mais sobre {name}
-            </a>
-          </li>
-        ))
+        SERVICES.map(({ slug, name, outcome, summary, highlights }, i) => {
+          return (
+            <li class="grid grid-cols-1 items-center gap-10 border-t border-line py-14 md:py-20 lg:grid-cols-2 lg:gap-20">
+              <div class:list={['flex flex-col gap-6', i % 2 === 1 && 'lg:order-2']}>
+                <div class="flex items-center gap-3">
+                  <ApertureGlyph active={i} size={32} />
+                  <h3 class="text-body font-semibold text-ink">{name}</h3>
+                </div>
+                <p class="font-expanded text-balance text-[clamp(28px,3vw,40px)] font-semibold leading-[1.1] tracking-heading text-ink">
+                  {outcome}
+                </p>
+                <p class="max-w-measure text-lead text-muted">{summary}</p>
+                <ul class="flex flex-col gap-2.5">
+                  {highlights.map((d) => (
+                    <li class="flex items-baseline gap-3 text-body text-ink">
+                      <span
+                        class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand"
+                        aria-hidden="true"
+                      />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={serviceUrl(slug)}
+                  class="self-start text-body font-medium text-brand underline underline-offset-4 transition-colors hover:text-ink"
+                >
+                  Mais sobre {name}
+                </a>
+              </div>
+              <div class:list={[i % 2 === 1 && 'lg:order-1']}>
+                <ServiceMockup slug={slug} />
+              </div>
+            </li>
+          );
+        })
       }
     </ul>
 
-    {/* TODO: validar texto (auditoria A11/A12: só referencia o diagnóstico, explicado em Diagnosis.astro) */}
+    {
+      /* TODO: validar texto (auditoria A11/A12: só referencia o diagnóstico, explicado em Diagnosis.astro) */
+    }
     <div
       class="mt-6 flex flex-col gap-6 rounded-[20px] bg-surface p-6 md:flex-row md:items-center md:justify-between md:p-10"
     >
@@ -67,19 +78,6 @@ import { SERVICES, serviceUrl } from '@/data/services';
       >
         Agendar diagnóstico gratuito
       </a>
-    </div>
-
-    {/* TODO: validar título (novo do redesign, não aprovado) */}
-    <div class="mt-24 flex flex-col gap-10 md:mt-32">
-      <h3
-        data-split
-        class="font-expanded text-balance max-w-[28rem] text-h3 font-semibold tracking-heading text-ink"
-      >
-        Da fonte bruta à decisão automatizada.
-      </h3>
-      <div class="w-full max-w-[1040px]">
-        <PipelineDiagram />
-      </div>
     </div>
   </div>
 </section>

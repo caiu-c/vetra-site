@@ -1,0 +1,77 @@
+---
+import MockupFrame from './MockupFrame.astro';
+import Check from './Check.astro';
+
+/* Engenharia de dados: a carga diária juntando as fontes numa base e os testes de qualidade. */
+const sources = [
+  { name: 'ERP', rows: '48.210' },
+  { name: 'CRM', rows: '12.480' },
+  { name: 'Loja online', rows: '9.932' },
+  { name: 'Planilhas de metas', rows: '316' },
+] as const;
+---
+
+<MockupFrame
+  title="Carga diária"
+  status="Hoje, 06:04"
+  label="Tela de carga diária de dados: quatro fontes reunidas numa base central, com testes de qualidade"
+>
+  <div
+    class="grid grid-cols-1 gap-5 p-5 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,0.9fr)] sm:items-center md:p-6"
+  >
+    <ul class="flex flex-col gap-2">
+      {
+        sources.map((s) => (
+          <li class="flex items-center justify-between gap-3 rounded-lg border border-line px-3 py-2.5">
+            <span class="flex items-center gap-2.5 text-meta font-medium">
+              <Check />
+              {s.name}
+            </span>
+            <span class="numerals-tabular text-xs text-muted">{s.rows} linhas</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <svg viewBox="0 0 48 160" class="mx-auto hidden h-40 w-12 sm:block" fill="none">
+      <path
+        d="M0 20 C24 20 24 80 48 80 M0 60 C24 60 24 80 48 80 M0 100 C24 100 24 80 48 80 M0 140 C24 140 24 80 48 80"
+        stroke="#C5CCD8"
+        stroke-width="1.5"></path>
+      <path
+        class="beam"
+        d="M0 20 C24 20 24 80 48 80"
+        stroke="#1640D6"
+        stroke-width="1.5"
+        stroke-linecap="round"></path>
+      <path
+        class="beam"
+        d="M0 140 C24 140 24 80 48 80"
+        stroke="#1640D6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        style="animation-delay:1.1s"></path>
+    </svg>
+
+    <div class="flex flex-col gap-4 rounded-lg bg-ink p-4 text-white">
+      <span class="text-meta font-medium">Base central</span>
+      <dl class="grid grid-cols-2 gap-3">
+        <div>
+          <dt class="text-xs text-on-deep-muted">Tabelas</dt>
+          <dd class="numerals-tabular font-expanded text-h3 font-semibold">86</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-on-deep-muted">Atualizada</dt>
+          <dd class="numerals-tabular font-expanded text-h3 font-semibold">06:04</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 border-t border-line px-5 py-3.5 md:px-6">
+    <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-surface">
+      <div class="h-full w-full rounded-full bg-brand"></div>
+    </div>
+    <span class="text-xs font-medium">128 de 128 testes de qualidade passaram</span>
+  </div>
+</MockupFrame>

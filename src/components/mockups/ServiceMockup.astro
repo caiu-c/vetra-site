@@ -1,0 +1,22 @@
+---
+import PipelineMockup from './PipelineMockup.astro';
+import DashboardMockup from './DashboardMockup.astro';
+import AgentMockup from './AgentMockup.astro';
+import AutomationMockup from './AutomationMockup.astro';
+
+/** Tela ilustrativa de cada serviço, pelo slug de src/data/services.ts (ADR-010). */
+interface Props {
+  slug: string;
+}
+
+const MOCKUPS: Record<string, typeof PipelineMockup> = {
+  'engenharia-de-dados': PipelineMockup,
+  dashboards: DashboardMockup,
+  'agentes-de-ia': AgentMockup,
+  automacoes: AutomationMockup,
+};
+
+const Mockup = MOCKUPS[Astro.props.slug];
+---
+
+{Mockup && <Mockup />}

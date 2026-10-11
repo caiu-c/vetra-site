@@ -1,0 +1,45 @@
+---
+import { TECHS } from '@/data/tech';
+
+/*
+  Faixa de logos no pé do hero (como a faixa de logos de clientes da Vercel e da
+  Genux, ADR-010). Sem clientes ainda, mostra as tecnologias com que trabalhamos —
+  nunca rotular como clientes. Marquee (src/scripts/motion/marquee.ts): a lista se
+  repete duas vezes e anda -50% em loop; a segunda cópia é aria-hidden. Com reduced
+  motion, a lista quebra em linhas (global.css).
+*/
+---
+
+<div class="border-t border-line">
+  <div class="wrap flex flex-col gap-5 py-7 md:flex-row md:items-center md:gap-10">
+    <p class="shrink-0 text-meta text-muted md:max-w-[11rem]">Tecnologias com que trabalhamos</p>
+    <div class="tech-fade min-w-0 flex-1 overflow-hidden">
+      <div class="flex w-max" data-marquee>
+        {
+          [0, 1].map((copy) => (
+            <ul
+              class="flex shrink-0 items-center"
+              aria-hidden={copy === 1 ? 'true' : undefined}
+              aria-label={copy === 0 ? 'Tecnologias com que trabalhamos' : undefined}
+            >
+              {TECHS.map((t) => (
+                <li class="flex items-center gap-2.5 pr-10 text-body font-medium text-muted md:pr-14">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    class="shrink-0 fill-current"
+                    aria-hidden="true"
+                  >
+                    <path d={t.path} />
+                  </svg>
+                  {t.name}
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+---
+/*
+  Moldura das telas ilustrativas (ADR-010): mostram o que a Vetra entrega, no lugar
+  de descrever. Sempre com dados fictícios e a legenda "Exemplo ilustrativo" — nunca
+  apresentar como cliente ou resultado real.
+*/
+interface Props {
+  title: string;
+  /** Texto curto à direita do título (status, data). */
+  status?: string;
+  /** Descrição da tela para leitores de tela. */
+  label: string;
+  class?: string;
+}
+
+const { title, status, label, class: className } = Astro.props;
+---
+
+<figure class:list={['flex flex-col gap-3', className]}>
+  <div
+    class="overflow-hidden rounded-[20px] border border-line-strong bg-canvas text-ink"
+    role="img"
+    aria-label={`${label} (exemplo ilustrativo, dados fictícios)`}
+  >
+    <div class="flex items-center justify-between gap-4 border-b border-line bg-surface px-5 py-3">
+      <div class="flex items-center gap-3">
+        <span class="flex gap-1.5" aria-hidden="true">
+          <span class="h-2.5 w-2.5 rounded-full bg-line-strong"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-line-strong"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-line-strong"></span>
+        </span>
+        <span class="text-meta font-medium">{title}</span>
+      </div>
+      {status && <span class="text-xs text-muted">{status}</span>}
+    </div>
+    <div aria-hidden="true">
+      <slot />
+    </div>
+  </div>
+  <figcaption class="text-xs text-muted">Exemplo ilustrativo, com dados fictícios.</figcaption>
+</figure>

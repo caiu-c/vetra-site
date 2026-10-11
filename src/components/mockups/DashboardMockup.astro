@@ -1,0 +1,67 @@
+---
+import MockupFrame from './MockupFrame.astro';
+
+/*
+  Dashboards: painel com indicadores e receita por mês. Marcas no padrão da skill
+  dataviz: barras ≤ 24px com topo arredondado de 4px, grade em linha fina, uma série
+  em Cobalto (mês atual cheio, anteriores mais claros), texto nos tokens de texto.
+*/
+const kpis = [
+  { label: 'Receita', value: 'R$ 1,24 mi', delta: '+8,2%' },
+  { label: 'Margem', value: '18,4%', delta: '+1,1 p.p.' },
+  { label: 'Pedidos', value: '3.912', delta: '+5,6%' },
+] as const;
+const months = ['nov', 'dez', 'jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out'];
+const values = [62, 78, 55, 58, 66, 70, 68, 74, 80, 77, 86, 94]; // % da altura do gráfico
+---
+
+<MockupFrame
+  title="Painel comercial"
+  status="Atualizado às 06:10"
+  label="Painel comercial com receita, margem e pedidos do mês e um gráfico de barras da receita mensal"
+>
+  <div class="flex flex-col gap-5 p-5 md:p-6">
+    <dl class="grid grid-cols-3 gap-2 sm:gap-3">
+      {
+        kpis.map((k) => (
+          <div class="flex min-w-0 flex-col gap-1 rounded-lg border border-line p-2.5 sm:p-3">
+            <dt class="text-xs text-muted">{k.label}</dt>
+            <dd class="numerals-tabular font-expanded whitespace-nowrap text-[clamp(14px,1.6vw,22px)] font-semibold leading-tight">
+              {k.value}
+            </dd>
+            <dd class="text-xs text-brand">{k.delta}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="flex flex-col gap-3">
+      <span class="text-xs text-muted">Receita por mês</span>
+      <div class="relative h-36">
+        <div class="absolute inset-0 flex flex-col justify-between">
+          {[0, 1, 2, 3].map(() => <span class="block h-px w-full bg-line" />)}
+        </div>
+        <div class="relative flex h-full items-end justify-between gap-[2px] px-1">
+          {
+            values.map((v, i) => (
+              <span
+                class:list={[
+                  'w-full max-w-[24px] rounded-t-[4px]',
+                  i === values.length - 1 ? 'bg-brand' : 'bg-brand/30',
+                ]}
+                style={`height:${v}%`}
+              />
+            ))
+          }
+        </div>
+      </div>
+      <div class="flex justify-between px-1">
+        {
+          months.map((m) => (
+            <span class="w-full max-w-[24px] text-center text-[10px] text-muted">{m}</span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</MockupFrame>

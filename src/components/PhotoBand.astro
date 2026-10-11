@@ -1,0 +1,37 @@
+---
+import { Picture } from 'astro:assets';
+import armazem from '@/assets/photos/armazem.jpg';
+
+/*
+  Faixa de foto de ponta a ponta (ADR-010, o "momento" de imagem grande da ASML e da
+  Genux). Foto de banco gratuito (src/assets/photos/CREDITOS.md) mostrando o mundo do
+  cliente — nunca apresentada como equipe ou cliente da Vetra. Véu em Tinta para o
+  texto manter contraste.
+  TODO: validar texto.
+*/
+---
+
+<section class="relative isolate overflow-hidden bg-ink text-white">
+  <Picture
+    src={armazem}
+    formats={['avif', 'webp']}
+    widths={[640, 960, 1440, 1920, 2400]}
+    sizes="100vw"
+    alt="Corredor de um armazém com prateleiras cheias e duas pessoas carregando caixas"
+    class="absolute inset-0 -z-10 h-full w-full object-cover"
+    loading="lazy"
+  />
+  <div class="absolute inset-0 -z-10 bg-ink/70" aria-hidden="true"></div>
+  <div class="wrap flex min-h-[70svh] flex-col justify-end gap-6 py-20 md:min-h-[78svh] md:py-28">
+    <h2
+      data-split
+      class="font-expanded max-w-[18ch] text-balance text-cta font-semibold tracking-display"
+    >
+      Do armazém à diretoria, todos olhando o mesmo número.
+    </h2>
+    <p class="max-w-measure text-pretty text-lead text-white/85">
+      É isso que uma base de dados bem feita entrega: a operação registra, a gestão decide e ninguém
+      precisa montar planilha no meio do caminho.
+    </p>
+  </div>
+</section>

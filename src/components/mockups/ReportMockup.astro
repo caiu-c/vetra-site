@@ -1,0 +1,76 @@
+---
+/*
+  Diagnóstico: a capa do mapa que o cliente recebe (sobre a foto da conversa).
+  Ilustrativo, com dados fictícios.
+*/
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+const bottlenecks = [
+  { label: 'Conciliação de vendas feita à mão', level: 'Alto' },
+  { label: 'Estoque atualizado uma vez por semana', level: 'Alto' },
+  { label: 'Metas em planilhas soltas', level: 'Médio' },
+] as const;
+---
+
+<figure class:list={['flex w-full max-w-[22rem] flex-col gap-2', className]}>
+  <div
+    class="flex flex-col gap-4 rounded-[20px] border border-line-strong bg-canvas p-5 text-ink"
+    role="img"
+    aria-label="Capa do mapa entregue no diagnóstico, com os três gargalos prioritários (exemplo ilustrativo, dados fictícios)"
+  >
+    <div class="flex flex-col gap-1" aria-hidden="true">
+      <span class="text-xs text-muted">Diagnóstico de dados</span>
+      <span class="font-expanded text-h4 font-semibold leading-tight tracking-heading"
+        >Mapa do seu sistema</span
+      >
+    </div>
+    <svg viewBox="0 0 280 84" class="w-full" fill="none" aria-hidden="true">
+      <g stroke="#C5CCD8" stroke-width="1.2">
+        <path d="M46 18 H120 M46 42 H120 M46 66 H120 M160 42 H230"></path>
+        <path d="M120 18 C140 18 140 42 160 42 M120 66 C140 66 140 42 160 42"></path>
+      </g>
+      <g font-family="inherit" font-size="10" fill="#0C1838">
+        <rect x="2" y="8" width="44" height="20" rx="6" fill="#F2F4F8"></rect><text
+          x="24"
+          y="21"
+          text-anchor="middle">ERP</text
+        >
+        <rect x="2" y="32" width="44" height="20" rx="6" fill="#F2F4F8"></rect><text
+          x="24"
+          y="45"
+          text-anchor="middle">CRM</text
+        >
+        <rect x="2" y="56" width="44" height="20" rx="6" fill="#F2F4F8"></rect><text
+          x="24"
+          y="69"
+          text-anchor="middle">Planilhas</text
+        >
+        <rect x="230" y="30" width="48" height="24" rx="6" fill="#1640D6"></rect><text
+          x="254"
+          y="45"
+          text-anchor="middle"
+          fill="#fff">Base</text
+        >
+      </g>
+      <circle cx="120" cy="66" r="4" fill="#B42318"></circle>
+      <circle cx="120" cy="18" r="4" fill="#B42318"></circle>
+    </svg>
+    <ol class="flex flex-col gap-2 border-t border-line pt-3" aria-hidden="true">
+      {
+        bottlenecks.map((b, i) => (
+          <li class="flex items-baseline justify-between gap-3 text-xs">
+            <span>
+              <span class="numerals-tabular mr-1.5 text-muted">{i + 1}</span>
+              {b.label}
+            </span>
+            <span class="shrink-0 font-medium">{b.level}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <figcaption class="text-xs text-muted">Exemplo ilustrativo, com dados fictícios.</figcaption>
+</figure>

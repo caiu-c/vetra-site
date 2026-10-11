@@ -1,21 +1,36 @@
 ---
+import { Picture } from 'astro:assets';
 import { SITE } from '@/config/site';
+import fortaleza from '@/assets/photos/fortaleza.jpg';
+
+/* Sobre / manifesto com a cidade-base (ADR-010). Some quando FOUNDER for preenchido
+   (Founder.astro). Textos placeholder TODO até aprovação final. */
 ---
 
-{/* Sobre / manifesto: bloco editorial de duas colunas. Textos placeholder TODO até aprovação final. */}
 <section id="sobre" class="bg-canvas">
-  <div class="wrap">
-    <div class="grid grid-cols-1 gap-6 py-24 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-16 md:py-32">
-      <p class="text-meta text-muted">{SITE.name}, {SITE.city}</p>
+  <div class="wrap grid grid-cols-1 items-center gap-12 py-24 md:py-32 lg:grid-cols-2 lg:gap-20">
+    <Picture
+      src={fortaleza}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280]}
+      sizes="(min-width: 1024px) 50vw, 100vw"
+      alt="Vista aérea de Fortaleza, com prédios à beira-mar e o oceano"
+      class="aspect-[4/3] w-full rounded-[20px] bg-surface object-cover"
+      loading="lazy"
+    />
 
+    <div class="flex flex-col gap-6">
+      <p class="text-meta text-muted">{SITE.name}, {SITE.city}</p>
       {/* TODO: validar texto definitivo do manifesto */}
       <p
         data-split
-        class="font-expanded max-w-[30ch] text-[clamp(24px,2.8vw,36px)] font-medium leading-[1.2] tracking-heading text-ink"
+        class="font-expanded max-w-[30ch] text-[clamp(24px,2.6vw,34px)] font-medium leading-[1.2] tracking-heading text-ink"
       >
-        Engenharia de dados não é commodity — é fundação. Por isso tratamos cada pipeline,
-        modelo e agente como infraestrutura crítica: com arquitetura, testes e operação
-        contínua.
+        Engenharia de dados não é commodity — é fundação. Por isso tratamos cada pipeline, modelo e
+        agente como infraestrutura crítica: com arquitetura, testes e operação contínua.
+      </p>
+      <p class="max-w-measure text-body text-muted">
+        De Fortaleza, atendemos empresas de todo o Brasil, de forma remota.
       </p>
     </div>
   </div>

@@ -2,6 +2,9 @@
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
 import Phases from './Phases.astro';
+import ReportMockup from './mockups/ReportMockup.astro';
+import { Picture } from 'astro:assets';
+import conversa from '@/assets/photos/diagnostico.jpg';
 
 /*
   Como começar (auditoria A6 + A12): a oferta de entrada descrita num lugar só —
@@ -34,7 +37,7 @@ const deliverables = [
 <section id="diagnostico" class="bg-surface">
   <div class="wrap py-24 md:py-32">
     <div
-      class="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16"
+      class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-16"
     >
       <div class="flex flex-col gap-8">
         <SectionHeader
@@ -61,36 +64,61 @@ const deliverables = [
         </a>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-        <div class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8">
-          <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
-            Sinais de que é hora
-          </h3>
-          <ul class="flex flex-col gap-4">
-            {
-              signals.map((s) => (
-                <li class="flex items-baseline gap-3 text-body text-ink">
-                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
-                  {s}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
+      {/* Foto da conversa (banco gratuito, CREDITOS.md) + a capa do mapa que a pessoa recebe */}
+      <div class="relative sm:pb-16">
+        <Picture
+          src={conversa}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 1024px) 55vw, 100vw"
+          alt="Pessoa em uma reunião por vídeo com três participantes na tela do notebook"
+          class="aspect-[4/3] w-full rounded-[20px] bg-canvas object-cover"
+          loading="lazy"
+        />
+        {
+          /* No celular o mapa fica abaixo da foto, sobrepondo só a borda; a partir de sm, flutua sobre ela */
+        }
+        <ReportMockup
+          class="relative -mt-16 ml-4 sm:absolute sm:-bottom-2 sm:right-6 sm:ml-0 sm:mt-0 lg:-left-10 lg:right-auto"
+        />
+      </div>
+    </div>
 
-        <div class="flex flex-col gap-6 rounded-[20px] bg-ink p-6 text-white md:p-8">
-          <h3 class="font-expanded text-h4 font-semibold tracking-heading">O que você recebe</h3>
-          <ul class="flex flex-col gap-4">
-            {
-              deliverables.map((d) => (
-                <li class="flex items-baseline gap-3 text-body">
-                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand-light" aria-hidden="true" />
-                  {d}
-                </li>
-              ))
-            }
-          </ul>
-        </div>
+    <div class="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+      <div class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8">
+        <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+          Sinais de que é hora
+        </h3>
+        <ul class="flex flex-col gap-4">
+          {
+            signals.map((s) => (
+              <li class="flex items-baseline gap-3 text-body text-ink">
+                <span
+                  class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand"
+                  aria-hidden="true"
+                />
+                {s}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="flex flex-col gap-6 rounded-[20px] bg-ink p-6 text-white md:p-8">
+        <h3 class="font-expanded text-h4 font-semibold tracking-heading">O que você recebe</h3>
+        <ul class="flex flex-col gap-4">
+          {
+            deliverables.map((d) => (
+              <li class="flex items-baseline gap-3 text-body">
+                <span
+                  class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand-light"
+                  aria-hidden="true"
+                />
+                {d}
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
 

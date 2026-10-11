@@ -1,0 +1,43 @@
+---
+import MockupFrame from './MockupFrame.astro';
+import Check from './Check.astro';
+
+/* Automações: uma rotina entre sistemas, passo a passo, com o histórico do dia. */
+const steps = [
+  { label: 'Pedido recebido na loja online', time: '09:41:02' },
+  { label: 'Lançamento no ERP', time: '09:41:05' },
+  { label: 'Baixa no estoque', time: '09:41:06' },
+  { label: 'Aviso para a expedição', time: '09:41:07' },
+] as const;
+---
+
+<MockupFrame
+  title="Pedido até a expedição"
+  status="Ativa"
+  label="Rotina automática que leva o pedido da loja online ao ERP, ao estoque e à expedição, com o histórico do dia"
+>
+  <ol class="flex flex-col p-5 md:p-6">
+    {
+      steps.map((s, i) => (
+        <li class="relative flex items-center gap-4 pb-5 last:pb-0">
+          {i < steps.length - 1 && (
+            <span
+              class="absolute left-[7.5px] top-5 h-[calc(100%-12px)] w-px bg-line-strong"
+              aria-hidden="true"
+            />
+          )}
+          <Check class="relative" />
+          <span class="flex flex-1 items-center justify-between gap-3 rounded-lg border border-line px-3 py-2.5">
+            <span class="text-meta font-medium">{s.label}</span>
+            <span class="numerals-tabular text-xs text-muted">{s.time}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="flex justify-between gap-3 border-t border-line px-5 py-3.5 text-xs md:px-6">
+    <span class="font-medium">Hoje: 214 execuções</span>
+    <span class="text-muted">0 falhas</span>
+  </div>
+</MockupFrame>

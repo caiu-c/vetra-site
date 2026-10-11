@@ -4,7 +4,7 @@ import { FOUNDER } from '@/config/site';
 import Hero from '@/components/Hero.astro';
 import Diagnosis from '@/components/Diagnosis.astro';
 import Capabilities from '@/components/Capabilities.astro';
-import Stack from '@/components/Stack.astro';
+import PhotoBand from '@/components/PhotoBand.astro';
 import Indicators from '@/components/Indicators.astro';
 import Sectors from '@/components/Sectors.astro';
 import Cases from '@/components/Cases.astro';
@@ -13,13 +13,14 @@ import Founder from '@/components/Founder.astro';
 import Contact from '@/components/Contact.astro';
 ---
 
-{/* Ordem e fundos no ADR-009 (ritmo de cores do ADR-006): problema e como começar logo
-    depois do topo, serviços, prova, quem está por trás e contato. */}
+{/* Ordem e fundos no ADR-010 (ritmo de cores do ADR-006): como começar logo depois do
+    topo, a faixa de foto, serviços com as telas do que entregamos, prova, quem está por
+    trás e contato. */}
 <BaseLayout>
   <Hero />
   <Diagnosis />
+  <PhotoBand />
   <Capabilities />
-  <Stack />
   <Indicators />
   <Sectors />
   <Cases />

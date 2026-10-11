@@ -242,33 +242,12 @@
   opacity: 0;
 }
 
-/* Indicador de scroll do hero */
-@keyframes scroll-cue {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  45% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  55% {
-    transform: scaleY(1);
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-  }
-}
-.scroll-cue {
-  animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+/* Faixa de logos (TechStrip.astro): as pontas somem em vez de cortar seco */
+.tech-fade {
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-cue {
-    animation: none;
-  }
   /* Marquee parado: mostra tudo quebrando linha e esconde a cópia duplicada */
   [data-marquee] {
     width: auto !important;

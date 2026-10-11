@@ -1,0 +1,52 @@
+---
+import MockupFrame from './MockupFrame.astro';
+import Check from './Check.astro';
+
+/* Agentes de IA: o agente faz a triagem e para no ponto de aprovação humana. */
+---
+
+<MockupFrame
+  title="Agente de atendimento"
+  status="Aguardando você"
+  label="Conversa com um agente de IA que preparou respostas para chamados e aguarda aprovação humana"
+>
+  <div class="flex flex-col gap-4 p-5 md:p-6">
+    <p class="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-surface px-4 py-3 text-meta">
+      Responda os chamados de segunda via de boleto que chegaram hoje.
+    </p>
+
+    <div
+      class="flex max-w-[92%] flex-col gap-3 rounded-2xl rounded-bl-md border border-line px-4 py-3"
+    >
+      <p class="text-meta">
+        Encontrei <strong class="font-semibold">42 chamados</strong>. 31 são de segunda via e já têm
+        resposta pronta. 11 fogem da regra e ficam com você.
+      </p>
+      <ul class="flex flex-col gap-2 text-meta">
+        <li class="flex items-center gap-2.5"><Check />31 respostas prontas para envio</li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-ink text-[10px] font-semibold"
+            >!</span
+          >
+          11 para revisão humana
+        </li>
+      </ul>
+      <div class="flex flex-wrap gap-2 pt-1">
+        <span class="rounded-full bg-ink px-4 py-2 text-xs font-medium text-white"
+          >Aprovar 31 respostas</span
+        >
+        <span class="rounded-full border border-line-strong px-4 py-2 text-xs font-medium"
+          >Revisar</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex justify-between gap-3 border-t border-line px-5 py-3.5 text-xs text-muted md:px-6"
+  >
+    <span>Custo hoje: R$ 3,18</span>
+    <span>Erros: 0</span>
+  </div>
+</MockupFrame>

@@ -1,27 +1,56 @@
 ---
+import { Picture } from 'astro:assets';
 import SectionHeader from './SectionHeader.astro';
+import varejo from '@/assets/photos/varejo.jpg';
+import industria from '@/assets/photos/industria.jpg';
+import servicos from '@/assets/photos/servicos.jpg';
 
 /* TODO: confirmar setores atendidos. Lista derivada dos casos (também placeholders);
-   `focus` descreve o tipo de problema típico de cada setor e precisa de validação. */
+   `focus` descreve o tipo de problema típico de cada setor e precisa de validação.
+   Fotos de banco gratuito do ambiente de cada setor (ADR-010, CREDITOS.md). */
 const sectors = [
-  { name: 'Varejo', focus: 'Unificação de vendas, estoque e canais em uma base analítica única.' },
-  { name: 'Indústria', focus: 'Logística, manutenção e planejamento com agentes e previsão.' },
-  { name: 'Serviços', focus: 'Indicadores executivos e camada semântica para várias áreas.' },
+  {
+    name: 'Varejo',
+    focus: 'Unificação de vendas, estoque e canais em uma base analítica única.',
+    image: varejo,
+    alt: 'Corredor de supermercado com gôndolas iluminadas',
+  },
+  {
+    name: 'Indústria',
+    focus: 'Logística, manutenção e planejamento com agentes e previsão.',
+    image: industria,
+    alt: 'Linha de produção automatizada em um galpão industrial',
+  },
+  {
+    name: 'Serviços',
+    focus: 'Indicadores executivos e camada semântica para várias áreas.',
+    image: servicos,
+    alt: 'Equipe reunida em volta de uma mesa analisando gráficos impressos',
+  },
 ] as const;
 ---
 
 <section id="setores" class="bg-canvas">
-  <div class="wrap grid grid-cols-1 gap-12 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-16 md:py-32">
+  <div class="wrap py-24 md:py-32">
     <SectionHeader title="Setores que atendemos." />
 
-    <ul class="border-t border-line">
+    <ul class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
       {
-        sectors.map(({ name, focus }) => (
-          <li class="grid grid-cols-1 gap-2 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:items-baseline md:gap-10">
-            <h3 class="font-expanded text-[clamp(28px,3vw,36px)] font-semibold leading-tight tracking-heading text-ink">
-              {name}
-            </h3>
-            <p class="max-w-measure text-body text-muted">{focus}</p>
+        sectors.map(({ name, focus, image, alt }) => (
+          <li class="flex flex-col gap-5">
+            <Picture
+              src={image}
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960]}
+              sizes="(min-width: 768px) 33vw, 100vw"
+              alt={alt}
+              class="aspect-[4/3] w-full rounded-[20px] bg-surface object-cover"
+              loading="lazy"
+            />
+            <div class="flex flex-col gap-2">
+              <h3 class="font-expanded text-h3 font-semibold tracking-heading text-ink">{name}</h3>
+              <p class="max-w-measure text-body text-muted">{focus}</p>
+            </div>
           </li>
         ))
       }
