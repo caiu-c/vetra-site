@@ -71,11 +71,6 @@
   }
 }
 
-/* Scroll travado enquanto o preloader cobre a página (main.ts) */
-.scroll-locked {
-  overflow: hidden;
-}
-
 /* Feixes do diagrama de pipeline: traço curto percorrendo o caminho */
 .beam {
   stroke-dasharray: 18 220;
@@ -109,41 +104,39 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ───────── Motion (main.ts) ─────────
-   `.js` e `.preloaded` vêm do script inline no <head>; `*-armed` são adicionadas
-   por main.ts quando assume o controle. Sem JS (ou se o script falhar), os
-   failsafes por animação liberam a página. */
-
-/* Preloader */
-#preloader {
-  display: none;
+/* ───────── Motion ─────────
+   Entrada do hero só em CSS (ADR-009): roda no primeiro quadro, sem esperar o JS nem
+   esconder o título. Cada palavra sobe por trás de uma máscara (Hero.astro). */
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* folga para a máscara não cortar acentos e descendentes */
+  padding-block: 0.12em;
+  margin-block: -0.12em;
 }
-.js:not(.preloaded) #preloader {
-  display: flex;
+.hero-word > span {
+  display: inline-block;
+  animation: hero-rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(80ms + var(--i, 0) * 55ms);
 }
-.js:not(.preloader-armed) #preloader {
-  animation: failsafe-hide 0s 6s forwards;
+.hero-fade {
+  animation: hero-fade 0.9s ease-out 0.45s both;
 }
-.preloader-bar {
-  transform: scaleX(0);
-  transform-origin: left center;
+@keyframes hero-rise {
+  from {
+    transform: translateY(110%);
+  }
 }
-
-/* Intro do hero */
-.js:not(.intro-armed) [data-intro] {
-  visibility: hidden;
-  animation: failsafe-show 0s 5s forwards;
-}
-
-@keyframes failsafe-hide {
-  to {
-    visibility: hidden;
+@keyframes hero-fade {
+  from {
     opacity: 0;
   }
 }
-@keyframes failsafe-show {
-  to {
-    visibility: visible;
+@media (prefers-reduced-motion: reduce) {
+  .hero-word > span,
+  .hero-fade {
+    animation: none;
   }
 }
 

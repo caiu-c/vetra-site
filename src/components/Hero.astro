@@ -1,5 +1,9 @@
 ---
 import { BOOKING_URL } from '@/config/site';
+
+const title = 'A coluna vertebral dos seus dados.';
+// Palavras em spans para a entrada mascarada em CSS (global.css → .hero-word).
+const words = title.split(' ');
 ---
 
 <section class="relative overflow-hidden bg-canvas">
@@ -31,20 +35,25 @@ import { BOOKING_URL } from '@/config/site';
       <canvas data-lens-canvas class="absolute inset-0 h-full w-full"></canvas>
     </div>
 
-    <h1
-      class="font-expanded relative z-10 max-w-[12ch] text-display font-semibold tracking-display text-ink"
-      data-intro
-      data-intro-title
-    >
-      A coluna vertebral dos seus dados.
+    <h1 class="font-expanded relative z-10 max-w-[12ch] text-display font-semibold tracking-display text-ink">
+      {
+        words.map((word, i) => (
+          <>
+            <span class="hero-word">
+              <span style={`--i:${i}`}>{word}</span>
+            </span>
+            {i < words.length - 1 && ' '}
+          </>
+        ))
+      }
     </h1>
 
-    <p class="text-pretty relative z-10 max-w-measure text-lead text-muted" data-intro>
+    <p class="hero-fade text-pretty relative z-10 max-w-measure text-lead text-muted">
       Construímos sistemas de dados, agentes de IA e automações com rigor de engenharia.
       Resultado de negócio sustentado por arquitetura técnica.
     </p>
 
-    <div class="relative z-10 flex flex-col gap-3 sm:flex-row" data-intro>
+    <div class="hero-fade relative z-10 flex flex-col gap-3 sm:flex-row">
       <a href={BOOKING_URL} class="btn-primary" data-subject="diagnostico" data-magnetic>
         Agendar diagnóstico
       </a>
@@ -55,7 +64,6 @@ import { BOOKING_URL } from '@/config/site';
       href="#stack"
       class="absolute bottom-8 left-6 hidden h-12 w-px overflow-hidden bg-line md:left-10 md:block xl:left-16"
       aria-label="Rolar para o conteúdo"
-      data-intro
     >
       <span class="scroll-cue absolute inset-0 bg-ink"></span>
     </a>
