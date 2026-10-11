@@ -1,48 +1,75 @@
 ---
 import { BOOKING_URL } from '@/config/site';
 import TechStrip from './TechStrip.astro';
+import { emphasize } from '@/lib/emphasis';
 
 // TODO: validar texto (auditoria A4: serviço + público no título; consultoria e local no subtítulo).
-const title = 'Engenharia de dados para quem ainda decide por planilha.';
+// `*…*` marca o destaque em Cobalto (ADR-011).
+const title = '*Engenharia de dados* para quem ainda decide por planilha.';
+const lead =
+  'Somos uma **consultoria de Fortaleza** que atende empresas de todo o Brasil. Organizamos seus dados em uma **base única**, entregamos os indicadores prontos e colocamos IA para trabalhar com supervisão.';
 // Palavras em spans para a entrada mascarada em CSS (global.css → .hero-word).
-const words = title.split(' ');
+const words = title
+  .split(/(\*[^*]+\*)/)
+  .filter(Boolean)
+  .flatMap((part) => {
+    const highlight = part.startsWith('*') && part.endsWith('*');
+    return part
+      .replace(/^\*|\*$/g, '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((text) => ({ text, highlight }));
+  });
 ---
 
 <section class="relative overflow-hidden bg-canvas">
   <div
     class="wrap relative flex min-h-[calc(100svh-7rem)] flex-col justify-center gap-10 pb-16 pt-32 md:pb-20 md:pt-36"
   >
-    {/*
+    {
+      /*
       Âncora da lente 3D (ADR-007): o canvas WebGL desenha a lente aqui.
       O SVG é o fallback estático — sem WebGL ou antes da cena carregar.
-    */}
+    */
+    }
     <div
       data-lens-anchor
       class="pointer-events-none absolute right-[-30%] top-1/2 aspect-square w-[90%] -translate-y-1/2 opacity-[0.12] sm:right-[-12%] sm:w-[60%] sm:opacity-100 md:right-[2%] md:w-[44%] xl:w-[40%]"
       aria-hidden="true"
     >
       <svg data-lens-fallback viewBox="0 0 400 400" class="h-full w-full" fill="none">
-        <circle cx="200" cy="200" r="190" fill="#F2F4F8" />
-        <circle cx="200" cy="200" r="190" stroke="#DCE1EA" />
-        <circle cx="200" cy="200" r="150" stroke="#DCE1EA" stroke-dasharray="2 6" />
-        <path d="M10 200H390M200 10V390" stroke="#DCE1EA" />
-        <g transform="translate(26 26) scale(0.87)" stroke="#0C1838" stroke-width="10" stroke-linejoin="miter" stroke-linecap="square">
-          <path d="M57 71 L200 329 L343 71" />
-          <path d="M100 71 L200 271 L300 71" />
-          <path d="M143 71 L200 214 L257 71" />
-          <circle cx="200" cy="329" r="16" fill="#1640D6" stroke="none" />
+        <circle cx="200" cy="200" r="190" fill="#F2F4F8"></circle>
+        <circle cx="200" cy="200" r="190" stroke="#DCE1EA"></circle>
+        <circle cx="200" cy="200" r="150" stroke="#DCE1EA" stroke-dasharray="2 6"></circle>
+        <path d="M10 200H390M200 10V390" stroke="#DCE1EA"></path>
+        <g
+          transform="translate(26 26) scale(0.87)"
+          stroke="#0C1838"
+          stroke-width="10"
+          stroke-linejoin="miter"
+          stroke-linecap="square"
+        >
+          <path d="M57 71 L200 329 L343 71"></path>
+          <path d="M100 71 L200 271 L300 71"></path>
+          <path d="M143 71 L200 214 L257 71"></path>
+          <circle cx="200" cy="329" r="16" fill="#1640D6" stroke="none"></circle>
         </g>
       </svg>
       {/* Lente 3D (src/scripts/three/lens.ts) — substitui o SVG quando o primeiro quadro sai */}
       <canvas data-lens-canvas class="absolute inset-0 h-full w-full"></canvas>
     </div>
 
-    <h1 class="font-expanded text-balance relative z-10 max-w-[16ch] text-display font-semibold tracking-display text-ink">
+    <h1
+      class="font-expanded relative z-10 max-w-[16ch] text-balance text-display font-semibold tracking-display text-ink"
+    >
       {
         words.map((word, i) => (
           <>
             <span class="hero-word">
-              <span style={`--i:${i}`}>{word}</span>
+              <span style={`--i:${i}`} class:list={[word.highlight && 'text-brand']}>
+                {word.text}
+              </span>
             </span>
             {i < words.length - 1 && ' '}
           </>
@@ -50,11 +77,10 @@ const words = title.split(' ');
       }
     </h1>
 
-    <p class="hero-fade text-pretty relative z-10 max-w-measure text-lead text-muted">
-      Somos uma consultoria de Fortaleza que atende empresas de todo o Brasil. Organizamos
-      seus dados em uma base única, entregamos os indicadores prontos e colocamos IA para
-      trabalhar com supervisão.
-    </p>
+    <p
+      class="hero-fade relative z-10 max-w-measure text-pretty text-lead text-muted"
+      set:html={emphasize(lead)}
+    />
 
     <div class="hero-fade relative z-10 flex flex-col gap-3 sm:flex-row">
       <a href={BOOKING_URL} class="btn-primary" data-subject="diagnostico" data-magnetic>
@@ -62,7 +88,6 @@ const words = title.split(' ');
       </a>
       <a href="#servicos" class="btn-secondary" data-magnetic>Ver serviços</a>
     </div>
-
   </div>
 
   <TechStrip />

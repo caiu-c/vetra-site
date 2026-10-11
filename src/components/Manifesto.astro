@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import { SITE } from '@/config/site';
 import fortaleza from '@/assets/photos/fortaleza.jpg';
+import { emphasize } from '@/lib/emphasis';
 
 /* Sobre / manifesto com a cidade-base (ADR-010). Some quando FOUNDER for preenchido
    (Founder.astro). Textos placeholder TODO até aprovação final. */
@@ -25,10 +26,10 @@ import fortaleza from '@/assets/photos/fortaleza.jpg';
       <p
         data-split
         class="font-expanded max-w-[30ch] text-[clamp(24px,2.6vw,34px)] font-medium leading-[1.2] tracking-heading text-ink"
-      >
-        Engenharia de dados não é commodity — é fundação. Por isso tratamos cada pipeline, modelo e
-        agente como infraestrutura crítica: com arquitetura, testes e operação contínua.
-      </p>
+        set:html={emphasize(
+          'Engenharia de dados não é commodity — é *fundação*. Por isso tratamos cada pipeline, modelo e agente como infraestrutura crítica: com arquitetura, testes e operação contínua.',
+        )}
+      />
       <p class="max-w-measure text-body text-muted">
         De Fortaleza, atendemos empresas de todo o Brasil, de forma remota.
       </p>

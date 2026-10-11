@@ -5,6 +5,7 @@ import Phases from '@/components/Phases.astro';
 import Contact from '@/components/Contact.astro';
 import PipelineDiagram from '@/components/PipelineDiagram.astro';
 import ServiceMockup from '@/components/mockups/ServiceMockup.astro';
+import { emphasize, plain } from '@/lib/emphasis';
 import { BOOKING_URL } from '@/config/site';
 import { SERVICES, serviceUrl, type Service } from '@/data/services';
 
@@ -41,14 +42,13 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
           <span class="text-h4 font-semibold text-brand">{service.name}</span>
           <span
             class="font-expanded max-w-[18ch] text-balance text-display font-semibold tracking-display text-ink"
-          >
-            {service.outcome}
-          </span>
+            set:html={emphasize(service.outcome)}
+          />
         </h1>
-        <p class="max-w-measure text-pretty text-lead text-muted">
-          {service.audience}
-          {service.summary}
-        </p>
+        <p
+          class="max-w-measure text-pretty text-lead text-muted"
+          set:html={emphasize(`${service.audience} ${service.summary}`)}
+        />
         <div class="flex flex-col gap-3 sm:flex-row">
           <a href={BOOKING_URL} class="btn-primary" data-subject={service.subject} data-magnetic>
             Agendar diagnóstico gratuito
@@ -163,7 +163,7 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
                   <span class="text-body font-semibold text-ink group-hover:text-brand">
                     {s.name}
                   </span>
-                  <span class="text-body text-muted">{s.outcome}</span>
+                  <span class="text-body text-muted">{plain(s.outcome)}</span>
                 </a>
               </li>
             ))

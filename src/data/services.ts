@@ -17,11 +17,11 @@ export interface Service {
   name: string;
   /** Assunto pré-selecionado no formulário. */
   subject: SubjectKey;
-  /** Resultado em uma frase: título do card e da página. */
+  /** Resultado em uma frase: título do card e da página. `*…*` = destaque (ADR-011). */
   outcome: string;
   /** Dor do cliente, na linguagem dele. */
   pain: string;
-  /** O que a Vetra faz, em uma frase, sem jargão. */
+  /** O que a Vetra faz, em uma frase, sem jargão. `**…**` = negrito (ADR-011). */
   summary: string;
   /** Para quem é (subtítulo da página). */
   audience: string;
@@ -43,10 +43,10 @@ export const SERVICES: readonly Service[] = [
     slug: 'engenharia-de-dados',
     name: 'Engenharia de dados',
     subject: 'engenharia',
-    outcome: 'Uma base única e confiável para a empresa inteira.',
+    outcome: 'Uma base *única e confiável* para a empresa inteira.',
     pain: 'Os números de cada área vêm de planilhas e sistemas diferentes, e ninguém sabe qual está certo.',
     summary:
-      'Reunimos os dados de todos os sistemas numa base só, atualizada sozinha e com testes que avisam quando algo sai do padrão.',
+      'Reunimos os dados de todos os sistemas numa base só, atualizada **sozinha** e com testes que avisam quando algo sai do padrão.',
     audience:
       'Para empresas que já têm ERP, CRM e planilhas, mas gastam horas conciliando números antes de cada reunião.',
     highlights: [
@@ -87,10 +87,10 @@ export const SERVICES: readonly Service[] = [
     slug: 'dashboards',
     name: 'Dashboards',
     subject: 'dashboards',
-    outcome: 'Indicadores que viram decisão, não planilha.',
+    outcome: 'Indicadores que viram *decisão*, não planilha.',
     pain: 'Os relatórios chegam atrasados e cada reunião começa discutindo qual número está certo.',
     summary:
-      'Definimos os indicadores com cada área e entregamos painéis que se atualizam sozinhos, com a mesma regra para todos.',
+      'Definimos os indicadores com cada área e entregamos painéis que se atualizam sozinhos, com a **mesma regra para todos**.',
     audience:
       'Para gestores que precisam acompanhar o negócio sem esperar alguém montar o relatório da semana.',
     highlights: [
@@ -131,10 +131,10 @@ export const SERVICES: readonly Service[] = [
     slug: 'agentes-de-ia',
     name: 'Agentes de IA',
     subject: 'agentes',
-    outcome: 'IA em produção, com supervisão humana.',
+    outcome: 'IA *em produção*, com supervisão humana.',
     pain: 'A empresa testou IA, mas os pilotos não viraram rotina porque ninguém confia no resultado.',
     summary:
-      'Colocamos a IA para executar tarefas reais, com regras claras, revisão humana nos pontos críticos e custo acompanhado.',
+      'Colocamos a IA para executar tarefas reais, com regras claras, **revisão humana** nos pontos críticos e custo acompanhado.',
     audience:
       'Para operações com tarefas de texto, triagem ou consulta que tomam horas da equipe toda semana.',
     highlights: [
@@ -175,10 +175,10 @@ export const SERVICES: readonly Service[] = [
     slug: 'automacoes',
     name: 'Automações',
     subject: 'automacoes',
-    outcome: 'Menos trabalho manual entre sistemas.',
+    outcome: '*Menos trabalho manual* entre sistemas.',
     pain: 'A equipe copia dados de um sistema para outro e confere tudo à mão.',
     summary:
-      'Ligamos os sistemas entre si e automatizamos as rotinas repetitivas, com aviso quando algo falha.',
+      'Ligamos os sistemas entre si e automatizamos as rotinas repetitivas, com **aviso quando algo falha**.',
     audience:
       'Para equipes que passam parte do dia movendo informação entre ERP, planilhas, e-mail e outros sistemas.',
     highlights: [

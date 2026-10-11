@@ -1,5 +1,6 @@
 ---
 import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE, whatsappUrl } from '@/config/site';
+import { emphasize } from '@/lib/emphasis';
 
 interface Props {
   /** Assunto pré-selecionado (as páginas de serviço passam o próprio). */
@@ -23,22 +24,26 @@ const whatsapp = whatsappUrl();
     <div class="flex flex-col gap-8">
       <h2
         data-split
-        class="font-expanded text-balance max-w-[14ch] text-cta font-semibold tracking-display"
-      >
-        Comece pelo diagnóstico.
-      </h2>
+        class="font-expanded max-w-[14ch] text-balance text-cta font-semibold tracking-display"
+        set:html={emphasize('Comece pelo *diagnóstico*.', 'dark')}
+      />
       {/* TODO: validar texto. Prazo de resposta (1 dia útil) definido pelo dono em 2026-10-11. */}
-      <p class="text-pretty max-w-measure text-lead text-on-deep-muted">
-        Conte o que está travando os seus dados. Respondemos em até 1 dia útil com os
-        próximos passos e, se fizer sentido, marcamos o diagnóstico gratuito.
+      <p class="max-w-measure text-pretty text-lead text-on-deep-muted">
+        Conte o que está travando os seus dados. Respondemos em até 1 dia útil com os próximos
+        passos e, se fizer sentido, marcamos o diagnóstico gratuito.
       </p>
 
       <dl class="flex flex-col gap-5 border-t border-line-deep pt-8 lg:mt-auto">
         <div class="flex flex-col gap-1">
           <dt class="text-meta text-on-deep-muted">E-mail</dt>
           <dd>
-            {/* TODO: o domínio ainda não tem MX — ativar Cloudflare Email Routing antes do go-live */}
-            <a href={`mailto:${CONTACT.email}`} class="text-body transition-colors hover:text-brand-light">
+            {
+              /* TODO: o domínio ainda não tem MX — ativar Cloudflare Email Routing antes do go-live */
+            }
+            <a
+              href={`mailto:${CONTACT.email}`}
+              class="text-body transition-colors hover:text-brand-light"
+            >
               {CONTACT.email}
             </a>
           </dd>
@@ -88,7 +93,12 @@ const whatsapp = whatsappUrl();
         data-contact-form
       >
         <input type="hidden" name="access_key" value={CONTACT_FORM.accessKey} />
-        <input type="hidden" name="subject" value="Novo contato pelo site" data-contact-subject-field />
+        <input
+          type="hidden"
+          name="subject"
+          value="Novo contato pelo site"
+          data-contact-subject-field
+        />
         <input type="hidden" name="from_name" value={`Site ${SITE.name}`} />
         {/* Honeypot do Web3Forms: robôs preenchem, pessoas não veem */}
         <input
@@ -103,7 +113,14 @@ const whatsapp = whatsappUrl();
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <label for="cf-name" class="field-label">Nome</label>
-            <input id="cf-name" name="name" type="text" autocomplete="name" required class="field-input" />
+            <input
+              id="cf-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              class="field-input"
+            />
           </div>
           <div>
             <label for="cf-company" class="field-label">Empresa</label>
@@ -170,7 +187,9 @@ const whatsapp = whatsappUrl();
 
         <p class="text-meta text-muted">
           Usamos seus dados só para responder a este contato. Veja a
-          <a href="/privacidade/" class="underline underline-offset-2 hover:text-ink">política de privacidade</a>.
+          <a href="/privacidade/" class="underline underline-offset-2 hover:text-ink"
+            >política de privacidade</a
+          >.
         </p>
 
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center">

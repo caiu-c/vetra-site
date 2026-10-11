@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import armazem from '@/assets/photos/armazem.jpg';
+import { emphasize } from '@/lib/emphasis';
 
 /*
   Faixa de foto de ponta a ponta (ADR-010, o "momento" de imagem grande da ASML e da
@@ -26,9 +27,8 @@ import armazem from '@/assets/photos/armazem.jpg';
     <h2
       data-split
       class="font-expanded max-w-[18ch] text-balance text-cta font-semibold tracking-display"
-    >
-      Do armazém à diretoria, todos olhando o mesmo número.
-    </h2>
+      set:html={emphasize('Do armazém à diretoria, todos olhando o *mesmo número*.', 'dark')}
+    />
     <p class="max-w-measure text-pretty text-lead text-white/85">
       É isso que uma base de dados bem feita entrega: a operação registra, a gestão decide e ninguém
       precisa montar planilha no meio do caminho.

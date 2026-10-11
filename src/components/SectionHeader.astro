@@ -1,4 +1,6 @@
 ---
+import { emphasize, plain } from '@/lib/emphasis';
+
 interface Props {
   title: string;
   description?: string;
@@ -8,6 +10,9 @@ interface Props {
 
 const { title, description, variant = 'light' } = Astro.props;
 const titleColor = variant === 'light' ? 'text-ink' : 'text-white';
+// Destaques (ADR-011): Cobalto no claro, brand-light no escuro; na faixa Cobalto, nenhum.
+const render = (text: string) =>
+  variant === 'brand' ? plain(text) : emphasize(text, variant === 'deep' ? 'dark' : 'light');
 const descColor = {
   light: 'text-muted',
   deep: 'text-on-deep-muted',
@@ -18,16 +23,15 @@ const descColor = {
 <div class="flex max-w-[44rem] flex-col gap-5">
   <h2
     data-split
-    class:list={[
-      'font-expanded text-balance text-h2 font-semibold tracking-heading',
-      titleColor,
-    ]}
-  >
-    {title}
-  </h2>
+    class:list={['font-expanded text-balance text-h2 font-semibold tracking-heading', titleColor]}
+    set:html={render(title)}
+  />
   {
     description && (
-      <p class:list={['text-pretty max-w-measure text-lead', descColor]}>{description}</p>
+      <p
+        class:list={['max-w-measure text-pretty text-lead', descColor]}
+        set:html={render(description)}
+      />
     )
   }
 </div>

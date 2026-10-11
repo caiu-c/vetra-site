@@ -4,6 +4,7 @@ import SectionHeader from './SectionHeader.astro';
 import ApertureGlyph from './ApertureGlyph.astro';
 import { SERVICES, serviceUrl } from '@/data/services';
 import ServiceMockup from './mockups/ServiceMockup.astro';
+import { emphasize } from '@/lib/emphasis';
 
 /*
   Serviços (ADR-010): cada um numa linha com texto de um lado e a tela do que
@@ -16,7 +17,7 @@ import ServiceMockup from './mockups/ServiceMockup.astro';
   <div class="wrap py-24 md:py-32">
     {/* TODO: validar texto (auditoria A11) */}
     <SectionHeader
-      title="Quatro serviços, uma base só."
+      title="Quatro serviços, *uma base só*."
       description="Começamos pela base de dados e, sobre ela, entregamos indicadores, IA e automações. Cada serviço funciona sozinho e rende mais com o anterior."
     />
 
@@ -30,10 +31,11 @@ import ServiceMockup from './mockups/ServiceMockup.astro';
                   <ApertureGlyph active={i} size={32} />
                   <h3 class="text-body font-semibold text-ink">{name}</h3>
                 </div>
-                <p class="font-expanded text-balance text-[clamp(28px,3vw,40px)] font-semibold leading-[1.1] tracking-heading text-ink">
-                  {outcome}
-                </p>
-                <p class="max-w-measure text-lead text-muted">{summary}</p>
+                <p
+                  class="font-expanded text-balance text-[clamp(28px,3vw,40px)] font-semibold leading-[1.1] tracking-heading text-ink"
+                  set:html={emphasize(outcome)}
+                />
+                <p class="max-w-measure text-lead text-muted" set:html={emphasize(summary)} />
                 <ul class="flex flex-col gap-2.5">
                   {highlights.map((d) => (
                     <li class="flex items-baseline gap-3 text-body text-ink">

@@ -1,5 +1,6 @@
 ---
 import { BOOKING_URL } from '@/config/site';
+import { emphasize } from '@/lib/emphasis';
 import SectionHeader from './SectionHeader.astro';
 import Phases from './Phases.astro';
 import ReportMockup from './mockups/ReportMockup.astro';
@@ -14,9 +15,9 @@ import conversa from '@/assets/photos/diagnostico.jpg';
   2026-10-11: gratuito, 30 min, remoto, mapa em até 5 dias úteis).
 */
 const facts = [
-  { label: 'Formato', value: 'Conversa de 30 min por vídeo' },
-  { label: 'Custo', value: 'Gratuito e sem compromisso' },
-  { label: 'Entrega', value: 'Mapa por escrito em até 5 dias úteis' },
+  { label: 'Formato', value: 'Conversa de **30 min** por vídeo' },
+  { label: 'Custo', value: '**Gratuito** e sem compromisso' },
+  { label: 'Entrega', value: 'Mapa por escrito em até **5 dias úteis**' },
 ] as const;
 
 const signals = [
@@ -41,7 +42,7 @@ const deliverables = [
     >
       <div class="flex flex-col gap-8">
         <SectionHeader
-          title="Comece por um diagnóstico gratuito."
+          title="Comece por um diagnóstico *gratuito*."
           description="Antes de qualquer proposta, entendemos como seus dados circulam hoje e onde travam a operação."
         />
         <dl class="flex flex-col gap-4 border-t border-line-strong pt-6">
@@ -49,7 +50,7 @@ const deliverables = [
             facts.map(({ label, value }) => (
               <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-4">
                 <dt class="text-meta text-muted">{label}</dt>
-                <dd class="text-body text-ink">{value}</dd>
+                <dd class="text-body text-ink" set:html={emphasize(value)} />
               </div>
             ))
           }
