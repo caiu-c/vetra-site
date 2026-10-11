@@ -1,4 +1,5 @@
 import { CONTACT, CONTACT_FORM } from '@/config/site';
+import { track } from './track';
 
 const SUBMIT_LABEL = 'Enviar mensagem';
 
@@ -35,6 +36,8 @@ export function initContactForm(): void {
     status.replaceChildren(`${reason} Tente de novo ou escreva para `, mail, '.');
   };
 
+  form.addEventListener('focusin', () => track('formulario_inicio'), { once: true });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!submit || !status) return;
@@ -59,6 +62,7 @@ export function initContactForm(): void {
       const data = (await response.json()) as { success?: boolean };
       if (!response.ok || !data.success) throw new Error('Envio recusado');
 
+      track('formulario_enviado', { assunto: topic?.value ?? '' });
       form.hidden = true;
       if (success) {
         success.classList.replace('hidden', 'flex');

@@ -12,7 +12,7 @@ export function initBooking(): void {
   const external = dialog.querySelector<HTMLAnchorElement>('[data-booking-external]');
   let current = '';
 
-  const open = (url: string) => {
+  const open = (url: string, section: string) => {
     if (frameBox && url !== current) {
       const src = new URL(url);
       src.searchParams.set('embed', 'true');
@@ -29,7 +29,7 @@ export function initBooking(): void {
     if (external) external.href = url;
     document.querySelector<HTMLDialogElement>('#mobile-menu[open]')?.close();
     dialog.showModal();
-    document.dispatchEvent(new CustomEvent('vetra:booking-open', { detail: { url } }));
+    document.dispatchEvent(new CustomEvent('vetra:booking-open', { detail: { url, section } }));
   };
 
   document.addEventListener('click', (e) => {
@@ -46,7 +46,11 @@ export function initBooking(): void {
       return;
     }
     e.preventDefault();
-    open(link.href);
+    open(
+      link.href,
+      link.closest('section')?.id ??
+        (link.closest('[data-sticky-cta]') ? 'barra-celular' : 'cabecalho'),
+    );
   });
 
   dialog.querySelector('[data-booking-close]')?.addEventListener('click', () => dialog.close());

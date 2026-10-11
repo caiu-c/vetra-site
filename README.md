@@ -88,3 +88,13 @@ Configuração (feita uma vez, na conta Cloudflare do dono):
 8. E-mail: o domínio não tem registro MX, então `contato@vetrasolutions.com.br` não recebe mensagens. Ativar Email → Email Routing e encaminhar `contato@` para um e-mail pessoal.
 
 Depois disso, todo push em `main` publica automaticamente; pull requests ganham URL de preview.
+
+## Medição de conversão
+
+O site registra eventos de conversão em `window.dataLayer` (`src/scripts/track.ts`): `agenda_aberta` (com a seção de origem), `formulario_inicio`, `formulario_enviado`, `exemplo_mapa_liberado`, `teste_concluido`, `calculadora_usada` e cliques em elementos com `data-track`. Nenhuma ferramenta de analytics é carregada por padrão.
+
+- **Para enviar os eventos a uma ferramenta,** inclua o script dela no `<head>` do `BaseLayout.astro`:
+  - **Plausible ou Umami:** sem cookies; o `track()` detecta e repassa automaticamente.
+  - **GA4:** exige consentimento de cookies antes de carregar.
+- **Origem do tráfego:** use links com UTM nas divulgações, por exemplo `https://vetrasolutions.com.br/?utm_source=linkedin&utm_medium=post&utm_campaign=diagnostico`.
+- **Agendamentos concluídos** ficam registrados no próprio Cal.com.
