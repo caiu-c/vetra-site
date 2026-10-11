@@ -1,25 +1,25 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
-import Stack from '@/components/Stack.astro';
+import Diagnosis from '@/components/Diagnosis.astro';
 import Capabilities from '@/components/Capabilities.astro';
+import Stack from '@/components/Stack.astro';
 import Indicators from '@/components/Indicators.astro';
 import Sectors from '@/components/Sectors.astro';
-import Methodology from '@/components/Methodology.astro';
-import Diagnosis from '@/components/Diagnosis.astro';
 import Cases from '@/components/Cases.astro';
 import Manifesto from '@/components/Manifesto.astro';
 import Contact from '@/components/Contact.astro';
 ---
 
+{/* Ordem e fundos no ADR-009 (ritmo de cores do ADR-006): problema e como começar logo
+    depois do topo, serviços, prova, quem está por trás e contato. */}
 <BaseLayout>
   <Hero />
-  <Stack />
+  <Diagnosis />
   <Capabilities />
+  <Stack />
   <Indicators />
   <Sectors />
-  <Methodology />
-  <Diagnosis />
   <Cases />
   <Manifesto />
   <Contact />

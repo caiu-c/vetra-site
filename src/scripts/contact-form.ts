@@ -6,7 +6,7 @@ const SUBMIT_LABEL = 'Enviar mensagem';
  * Formulário de contato (Contact.astro) com envio inline para o Web3Forms.
  * A validação é a nativa do navegador: o evento submit só chega aqui com os campos
  * obrigatórios válidos. Também pré-seleciona o assunto quando a pessoa chega por um
- * CTA com `data-subject` (ex.: "Agendar diagnóstico").
+ * CTA com `data-subject` (ex.: "Agendar diagnóstico gratuito").
  */
 export function initContactForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');

@@ -10,7 +10,7 @@ export const SITE = {
   founded: 2026,
 } as const;
 
-// "Agendar diagnóstico" leva ao formulário de contato (assunto pré-selecionado via
+// "Agendar diagnóstico gratuito" leva ao formulário de contato (assunto pré-selecionado via
 // data-subject="diagnostico"). TODO: trocar pelo link de agendamento (Cal.com /
 // Google Agenda) quando existir.
 // Âncora do formulário na própria página. Páginas sem o formulário (404, privacidade)
@@ -28,7 +28,7 @@ export const CONTACT_FORM = {
 } as const;
 
 export const CONTACT_SUBJECTS = [
-  { value: 'diagnostico', label: 'Diagnóstico de dados' },
+  { value: 'diagnostico', label: 'Diagnóstico gratuito' },
   { value: 'engenharia', label: 'Engenharia de dados' },
   { value: 'dashboards', label: 'Dashboards' },
   { value: 'agentes', label: 'Agentes de IA' },
@@ -55,9 +55,8 @@ export const ADDRESS = {
 // Seções da home com href absoluto: funcionam também nas outras páginas (na própria
 // home, "/#x" é navegação no mesmo documento e rola suave).
 export const NAV = [
-  { label: 'Sistemas', href: '/#sistemas' },
-  { label: 'Metodologia', href: '/#metodologia' },
   { label: 'Diagnóstico', href: '/#diagnostico' },
+  { label: 'Serviços', href: '/#servicos' },
   { label: 'Casos', href: '/#casos' },
   { label: 'Sobre', href: '/#sobre' },
 ] as const;

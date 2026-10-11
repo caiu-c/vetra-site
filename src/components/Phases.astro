@@ -1,0 +1,63 @@
+---
+/*
+  As três fases de todo projeto (Diagnóstico → Fundação → Operação). Sequência real,
+  por isso numerada (ADR-005). Usado na seção Diagnóstico da home e nas páginas de
+  serviço. TODO: validar texto (auditoria A6: cada fase com o que acontece de fato).
+*/
+interface Props {
+  variant?: 'light' | 'deep';
+}
+
+const { variant = 'light' } = Astro.props;
+const deep = variant === 'deep';
+
+const PHASES = [
+  {
+    title: 'Diagnóstico',
+    desc: 'Conversa de 30 min e levantamento das suas fontes de dados. Você recebe o mapa e os gargalos priorizados.',
+  },
+  {
+    title: 'Fundação',
+    desc: 'Construímos a base de dados e os primeiros indicadores por etapas, com entregas que a equipe já usa.',
+  },
+  {
+    title: 'Operação',
+    desc: 'Monitoramos qualidade, custo e disponibilidade, e ajustamos conforme a operação cresce.',
+  },
+] as const;
+---
+
+<ol
+  class:list={[
+    'grid grid-cols-1 border-t md:grid-cols-3',
+    deep ? 'border-line-deep' : 'border-line-strong',
+  ]}
+>
+  {
+    PHASES.map(({ title, desc }, i) => (
+      <li
+        class:list={[
+          'flex flex-col gap-6 py-8 md:gap-10 md:py-10',
+          i > 0 && 'border-t md:border-l md:border-t-0 md:pl-10',
+          i > 0 && (deep ? 'border-line-deep' : 'border-line-strong'),
+          i < 2 && 'md:pr-10',
+        ]}
+      >
+        <span
+          class:list={[
+            'numerals-tabular font-expanded text-h3 font-medium',
+            deep ? 'text-on-deep-muted' : 'text-muted',
+          ]}
+        >
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <div class="flex flex-col gap-2">
+          <h3 class="font-expanded text-h3 font-semibold tracking-heading">{title}</h3>
+          <p class:list={['max-w-measure text-body', deep ? 'text-on-deep-muted' : 'text-muted']}>
+            {desc}
+          </p>
+        </div>
+      </li>
+    ))
+  }
+</ol>

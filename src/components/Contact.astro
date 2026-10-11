@@ -19,10 +19,10 @@ import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
       >
         Comece pelo diagnóstico.
       </h2>
-      {/* TODO: validar texto (novo do redesign, não aprovado) */}
+      {/* TODO: validar texto. Prazo de resposta (1 dia útil) definido pelo dono em 2026-10-11. */}
       <p class="text-pretty max-w-measure text-lead text-on-deep-muted">
-        Conte o que está travando os seus dados. Respondemos com os próximos passos e, se
-        fizer sentido, marcamos o diagnóstico.
+        Conte o que está travando os seus dados. Respondemos em até 1 dia útil com os
+        próximos passos e, se fizer sentido, marcamos o diagnóstico gratuito.
       </p>
 
       <dl class="flex flex-col gap-5 border-t border-line-deep pt-8 lg:mt-auto">
@@ -156,7 +156,9 @@ import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
 
       <div class="hidden flex-col gap-3 outline-none" tabindex="-1" data-contact-success>
         <h3 class="font-expanded text-h3 font-semibold tracking-heading">Mensagem enviada.</h3>
-        <p class="max-w-measure text-body text-muted">Vamos responder no e-mail informado.</p>
+        <p class="max-w-measure text-body text-muted">
+          Respondemos em até 1 dia útil, no e-mail informado.
+        </p>
       </div>
     </div>
   </div>

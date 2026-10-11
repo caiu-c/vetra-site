@@ -1,12 +1,21 @@
 ---
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
+import Phases from './Phases.astro';
 
-/* Formato "dores + entregáveis" (referência: GEI da Genux, ADR-006).
-   TODO: validar as listas (rascunho do redesign). Os entregáveis vêm da fase 01 da
-   Metodologia ("Mapa do sistema, gargalos").
-   TODO: quando o time definir duração, formato e investimento do diagnóstico,
-   acrescentar aqui — não publicar valores inventados. */
+/*
+  Como começar (auditoria A6 + A12): a oferta de entrada descrita num lugar só —
+  formato, custo e prazo —, os sinais de que é hora, o que a pessoa recebe e as fases
+  que vêm depois (antes em Methodology.astro).
+  TODO: validar texto e listas (rascunho do redesign; oferta definida pelo dono em
+  2026-10-11: gratuito, 30 min, remoto, mapa em até 5 dias úteis).
+*/
+const facts = [
+  { label: 'Formato', value: 'Conversa de 30 min por vídeo' },
+  { label: 'Custo', value: 'Gratuito e sem compromisso' },
+  { label: 'Entrega', value: 'Mapa por escrito em até 5 dias úteis' },
+] as const;
+
 const signals = [
   'Relatórios montados à mão em planilhas',
   'O mesmo indicador com números diferentes em cada área',
@@ -16,61 +25,81 @@ const signals = [
 ] as const;
 
 const deliverables = [
-  'Mapa do seu sistema de dados',
-  'Gargalos priorizados por impacto',
-  'Plano de fundação com etapas',
+  'Mapa de como seus dados circulam hoje',
+  'Gargalos priorizados por impacto no negócio',
+  'Plano de fundação com etapas e o que vem primeiro',
 ] as const;
 ---
 
 <section id="diagnostico" class="bg-surface">
-  <div
-    class="wrap grid grid-cols-1 gap-12 py-24 md:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16"
-  >
-    <div class="flex flex-col gap-8">
-      {/* TODO: validar texto (novo do redesign, não aprovado) */}
-      <SectionHeader
-        title="Como funciona o diagnóstico."
-        description="O primeiro passo de todo projeto: um levantamento técnico do seu sistema de dados antes de qualquer proposta de construção."
-      />
-      <a
-        href={BOOKING_URL}
-        class="btn-primary self-start"
-        data-subject="diagnostico"
-        data-magnetic
-      >
-        Agendar diagnóstico
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-      <div class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8">
-        <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
-          Sinais de que é hora de um diagnóstico
-        </h3>
-        <ul class="flex flex-col gap-4">
+  <div class="wrap py-24 md:py-32">
+    <div
+      class="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16"
+    >
+      <div class="flex flex-col gap-8">
+        <SectionHeader
+          title="Comece por um diagnóstico gratuito."
+          description="Antes de qualquer proposta, entendemos como seus dados circulam hoje e onde travam a operação."
+        />
+        <dl class="flex flex-col gap-4 border-t border-line-strong pt-6">
           {
-            signals.map((s) => (
-              <li class="flex items-baseline gap-3 text-body text-ink">
-                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
-                {s}
-              </li>
+            facts.map(({ label, value }) => (
+              <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-4">
+                <dt class="text-meta text-muted">{label}</dt>
+                <dd class="text-body text-ink">{value}</dd>
+              </div>
             ))
           }
-        </ul>
+        </dl>
+        <a
+          href={BOOKING_URL}
+          class="btn-primary self-start"
+          data-subject="diagnostico"
+          data-magnetic
+        >
+          Agendar diagnóstico gratuito
+        </a>
       </div>
 
-      <div class="flex flex-col gap-6 rounded-[20px] bg-ink p-6 text-white md:p-8">
-        <h3 class="font-expanded text-h4 font-semibold tracking-heading">O que você recebe</h3>
-        <ul class="flex flex-col gap-4">
-          {
-            deliverables.map((d) => (
-              <li class="flex items-baseline gap-3 text-body">
-                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand-light" aria-hidden="true" />
-                {d}
-              </li>
-            ))
-          }
-        </ul>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+        <div class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8">
+          <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+            Sinais de que é hora
+          </h3>
+          <ul class="flex flex-col gap-4">
+            {
+              signals.map((s) => (
+                <li class="flex items-baseline gap-3 text-body text-ink">
+                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
+                  {s}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="flex flex-col gap-6 rounded-[20px] bg-ink p-6 text-white md:p-8">
+          <h3 class="font-expanded text-h4 font-semibold tracking-heading">O que você recebe</h3>
+          <ul class="flex flex-col gap-4">
+            {
+              deliverables.map((d) => (
+                <li class="flex items-baseline gap-3 text-body">
+                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand-light" aria-hidden="true" />
+                  {d}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 md:mt-24">
+      <p class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+        Depois do diagnóstico, o projeto segue em três fases.
+      </p>
+      <div class="mt-8">
+        <Phases />
       </div>
     </div>
   </div>
