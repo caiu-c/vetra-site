@@ -1,0 +1,158 @@
+---
+import { BOOKING_URL } from '@/config/site';
+import SectionHeader from './SectionHeader.astro';
+
+/*
+  Quanto a planilha custa (ADR-012, auditoria de conversão C5): a língua do dinheiro
+  para quem assina. Pessoas × horas por semana × 4,33 semanas × custo por hora. O
+  resultado inicial já vem no HTML (sem JS fica a estimativa padrão).
+  TODO: validar textos e valores padrão com o dono.
+*/
+const fields = [
+  {
+    id: 'pessoas',
+    label: 'Pessoas que montam ou conferem planilhas',
+    min: 1,
+    max: 30,
+    step: 1,
+    value: 4,
+    unit: '',
+  },
+  {
+    id: 'horas',
+    label: 'Horas por semana, por pessoa',
+    min: 1,
+    max: 40,
+    step: 1,
+    value: 6,
+    unit: 'h',
+  },
+  {
+    id: 'custo',
+    label: 'Custo por hora de cada pessoa (R$)',
+    min: 20,
+    max: 300,
+    step: 5,
+    value: 60,
+    unit: 'R$',
+  },
+] as const;
+
+const WEEKS = 4.33;
+const monthly = fields[0].value * fields[1].value * WEEKS * fields[2].value;
+const brl = (n: number) =>
+  n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+---
+
+<section id="custo" class="bg-surface">
+  <div class="wrap grid grid-cols-1 items-center gap-12 py-24 md:py-32 lg:grid-cols-2 lg:gap-20">
+    <SectionHeader
+      title="Quanto a *planilha* custa por mês?"
+      description="Some as horas que a equipe passa montando, conferindo e corrigindo planilhas. É **dinheiro** que poderia estar virando decisão."
+    />
+
+    <div
+      class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8"
+      data-cost-calculator
+      data-weeks={WEEKS}
+    >
+      {
+        fields.map((f) => (
+          <div class="flex flex-col gap-2">
+            <div class="flex items-baseline justify-between gap-4">
+              <label for={`cc-${f.id}`} class="text-meta font-medium text-ink">
+                {f.label}
+              </label>
+              <output
+                for={`cc-${f.id}`}
+                class="numerals-tabular text-body font-semibold text-ink"
+                data-cc-out={f.id}
+              >
+                {f.unit === 'R$' ? brl(f.value) : `${f.value}${f.unit}`}
+              </output>
+            </div>
+            <input
+              id={`cc-${f.id}`}
+              type="range"
+              min={f.min}
+              max={f.max}
+              step={f.step}
+              value={f.value}
+              data-cc-input={f.id}
+              data-unit={f.unit}
+              class="w-full accent-[#1640D6]"
+            />
+          </div>
+        ))
+      }
+
+      <div class="flex flex-col gap-1 rounded-xl bg-ink p-5 text-white" aria-live="polite">
+        <span class="text-meta text-on-deep-muted">Custo estimado</span>
+        <span
+          class="numerals-tabular font-expanded text-[clamp(32px,4vw,48px)] font-semibold leading-none"
+          data-cc-month
+        >
+          {brl(monthly)}
+        </span>
+        <span class="text-meta text-on-deep-muted">
+          por mês, ou <strong class="font-semibold text-white" data-cc-year
+            >{brl(monthly * 12)}</strong
+          > por ano
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener"
+          data-booking
+          class="btn-primary self-start"
+        >
+          Descobrir onde está esse custo
+        </a>
+        <p class="text-xs text-muted">
+          Estimativa simples para orientar a conversa, não promessa de economia.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { track } from '@/scripts/track';
+
+  const root = document.querySelector<HTMLElement>('[data-cost-calculator]');
+  if (root) {
+    const weeks = Number(root.dataset.weeks) || 4.33;
+    const brl = (n: number) =>
+      n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    const inputs = Array.from(root.querySelectorAll<HTMLInputElement>('[data-cc-input]'));
+    const value = (id: string) => Number(inputs.find((i) => i.dataset.ccInput === id)?.value ?? 0);
+    let tracked = false;
+
+    const update = () => {
+      inputs.forEach((i) => {
+        const out = root.querySelector<HTMLElement>(`[data-cc-out="${i.dataset.ccInput}"]`);
+        if (out)
+          out.textContent =
+            i.dataset.unit === 'R$' ? brl(Number(i.value)) : `${i.value}${i.dataset.unit ?? ''}`;
+      });
+      const monthly = value('pessoas') * value('horas') * weeks * value('custo');
+      const month = root.querySelector('[data-cc-month]');
+      const year = root.querySelector('[data-cc-year]');
+      if (month) month.textContent = brl(monthly);
+      if (year) year.textContent = brl(monthly * 12);
+    };
+
+    inputs.forEach((i) =>
+      i.addEventListener('input', () => {
+        update();
+        if (!tracked) {
+          tracked = true;
+          track('calculadora_usada');
+        }
+      }),
+    );
+  }
+</script>
