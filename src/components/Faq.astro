@@ -1,17 +1,37 @@
 ---
 import SectionHeader from './SectionHeader.astro';
 
-/* Fora da home até ter respostas reais (auditoria A8): publicar "A definir" frustra
-   justamente quem já está interessado. Para voltar, importar em src/pages/index.astro.
-   TODO: escrever as respostas com o time antes do go-live. As perguntas seguem os
-   temas recorrentes nos FAQs de consultorias do setor (segurança, prazo, contratação,
-   tecnologia, time) e também podem ser ajustadas. */
+import { emphasize } from '@/lib/emphasis';
+
+/* Objeções que o comprador traz antes de agendar (auditoria de conversão C6), na
+   ordem em que costumam aparecer — referência: FAQ da Redrex e de consultorias do
+   setor. Respostas sem prometer prazo ou preço não confirmados.
+   TODO: validar as respostas com o dono. */
 const faqs = [
-  'Como vocês tratam a segurança e a privacidade dos nossos dados?',
-  'Quanto tempo leva um projeto, do diagnóstico à operação?',
-  'Como funciona a contratação: projeto fechado ou alocação de time?',
-  'Vocês trabalham com as ferramentas que já usamos?',
-  'Quem vai trabalhar no nosso projeto?',
+  {
+    q: 'Para que porte de empresa vocês trabalham?',
+    a: 'Para pequenas e médias empresas que já têm dados em vários sistemas (ERP, CRM, estoque, planilhas) e sentem que gastam tempo demais para chegar a um número confiável. Não é preciso ter time de TI ou de dados.',
+  },
+  {
+    q: 'Em quanto tempo vejo algo funcionando?',
+    a: 'O diagnóstico gratuito sai em até 5 dias úteis depois da conversa. A partir dele, o plano é dividido em etapas curtas, e cada etapa termina com **algo que a equipe já usa**, não com um relatório de intenções.',
+  },
+  {
+    q: 'Como funciona a contratação?',
+    a: 'Por fase: primeiro o diagnóstico (gratuito), depois cada etapa do plano é contratada à parte, com escopo definido antes de começar. **Sem fidelidade**: você segue para a próxima só se fizer sentido.',
+  },
+  {
+    q: 'Como fica o sigilo dos nossos dados e a LGPD?',
+    a: 'Assinamos um **acordo de confidencialidade (NDA)** antes da conversa técnica, usamos só os acessos necessários e o que construímos fica com a sua empresa: código, dados e documentação.',
+  },
+  {
+    q: 'Vocês só constroem ou também preparam a nossa equipe?',
+    a: 'Também preparamos. Cada entrega vem com documentação e repasse para quem vai usar e manter, para a empresa não ficar dependente da gente.',
+  },
+  {
+    q: 'Atendem fora de Fortaleza?',
+    a: 'Sim. A base é em Fortaleza e o atendimento é remoto para todo o Brasil, com conversas por vídeo e acompanhamento contínuo.',
+  },
 ] as const;
 ---
 
@@ -20,11 +40,14 @@ const faqs = [
     <div
       class="grid grid-cols-1 gap-10 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:gap-16 md:py-32"
     >
-      <SectionHeader title="Perguntas frequentes." />
+      <SectionHeader
+        title="Antes de *agendar*."
+        description="As dúvidas que mais ouvimos de quem está avaliando um parceiro de dados."
+      />
 
       <div class="border-t border-line">
         {
-          faqs.map((q) => (
+          faqs.map(({ q, a }) => (
             <details class="faq group border-b border-line">
               <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-h4 font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand [&::-webkit-details-marker]:hidden">
                 {q}
@@ -33,7 +56,7 @@ const faqs = [
                   aria-hidden="true"
                 />
               </summary>
-              <p class="max-w-measure pb-6 text-body text-muted">A definir.</p>
+              <p class="max-w-measure pb-6 text-body text-muted" set:html={emphasize(a)} />
             </details>
           ))
         }

@@ -11,6 +11,7 @@ import Sectors from '@/components/Sectors.astro';
 import Cases from '@/components/Cases.astro';
 import Manifesto from '@/components/Manifesto.astro';
 import Founder from '@/components/Founder.astro';
+import Faq from '@/components/Faq.astro';
 import Contact from '@/components/Contact.astro';
 ---
 
@@ -28,5 +29,6 @@ import Contact from '@/components/Contact.astro';
   <Cases />
   {/* Quem conduz aparece quando FOUNDER.name for preenchido (auditoria A5). */}
   {FOUNDER.name ? <Founder /> : <Manifesto />}
+  <Faq />
   <Contact />
 </BaseLayout>
