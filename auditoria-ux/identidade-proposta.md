@@ -39,6 +39,7 @@ A decidir com o dono: se "próximo" ou "acessível" deve entrar como quarto atri
 | `metric` | 56–96 px | 0,95 | Exceção: só a métrica de cada caso real |
 
 **Regras:**
+- **Destaque (ADR-011):** uma palavra ou expressão por título em Cobalto (no escuro, brand-light) e até dois negritos por parágrafo, sempre na ideia que vende. Nunca a frase inteira, nunca na faixa Cobalto.
 - Largura de texto até 36rem (~66 caracteres).
 - Alinhamento à esquerda.
 - Sem caixa alta em rótulos e sem fonte mono.

@@ -26,7 +26,8 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - Componentes Astro têm extensão .astro; React só quando há interatividade.
 - Cores: usar os tokens do `tailwind.config.mjs` — `canvas` (Papel #FFF), `surface` (Névoa #F2F4F8), `ink` (Tinta #0C1838: texto e faixa escura), `brand` (Cobalto #1640D6: único acento), `muted` (Aço #586178: texto secundário), `line`/`line-strong` (bordas decorativas; nunca como único limite de um campo), `line-input` (borda de campo, 6,2:1), `subtle` (#8A93A6: só decorativo ou texto ≥24px, falha AA em texto pequeno); na faixa escura, `line-deep` e `on-deep-muted`. Pares de contraste aprovados em `auditoria-ux/identidade-proposta.md`.
 - Tipografia: só Archivo. Títulos com `.font-expanded` (`font-stretch: 112%`) + `font-semibold` + `tracking-display`/`tracking-heading`. Tamanhos pela escala de Bringhurst (12 · 14 · 16 · 18 · 21 · 24 · 36 · 48 · 60 · 72) via utilitários `text-meta`, `text-body`, `text-lead`, `text-h4`, `text-h3`, `text-h2`, `text-cta`, `text-display`, `text-stat`. Nada acima de 72px.
-- **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só as fases de `Phases.astro` e as etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
+- **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase inteira do título em outra cor (destaque de uma palavra ou expressão é permitido, ver Destaques), numeração em conteúdo que não é sequência (só as fases de `Phases.astro` e as etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
+- **Destaques (ADR-011):** marcação nas strings de conteúdo, convertida por `emphasize()` (`src/lib/emphasis.ts`, saída em `set:html`): `*trecho*` → Cobalto no claro / `brand-light` no escuro; `**trecho**` → negrito na cor de texto principal. `SectionHeader` já aplica nos títulos e descrições (tom pelo `variant`; na faixa Cobalto, nenhum destaque). Dose: no máximo um destaque de cor por título e dois negritos por parágrafo, sempre na ideia que vende (o quê, para quem, o resultado, o que é grátis), nunca em frase inteira. Em `title`/meta/aria, usar `plain()`.
 - **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta, uma única faixa Cobalto (Indicadores) e uma faixa de foto de ponta a ponta (`PhotoBand`); a ordem da home está no ADR-010. Ao criar uma seção, escolher o fundo para manter a alternância.
 - **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta sólida e arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem transparência nem `backdrop-blur` (ADR-008/009).
 - **CTAs:** a ação principal se chama sempre "Agendar diagnóstico gratuito" (oferta: conversa de 30 min por vídeo, gratuita, mapa por escrito em até 5 dias úteis; resposta ao contato em até 1 dia útil) e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject` para pré-selecionar o assunto. O diagnóstico é explicado só em `Diagnosis.astro`; as outras seções apenas o referenciam. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
@@ -322,3 +323,27 @@ O dono escolheu usar as duas fontes de imagem e trocar a faixa de nomes por logo
 - **Imagens otimizadas pelo build:** fontes reduzidas a 1600 px (a faixa a 2400 px). Cada foto baixa ~100–200 kB em AVIF, só quando aparece. JS inicial inalterado.
 - **Comprimento da home:** cresceu (~10.500 px no desktop, ~15.700 px no celular), em troca de densidade visual. Se o dono quiser encurtar, o primeiro corte é a lista de entregáveis de cada serviço no celular.
 - **Foto do fundador:** quando houver retrato, ele entra no bloco "Quem conduz" e tem prioridade sobre as fotos de banco.
+
+### ADR-011 — Destaques no texto e diagrama "uma base só"
+
+**Status:** aceito (2026-10-11). Revê a regra do ADR-005 sobre "frase do título em outra cor".
+
+**Contexto.** Com o visual aprovado, o dono apontou que os textos eram "preto e branco", sem chamar atenção para o que importa. O leitor tem que bater o olho e entender a proposta. Ele também apontou que a abertura da seção de serviços era só texto ao lado de uma faixa branca vazia.
+
+**Decisão.**
+- **Marcação de destaque nas strings** (`*cor*`, `**negrito**`), convertida por `emphasize()` em `src/lib/emphasis.ts`. O texto é escapado antes, então só essas marcações viram HTML.
+  - Cor: Cobalto no claro (7,67:1) e `brand-light` no escuro (5,57:1).
+  - `SectionHeader` aplica nos títulos e descrições; o título do hero marca as palavras dentro do split por palavras.
+  - O SplitText fatia elementos aninhados, então a revelação por linha continua.
+- **Onde ficou:**
+  - hero: "*Engenharia de dados*…";
+  - diagnóstico: "*gratuito*" e os fatos em negrito;
+  - faixa de foto: "*mesmo número*";
+  - serviços: "*uma base só*" e um destaque no resultado de cada serviço (`services.ts`);
+  - Sobre: "*fundação*";
+  - contato: "*diagnóstico*".
+- **`ServicesDiagram.astro`** no topo dos serviços: sistemas da empresa → base (Engenharia de dados) → Dashboards, Agentes de IA e Automações. Cada bloco leva à linha do serviço (`#servico-{slug}`); os feixes (`.flow-line`) sobem pelas linhas e desligam com reduced motion. Os rótulos curtos vêm de `tagline` em `services.ts`.
+
+**Consequências.**
+- A regra de dose fica no `CLAUDE.md` (Convenções → Destaques). Mais de um destaque de cor por título volta a deixar o texto sem hierarquia.
+- O ApertureGlyph ganhou `tone="dark"` para uso sobre Tinta.
