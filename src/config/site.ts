@@ -31,6 +31,20 @@ export const CONTACT_FORM = {
   accessKey: 'TODO',
 } as const;
 
+// Compromissos de processo exibidos junto aos CTAs (Commitments.astro). Só o que o dono
+// confirmou como verdadeiro em 2026-10-11 — não acrescentar promessas sem confirmação.
+export const COMMITMENTS = [
+  {
+    title: 'Sigilo desde o início',
+    desc: 'Acordo de confidencialidade (NDA) antes da conversa técnica.',
+  },
+  { title: 'Código e dados são seus', desc: 'Tudo o que construímos fica com a sua empresa.' },
+  {
+    title: 'Sem fidelidade',
+    desc: 'Cada fase é contratada à parte. Você segue só se fizer sentido.',
+  },
+] as const;
+
 export const CONTACT_SUBJECTS = [
   { value: 'diagnostico', label: 'Diagnóstico gratuito' },
   { value: 'engenharia', label: 'Engenharia de dados' },

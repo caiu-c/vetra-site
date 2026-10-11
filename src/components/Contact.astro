@@ -9,6 +9,8 @@ import {
   whatsappUrl,
 } from '@/config/site';
 import { emphasize } from '@/lib/emphasis';
+import NextSteps from './NextSteps.astro';
+import Commitments from './Commitments.astro';
 
 interface Props {
   /** Assunto pré-selecionado (as páginas de serviço passam o próprio). */
@@ -27,7 +29,7 @@ const whatsapp = whatsappUrl();
 
 <section id="contato" class="bg-ink text-white">
   <div
-    class="wrap grid grid-cols-1 gap-12 py-24 md:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16"
+    class="wrap grid grid-cols-1 gap-12 pb-12 pt-24 md:pb-16 md:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16"
   >
     <div class="flex flex-col gap-8">
       <h2
@@ -59,6 +61,11 @@ const whatsapp = whatsappUrl();
         >
           Ou uma conversa rápida de 15 min
         </a>
+      </div>
+
+      <div class="flex flex-col gap-4 border-t border-line-deep pt-8">
+        <p class="text-meta text-on-deep-muted">O que acontece depois</p>
+        <NextSteps />
       </div>
 
       <dl class="flex flex-col gap-5 border-t border-line-deep pt-8 lg:mt-auto">
@@ -239,5 +246,8 @@ const whatsapp = whatsappUrl();
         </p>
       </div>
     </div>
+  </div>
+  <div class="wrap pb-24 md:pb-32">
+    <Commitments tone="dark" class="border-t border-line-deep pt-8" />
   </div>
 </section>

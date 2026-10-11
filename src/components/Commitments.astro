@@ -1,0 +1,46 @@
+---
+import { COMMITMENTS } from '@/config/site';
+
+/* Compromissos de processo perto dos CTAs (auditoria de conversão C7). */
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { tone = 'light', class: className } = Astro.props;
+const dark = tone === 'dark';
+---
+
+<ul
+  class:list={['grid grid-cols-1 gap-4 sm:grid-cols-3', className]}
+  aria-label="Nossos compromissos"
+>
+  {
+    COMMITMENTS.map(({ title, desc }) => (
+      <li class="flex items-start gap-3">
+        <svg viewBox="0 0 20 20" width="20" height="20" class="mt-0.5 shrink-0" aria-hidden="true">
+          <path
+            d="M10 1.5l7 3v5c0 4.3-3 7.9-7 9-4-1.1-7-4.7-7-9v-5l7-3z"
+            fill="none"
+            stroke={dark ? '#6A8CF7' : '#1640D6'}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M6.8 10.2l2.2 2.2 4.2-4.4"
+            fill="none"
+            stroke={dark ? '#6A8CF7' : '#1640D6'}
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="flex flex-col gap-0.5">
+          <span class:list={['text-meta font-semibold', dark ? 'text-white' : 'text-ink']}>
+            {title}
+          </span>
+          <span class:list={['text-meta', dark ? 'text-on-deep-muted' : 'text-muted']}>{desc}</span>
+        </span>
+      </li>
+    ))
+  }
+</ul>
