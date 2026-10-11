@@ -1,5 +1,5 @@
 ---
-import { NAV, SITE, CONTACT, BOOKING_URL } from '@/config/site';
+import { NAV, SITE, CONTACT, BOOKING_URL, whatsappUrl } from '@/config/site';
 import ApertureSymbol from './ApertureSymbol.astro';
 import { SERVICES, serviceUrl } from '@/data/services';
 const year = new Date().getFullYear();
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { contactHref = BOOKING_URL } = Astro.props;
+const whatsapp = whatsappUrl();
 ---
 
 {/* Continua o bloco Tinta do Contato, separado por uma linha. */}
@@ -57,6 +58,18 @@ const { contactHref = BOOKING_URL } = Astro.props;
         >
           Agendar diagnóstico gratuito
         </a>
+        {
+          whatsapp && (
+            <a
+              href={whatsapp}
+              class="text-meta text-on-deep-muted transition-colors hover:text-white"
+              rel="noopener"
+              target="_blank"
+            >
+              WhatsApp
+            </a>
+          )
+        }
         <a
           href={`mailto:${CONTACT.email}`}
           class="text-meta text-on-deep-muted transition-colors hover:text-white">E-mail</a

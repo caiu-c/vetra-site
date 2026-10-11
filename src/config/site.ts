@@ -41,7 +41,18 @@ export const CONTACT = {
   email: 'contato@vetrasolutions.com.br',
   linkedin: 'https://www.linkedin.com/company/vetra-solutions',
   cnpj: '00.000.000/0001-00',
+  // TODO: número do WhatsApp só com dígitos, com país e DDD (ex.: '5585999990000').
+  // Vazio = o link não aparece no site (auditoria A14).
+  whatsapp: '',
 } as const;
+
+/** Link do WhatsApp com mensagem pré-preenchida, ou null enquanto não houver número. */
+export function whatsappUrl(
+  message = 'Olá, vim pelo site e quero saber sobre o diagnóstico gratuito.',
+): string | null {
+  const digits = CONTACT.whatsapp.replace(/\D/g, '');
+  return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(message)}` : null;
+}
 
 // TODO: confirmar endereço completo antes do go-live (validar com cliente)
 export const ADDRESS = {

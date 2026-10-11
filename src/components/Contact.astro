@@ -1,5 +1,5 @@
 ---
-import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
+import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE, whatsappUrl } from '@/config/site';
 
 interface Props {
   /** Assunto pré-selecionado (as páginas de serviço passam o próprio). */
@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { subject = 'diagnostico' } = Astro.props;
+const whatsapp = whatsappUrl();
 
 /*
   Contato + formulário (Web3Forms, ADR-006). Sem JS, o formulário faz POST direto para o
@@ -42,6 +43,23 @@ const { subject = 'diagnostico' } = Astro.props;
             </a>
           </dd>
         </div>
+        {
+          whatsapp && (
+            <div class="flex flex-col gap-1">
+              <dt class="text-meta text-on-deep-muted">WhatsApp</dt>
+              <dd>
+                <a
+                  href={whatsapp}
+                  class="text-body transition-colors hover:text-brand-light"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Conversar pelo WhatsApp
+                </a>
+              </dd>
+            </div>
+          )
+        }
         <div class="flex flex-col gap-1">
           <dt class="text-meta text-on-deep-muted">LinkedIn</dt>
           <dd>
