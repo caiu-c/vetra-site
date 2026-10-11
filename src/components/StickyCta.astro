@@ -1,0 +1,32 @@
+---
+import { BOOKING_URL, whatsappUrl } from '@/config/site';
+
+/*
+  Barra de ação fixa no celular (ADR-012, auditoria de conversão C2): o cabeçalho móvel
+  só tem "Menu", e a home passava 9,5 telas sem botão. Aparece quando o topo sai da
+  tela e some com o contato ou o rodapé visíveis e com qualquer janela aberta
+  (src/scripts/sticky-cta.ts + global.css). Só abaixo de md.
+*/
+const whatsapp = whatsappUrl();
+---
+
+<div class="sticky-cta md:hidden" data-sticky-cta>
+  <div class="flex gap-2 rounded-2xl bg-ink p-2 ring-1 ring-white/10">
+    <a
+      href={BOOKING_URL}
+      target="_blank"
+      rel="noopener"
+      data-booking
+      class="btn-inverse flex-1 px-4"
+    >
+      Agendar diagnóstico gratuito
+    </a>
+    {
+      whatsapp && (
+        <a href={whatsapp} target="_blank" rel="noopener" class="btn-outline-inverse px-4">
+          WhatsApp
+        </a>
+      )
+    }
+  </div>
+</div>

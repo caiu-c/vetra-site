@@ -7,6 +7,7 @@ import Footer from '@/components/Footer.astro';
 import Cursor from '@/components/Cursor.astro';
 import { SITE, ADDRESS, CONTACT, CONTACT_FORM_ANCHOR, HOME_CONTACT_URL } from '@/config/site';
 import BookingDialog from '@/components/BookingDialog.astro';
+import StickyCta from '@/components/StickyCta.astro';
 
 interface Props {
   title?: string;
@@ -106,6 +107,7 @@ const jsonLd = {
       <slot />
     </main>
     <Footer contactHref={contactHref} />
+    <StickyCta />
     <BookingDialog />
 
     <script>
