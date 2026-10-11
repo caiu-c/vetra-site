@@ -18,7 +18,7 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - Rotas em `src/pages/`: `index.astro` (home; só compõe as seções em ordem, cada seção é um componente em `src/components/`), `servicos/[slug].astro` (uma página por serviço, gerada de `src/data/services.ts`), `privacidade.astro`, `404.astro` (o Cloudflare Pages a serve com status 404) e `sitemap.xml.ts`.
 - `src/layouts/BaseLayout.astro` concentra `<head>` (meta, `canonical`, OG/Twitter, JSON-LD `Organization`, preload da fonte), import da fonte Archivo, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Props: `title`, `description`, `noindex` (404) e `contactOnPage` (`false` em páginas sem o formulário: os CTAs do cabeçalho e do rodapé levam ao da home). Não há preloader (ADR-009) nem moldura: cada seção desenha a sua.
 - JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A entrada do hero é só CSS (`.hero-word`/`.hero-fade` em `global.css`, palavras divididas no build em `Hero.astro`), para pintar no primeiro quadro. A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico só com tela ≥ 768px e ponteiro fino. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
-- Dados institucionais (SITE, CONTACT com `whatsapp`, ADDRESS, NAV, BOOKING_URL/HOME_CONTACT_URL, CONTACT_FORM, CONTACT_SUBJECTS, FOUNDER) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Campos vazios escondem o que dependem deles: sem `CONTACT.whatsapp` não há link de WhatsApp; sem `FOUNDER.name` a home mostra o manifesto no lugar do bloco "Quem conduz" (`Founder.astro`). Os serviços (cards da home e páginas) ficam em `src/data/services.ts`; os casos de clientes (texto + dados do gráfico) em `src/data/cases.ts`.
+- Dados institucionais (SITE, CONTACT com `whatsapp`, ADDRESS, NAV, BOOKING_URL/HOME_CONTACT_URL, CONTACT_FORM, CONTACT_SUBJECTS, FOUNDER) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Campos vazios escondem o que dependem deles: sem `CONTACT.whatsapp` não há link de WhatsApp; sem `FOUNDER.name` a home mostra o manifesto no lugar do bloco "Quem conduz" (`Founder.astro`). Os serviços (linhas da home e páginas) ficam em `src/data/services.ts`, com a tela de cada um em `src/components/mockups/ServiceMockup.astro`; as tecnologias da faixa de logos (Simple Icons, CC0) em `src/data/tech.ts`; os casos de clientes (texto + dados do gráfico) em `src/data/cases.ts`.
 - Fonte do site: Archivo Variable (`@fontsource-variable/archivo/wdth.css`, eixos de peso e largura), empacotada pelo Vite. `public/og-image.png`, `favicon.ico` e `apple-touch-icon.png` são gerados por scripts (ver Comandos), não editados à mão.
 - Import alias `@/*` → `src/*`.
 
@@ -27,13 +27,16 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - Cores: usar os tokens do `tailwind.config.mjs` — `canvas` (Papel #FFF), `surface` (Névoa #F2F4F8), `ink` (Tinta #0C1838: texto e faixa escura), `brand` (Cobalto #1640D6: único acento), `muted` (Aço #586178: texto secundário), `line`/`line-strong` (bordas decorativas; nunca como único limite de um campo), `line-input` (borda de campo, 6,2:1), `subtle` (#8A93A6: só decorativo ou texto ≥24px, falha AA em texto pequeno); na faixa escura, `line-deep` e `on-deep-muted`. Pares de contraste aprovados em `auditoria-ux/identidade-proposta.md`.
 - Tipografia: só Archivo. Títulos com `.font-expanded` (`font-stretch: 112%`) + `font-semibold` + `tracking-display`/`tracking-heading`. Tamanhos pela escala de Bringhurst (12 · 14 · 16 · 18 · 21 · 24 · 36 · 48 · 60 · 72) via utilitários `text-meta`, `text-body`, `text-lead`, `text-h4`, `text-h3`, `text-h2`, `text-cta`, `text-display`, `text-stat`. Nada acima de 72px.
 - **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só as fases de `Phases.astro` e as etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
-- **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta e uma única faixa Cobalto (Indicadores); a ordem da home está no ADR-009. Ao criar uma seção, escolher o fundo para manter a alternância.
+- **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta, uma única faixa Cobalto (Indicadores) e uma faixa de foto de ponta a ponta (`PhotoBand`); a ordem da home está no ADR-010. Ao criar uma seção, escolher o fundo para manter a alternância.
 - **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta sólida e arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem transparência nem `backdrop-blur` (ADR-008/009).
 - **CTAs:** a ação principal se chama sempre "Agendar diagnóstico gratuito" (oferta: conversa de 30 min por vídeo, gratuita, mapa por escrito em até 5 dias úteis; resposta ao contato em até 1 dia útil) e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject` para pré-selecionar o assunto. O diagnóstico é explicado só em `Diagnosis.astro`; as outras seções apenas o referenciam. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
 - **Links entre páginas:** itens de menu e links para seções da home usam href absoluto (`/#diagnostico`), para funcionar em qualquer rota. Ao criar uma página, acrescentá-la ao `sitemap.xml.ts`.
 - **Raios:** botão `rounded-full`; card e cartão do formulário `rounded-[20px]`; campo `rounded-xl`; cabeçalho `rounded-2xl`; elementos internos de diagrama `rounded-lg`. Sem sombra.
 - **Números:** sempre em pt-BR (vírgula decimal, ponto de milhar), via `toLocaleString('pt-BR')`.
-- **Imagens:** sem banco de imagens. Preferência: retrato real do fundador → trabalho real → artefatos do serviço (diagramas, gráficos) → símbolo aperture. Direção completa em `auditoria-ux/identidade-proposta.md`.
+- **Imagens (ADR-010):** toda seção grande tem uma peça visual ocupando boa parte da área. Duas fontes:
+  - **Telas do que entregamos** (`src/components/mockups/`): HTML/SVG nos tokens da marca, sempre com dados fictícios e a legenda "Exemplo ilustrativo, com dados fictícios." (`MockupFrame`). Nunca apresentar como cliente ou resultado real.
+  - **Fotos de banco gratuito** (Pexels, licença comercial livre) do mundo do cliente: armazém, fábrica, varejo, reunião, a cidade-base. Ficam em `src/assets/photos/`, com origem registrada em `CREDITOS.md`, e são servidas por `<Picture>` do `astro:assets` (AVIF/WebP, `widths`/`sizes`, `loading="lazy"` abaixo da dobra). Nunca sugerir que as pessoas fotografadas são equipe ou clientes, e evitar clichês de tecnologia (código binário, cérebro brilhante, robô).
+  - Quando houver o retrato do fundador, ele tem prioridade sobre qualquer foto de banco. Direção completa em `auditoria-ux/identidade-proposta.md`.
 - Componentes de UI em `global.css` (`@layer components`): `.wrap`, `.btn-primary`, `.btn-secondary`, `.btn-inverse` e `.btn-outline-inverse` (fundos Tinta), `.btn-sm`, `.font-expanded`, `.field-label`/`.field-input` (formulário). Cabeçalho de seção padrão: `SectionHeader.astro` (título com `data-split` + descrição opcional; `variant` light/deep/brand conforme o fundo).
 - Gráficos dos casos (`CaseChart.astro`): seguir a skill `dataviz` (carregar antes de mexer). A série usa `brand-light` e o contexto `chart-context`, ambos validados com o script da skill contra o fundo Tinta; qualquer cor nova de gráfico precisa passar pelo validador.
 - Conteúdo placeholder (casos e seus gráficos, indicadores, setores, textos de serviço e das páginas de serviço, política de privacidade, FAQ, CNPJ/endereço/telefone, chave do Web3Forms) está marcado com `TODO`. Por decisão do dono (2026-10-11), casos, indicadores, setores e dados da empresa seguem no ar até ele preencher os oficiais; o FAQ fica fora da home até ter respostas.
@@ -279,3 +282,43 @@ O dono aprovou aplicar tudo, menos A1 a A3 (contato, prova e dados da empresa), 
 - **JS inicial:** ~52 kB gz.
 - **Comprimento da home:** caiu no desktop (8.955 → 8.198 px), mas não no celular (~12.600 px). Indicadores, Setores e Casos ficaram no ar, e o diagnóstico ganhou oferta e fases. O próximo corte é rever o diagrama do pipeline e a faixa Stack no celular.
 - **Rodada seguinte da auditoria:** rodar o coletor contra o preview e comparar com `auditoria-ux/coletas/`.
+
+### ADR-010 — Imagens: telas do que entregamos e fotos do mundo do cliente
+
+**Status:** aceito (2026-10-11). Ajusta o ADR-003 (sem fotos), o ADR-009 (ordem da home) e a direção de imagem da identidade.
+
+**Contexto.** Depois da rodada da auditoria, o dono avaliou que o site "não mudou quase nada": sem imagens, a mesma sensação de vazio. A comparação lado a lado com Genux, ASML e Vercel mostrou a diferença:
+- **Nas referências:** toda seção tem uma imagem grande — fotos de ponta a ponta (ASML), telas de produto ao lado de uma frase curta (Vercel), foto ou ilustração em quase todo bloco (Genux) —, além de uma faixa de logos logo abaixo do topo.
+- **Na Vetra:** depois do topo, quase tudo era texto em cartões.
+
+O dono escolheu usar as duas fontes de imagem e trocar a faixa de nomes por logos das tecnologias.
+
+**Decisão.**
+- **Telas do que entregamos** (`src/components/mockups/`): carga de dados, painel, agente de IA com aprovação humana, automação e a capa do mapa do diagnóstico.
+  - São HTML/SVG nos tokens da marca, com dados fictícios e legenda de exemplo ilustrativo.
+  - Na home, os serviços viram linhas alternadas: texto de um lado, tela do outro.
+  - Nas páginas de serviço, a tela vai para o topo. O diagrama do pipeline passou para a página de engenharia de dados.
+- **Fotos de banco gratuito** (Pexels), com origem em `src/assets/photos/CREDITOS.md`:
+  - faixa de ponta a ponta (armazém) depois do diagnóstico;
+  - uma foto por setor;
+  - conversa por vídeo no diagnóstico, com a capa do mapa sobreposta;
+  - vista aérea de Fortaleza no Sobre.
+- **Logos das tecnologias** (`TechStrip.astro`, Simple Icons) no pé do hero, rotulados como "Tecnologias com que trabalhamos" (nunca clientes). A faixa Stack em Tinta foi removida, e com ela o indicador de scroll do hero.
+- **Ordem da home:**
+
+  | # | Seção | Fundo |
+  |---|---|---|
+  | 1 | Hero + logos | Papel |
+  | 2 | Diagnóstico | Névoa |
+  | 3 | Faixa de foto | Tinta, com foto |
+  | 4 | Serviços | Papel |
+  | 5 | Indicadores | Cobalto |
+  | 6 | Setores | Papel |
+  | 7 | Casos | Tinta |
+  | 8 | Sobre/Quem conduz | Papel |
+  | 9 | Contato + Rodapé | Tinta |
+
+**Consequências.**
+- **Imagens otimizadas pelo build:** fontes reduzidas a 1600 px (a faixa a 2400 px). Cada foto baixa ~100–200 kB em AVIF, só quando aparece. JS inicial inalterado.
+- **Comprimento da home:** cresceu (~10.500 px no desktop, ~15.700 px no celular), em troca de densidade visual. Se o dono quiser encurtar, o primeiro corte é a lista de entregáveis de cada serviço no celular.
+- **Foto do fundador:** quando houver retrato, ele entra no bloco "Quem conduz" e tem prioridade sobre as fotos de banco.

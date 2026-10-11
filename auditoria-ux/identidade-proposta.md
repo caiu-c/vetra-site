@@ -113,21 +113,26 @@ A decidir com o dono: se "próximo" ou "acessível" deve entrar como quarto atri
 
 ## Direção de imagem
 
-Ordem de preferência para o site (`proposta-e-confianca.md` §7):
+Atualizada em 11/10/2026 (ADR-010): toda seção grande tem uma peça visual. Ordem de preferência:
 
 1. **Retrato do fundador (prioridade, A5).**
    - Fundo neutro claro (próximo à Névoa #F2F4F8) ou ambiente de trabalho real desfocado.
    - Luz natural lateral, olhar para a câmera, roupa sem estampa.
    - Enquadramento do peito para cima.
-   - Uma sessão curta resolve o site e o LinkedIn.
-   - Tratamento: cor natural, sem filtro, sem recorte com sombra.
-2. **Trabalho real:** reunião, quadro branco, sessão de diagnóstico (com autorização de quem aparecer).
-3. **Artefatos do serviço,** que já são o ponto forte do site:
-   - diagramas de arquitetura e fluxo no estilo do `PipelineDiagram`;
-   - gráficos no padrão dos casos (skill dataviz, cores validadas);
-   - telas de painéis com dados fictícios **claramente identificados** como ilustrativos.
-4. **Lente 3D / símbolo aperture:** gesto de marca **só no topo** (ADR-007).
-5. **Não usar:** banco de imagens com clichês de dados (código binário, cérebro brilhante, globo de rede, robô), foto de banco apresentada como equipe, logos de clientes sem autorização.
+   - Quando existir, substitui qualquer foto de banco nos lugares de "quem somos".
+2. **Telas do que entregamos** (`src/components/mockups/`):
+   - carga de dados, painel, agente de IA com aprovação humana, automação, mapa do diagnóstico;
+   - nos tokens da marca, com dados fictícios e a legenda "Exemplo ilustrativo, com dados fictícios.";
+   - gráficos no padrão da skill dataviz.
+3. **Fotos de banco gratuito do mundo do cliente** (Pexels, origem em `src/assets/photos/CREDITOS.md`):
+   - temas: armazém, fábrica, varejo, reunião, a cidade-base;
+   - pessoas trabalhando em ambiente real, luz natural, tons frios ou neutros, que combinam com o azul-marinho;
+   - em faixa de ponta a ponta, com véu Tinta de 70% para o texto.
+4. **Símbolo aperture e lente 3D:** gesto de marca **só no topo** (ADR-007).
+5. **Não usar:**
+   - clichês de dados (código binário, cérebro brilhante, globo de rede, robô);
+   - foto de banco apresentada como equipe ou cliente;
+   - logos de clientes sem autorização (logos de **tecnologias**, sim, rotulados como tal).
 
 ## Logo
 
