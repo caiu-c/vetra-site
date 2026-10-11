@@ -35,3 +35,6 @@ yarn-debug.log*
 
 # capturas locais para review visual (não versionar)
 .screenshots/
+
+# auditoria-ux: capturas e coletas pesam (o relatório e o contexto são versionados)
+auditoria-ux/coletas/
