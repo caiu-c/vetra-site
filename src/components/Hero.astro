@@ -1,7 +1,8 @@
 ---
 import { BOOKING_URL } from '@/config/site';
 
-const title = 'A coluna vertebral dos seus dados.';
+// TODO: validar texto (auditoria A4: serviço + público no título; consultoria e local no subtítulo).
+const title = 'Engenharia de dados para quem ainda decide por planilha.';
 // Palavras em spans para a entrada mascarada em CSS (global.css → .hero-word).
 const words = title.split(' ');
 ---
@@ -35,7 +36,7 @@ const words = title.split(' ');
       <canvas data-lens-canvas class="absolute inset-0 h-full w-full"></canvas>
     </div>
 
-    <h1 class="font-expanded relative z-10 max-w-[12ch] text-display font-semibold tracking-display text-ink">
+    <h1 class="font-expanded text-balance relative z-10 max-w-[16ch] text-display font-semibold tracking-display text-ink">
       {
         words.map((word, i) => (
           <>
@@ -49,8 +50,9 @@ const words = title.split(' ');
     </h1>
 
     <p class="hero-fade text-pretty relative z-10 max-w-measure text-lead text-muted">
-      Construímos sistemas de dados, agentes de IA e automações com rigor de engenharia.
-      Resultado de negócio sustentado por arquitetura técnica.
+      Somos uma consultoria de Fortaleza que atende empresas de todo o Brasil. Organizamos
+      seus dados em uma base única, entregamos os indicadores prontos e colocamos IA para
+      trabalhar com supervisão.
     </p>
 
     <div class="hero-fade relative z-10 flex flex-col gap-3 sm:flex-row">

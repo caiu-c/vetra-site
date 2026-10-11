@@ -85,11 +85,12 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   ${textPath('Vetra Solutions', 146, 125, 22, INK, { wght: 600, wdth: 112, tracking: -0.4 })}
 
   <!-- headline -->
-  ${textPath('A coluna vertebral', 104, 330, 72, INK, heading)}
-  ${textPath('dos seus dados.', 104, 408, 72, INK, heading)}
+  ${textPath('Engenharia de dados', 104, 290, 60, INK, heading)}
+  ${textPath('para quem ainda', 104, 356, 60, INK, heading)}
+  ${textPath('decide por planilha.', 104, 422, 60, INK, heading)}
 
   <!-- rodapé -->
-  ${textPath('Engenharia de dados e IA em Fortaleza/CE', 108, 500, 20, MUTED)}
+  ${textPath('Consultoria de engenharia de dados em Fortaleza/CE', 108, 500, 20, MUTED)}
   ${textPath('vetrasolutions.com.br', 108, 530, 20, MUTED)}
 </svg>
 `;

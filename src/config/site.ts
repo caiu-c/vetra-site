@@ -2,9 +2,10 @@ export const SITE = {
   name: 'Vetra Solutions',
   domain: 'vetrasolutions.com.br',
   url: 'https://vetrasolutions.com.br',
-  title: 'Vetra Solutions — Engenharia de Dados & IA',
+  // Termo principal no início, marca no fim (auditoria A4). TODO: validar texto.
+  title: 'Consultoria de Engenharia de Dados | Vetra Solutions',
   description:
-    'Construímos sistemas de dados, agentes de IA e automações com rigor de engenharia. Resultado de negócio sustentado por arquitetura técnica.',
+    'Consultoria de engenharia de dados em Fortaleza para empresas de todo o Brasil: base de dados única, dashboards, IA e automações. Diagnóstico gratuito.',
   city: 'Fortaleza/CE',
   founded: 2026,
 } as const;
