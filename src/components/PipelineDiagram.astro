@@ -88,7 +88,7 @@ const rightPaths = outputY.map((y) => `M0 ${mid} C36 ${mid} 36 ${y} 72 ${y}`);
       <ul class="mt-3 flex flex-1 flex-col justify-between gap-2 md:gap-0">
         {
           steps.map(({ label, meta }, i) => (
-            <li class="flex items-center justify-between rounded-md border border-white/10 bg-white/[0.04] px-3 py-2">
+            <li class="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2">
               <span class="flex items-center gap-2.5 text-meta">
                 <span class="numerals-tabular text-xs text-white/50">{i + 1}</span>
                 {label}
