@@ -17,7 +17,7 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 ## Arquitetura
 - Rotas em `src/pages/`: `index.astro` (home; só compõe as seções em ordem, cada seção é um componente em `src/components/`), `servicos/[slug].astro` (uma página por serviço, gerada de `src/data/services.ts`), `privacidade.astro`, `404.astro` (o Cloudflare Pages a serve com status 404) e `sitemap.xml.ts`.
 - `src/layouts/BaseLayout.astro` concentra `<head>` (meta, `canonical`, OG/Twitter, JSON-LD `Organization`, preload da fonte), import da fonte Archivo, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Props: `title`, `description`, `noindex` (404) e `contactOnPage` (`false` em páginas sem o formulário: os CTAs do cabeçalho e do rodapé levam ao da home). Não há preloader (ADR-009) nem moldura: cada seção desenha a sua.
-- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A entrada do hero é só CSS (`.hero-word`/`.hero-fade` em `global.css`, palavras divididas no build em `Hero.astro`), para pintar no primeiro quadro. A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico só com tela ≥ 768px e ponteiro fino. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
+- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (pré-seleciona o assunto do formulário), `data-booking` (link da agenda Cal.com que abre na janela `BookingDialog`, em `src/scripts/booking.ts`), `data-track` (evento de conversão, em `src/scripts/track.ts`). A entrada do hero é só CSS (`.hero-word`/`.hero-fade` em `global.css`, palavras divididas no build em `Hero.astro`), para pintar no primeiro quadro. A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico só com tela ≥ 768px e ponteiro fino. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
 - Dados institucionais (SITE, CONTACT com `whatsapp`, ADDRESS, NAV, BOOKING_URL/HOME_CONTACT_URL, CONTACT_FORM, CONTACT_SUBJECTS, FOUNDER) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Campos vazios escondem o que dependem deles: sem `CONTACT.whatsapp` não há link de WhatsApp; sem `FOUNDER.name` a home mostra o manifesto no lugar do bloco "Quem conduz" (`Founder.astro`). Os serviços (linhas da home e páginas) ficam em `src/data/services.ts`, com a tela de cada um em `src/components/mockups/ServiceMockup.astro`; as tecnologias da faixa de logos (Simple Icons, CC0) em `src/data/tech.ts`; os casos de clientes (texto + dados do gráfico) em `src/data/cases.ts`.
 - Fonte do site: Archivo Variable (`@fontsource-variable/archivo/wdth.css`, eixos de peso e largura), empacotada pelo Vite. `public/og-image.png`, `favicon.ico` e `apple-touch-icon.png` são gerados por scripts (ver Comandos), não editados à mão.
 - Import alias `@/*` → `src/*`.
@@ -30,7 +30,8 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - **Destaques (ADR-011):** marcação nas strings de conteúdo, convertida por `emphasize()` (`src/lib/emphasis.ts`, saída em `set:html`): `*trecho*` → Cobalto no claro / `brand-light` no escuro; `**trecho**` → negrito na cor de texto principal. `SectionHeader` já aplica nos títulos e descrições (tom pelo `variant`; na faixa Cobalto, nenhum destaque). Dose: no máximo um destaque de cor por título e dois negritos por parágrafo, sempre na ideia que vende (o quê, para quem, o resultado, o que é grátis), nunca em frase inteira. Em `title`/meta/aria, usar `plain()`.
 - **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta, uma única faixa Cobalto (Indicadores) e uma faixa de foto de ponta a ponta (`PhotoBand`); a ordem da home está no ADR-010. Ao criar uma seção, escolher o fundo para manter a alternância.
 - **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta sólida e arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem transparência nem `backdrop-blur` (ADR-008/009).
-- **CTAs:** a ação principal se chama sempre "Agendar diagnóstico gratuito" (oferta: conversa de 30 min por vídeo, gratuita, mapa por escrito em até 5 dias úteis; resposta ao contato em até 1 dia útil) e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject` para pré-selecionar o assunto. O diagnóstico é explicado só em `Diagnosis.astro`; as outras seções apenas o referenciam. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
+- **Conversão (ADR-012):** "Agendar diagnóstico gratuito" abre a agenda do Cal.com (`BOOKING_URL`, 30 min; `QUICK_CALL_URL`, 15 min) — todo link de agenda leva `target="_blank" rel="noopener" data-booking`. O formulário (`#contato`) é a alternativa "Prefere escrever?". No celular há a barra fixa `StickyCta`. Para quem ainda pesquisa: teste de maturidade (`/teste-de-maturidade/`), exemplo do mapa (`/diagnostico/exemplo/`, liberado por `SampleMapGate`) e calculadora (`CostCalculator`). Compromissos de processo só os confirmados pelo dono (`COMMITMENTS` em `site.ts`). Novo CTA ou porta de entrada deve disparar um evento (`track()` ou `data-track`).
+- **CTAs:** a ação principal se chama sempre "Agendar diagnóstico gratuito" (oferta: conversa de 30 min por vídeo, gratuita, mapa por escrito em até 5 dias úteis; resposta ao contato em até 1 dia útil) e abre a agenda do Cal.com (ver Conversão). O diagnóstico é explicado só em `Diagnosis.astro`; as outras seções apenas o referenciam. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
 - **Links entre páginas:** itens de menu e links para seções da home usam href absoluto (`/#diagnostico`), para funcionar em qualquer rota. Ao criar uma página, acrescentá-la ao `sitemap.xml.ts`.
 - **Raios:** botão `rounded-full`; card e cartão do formulário `rounded-[20px]`; campo `rounded-xl`; cabeçalho `rounded-2xl`; elementos internos de diagrama `rounded-lg`. Sem sombra.
 - **Números:** sempre em pt-BR (vírgula decimal, ponto de milhar), via `toLocaleString('pt-BR')`.
@@ -347,3 +348,37 @@ O dono escolheu usar as duas fontes de imagem e trocar a faixa de nomes por logo
 **Consequências.**
 - A regra de dose fica no `CLAUDE.md` (Convenções → Destaques). Mais de um destaque de cor por título volta a deixar o texto sem hierarquia.
 - O ApertureGlyph ganhou `tone="dark"` para uso sobre Tinta.
+
+### ADR-012 — Conversão: agenda direta, CTA sempre à mão e portas para quem pesquisa
+
+**Status:** aceito (2026-10-11). Aplica o relatório `auditoria-ux/relatorio-conversao-2026-10-11.md` (C1–C12).
+
+**Contexto.** A auditoria de conversão, feita do ponto de vista de um comprador B2B e comparada com a Redrex, mostrou que o site convencia mas convertia pouco:
+- o "Agendar" levava a um formulário;
+- no celular, 9,5 telas sem botão;
+- nenhuma porta para quem ainda está pesquisando;
+- nenhuma pessoa, nenhuma resposta às objeções e nenhuma medição.
+
+**Decisão.**
+- **Agenda Cal.com** (`caiocavalcanti/30min` e `/15min`) numa janela própria (`BookingDialog.astro` + `booking.ts`). O iframe só é criado no clique; nada do Cal.com carrega antes. Sem JS, o link abre a agenda em nova aba.
+- **Barra fixa no celular** (`StickyCta.astro` + `sticky-cta.ts`): aparece depois do topo e some no contato, no rodapé e com janela aberta.
+- **Contato:** linha do tempo do pós-agendamento (`NextSteps.astro`) e compromissos confirmados pelo dono (`Commitments.astro`: NDA, código e dados do cliente, sem fidelidade), também no diagnóstico.
+- **Portas de entrada:**
+  - teste de maturidade de 8 perguntas, com script só na própria página;
+  - exemplo completo do mapa (`noindex`, liberado por nome e e-mail via Web3Forms; sem chave, liberado direto);
+  - calculadora "quanto a planilha custa".
+- **Mais conteúdo de conversão:**
+  - FAQ de volta, com 6 objeções respondidas (rascunho para validar);
+  - CTAs contextuais (faixa de foto, cada serviço, título do contato em pergunta);
+  - porte da empresa opcional no formulário;
+  - entregáveis dos serviços fora do celular.
+- **Medição** (`track.ts`): eventos em `window.dataLayer`, repassados a Plausible, Umami ou GA4 se estiverem na página. Nenhum provedor é carregado por padrão (README → Medição).
+
+**Consequências.**
+- O JS das portas fica fora do bundle principal (página própria ou componente só na home); o embed da agenda custa zero até o clique.
+- A home ganhou duas seções (calculadora e FAQ), e o celular encurtou nos serviços.
+- **Pendências do dono:**
+  - fundador (`FOUNDER`);
+  - chave do Web3Forms (sem ela, o exemplo do mapa não captura contato);
+  - provedor de analytics;
+  - validação dos textos do FAQ, do teste e do exemplo do mapa.

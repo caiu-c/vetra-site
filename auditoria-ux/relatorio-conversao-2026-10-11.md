@@ -283,6 +283,24 @@ Coleta em 11/10/2026: capturas desktop e celular das duas páginas iniciais, mai
 | | Encontro ao vivo mensal | C3 | Médio | Agenda do fundador |
 | | Campo opcional de porte ou qualificação no agendamento | C9 | Baixo | — |
 
+## 8.1 Status após a rodada de correções (11/10/2026)
+
+| Achado | Status | Onde |
+|---|---|---|
+| C1 Agenda direta | **Feito** | Cal.com 30 min e 15 min na janela `BookingDialog`; formulário como "Prefere escrever?" |
+| C2 CTA no celular | **Feito** | `StickyCta` (verificado: aparece depois do topo, some no contato) |
+| C3 Portas para quem pesquisa | **Feito** | `/teste-de-maturidade/`, `/diagnostico/exemplo/` (com captura de e-mail), calculadora |
+| C4 Fundador | Pendente (dono) | Bloco pronto, falta preencher `FOUNDER` |
+| C5 Língua do dinheiro | **Feito** | `CostCalculator` + sinal "Dias de trabalho por mês…" |
+| C6 Objeções | **Feito** (validar textos) | FAQ "Antes de agendar", 6 respostas |
+| C7 Garantias | **Feito** | NDA, código e dados do cliente, sem fidelidade (`COMMITMENTS`) |
+| C8 Pós-clique | **Feito** | `NextSteps` na seção de contato |
+| C9 Qualificação | **Feito** | "Tamanho da empresa" opcional |
+| C10 Medição | **Feito** (falta provedor) | `track.ts`, eventos no `dataLayer`; escolher Plausible, Umami ou GA4 |
+| C11 Prova técnica | Parcial | O exemplo do mapa cumpre parte; o estudo com dados públicos depende do dono |
+| C12 Página longa | **Feito** | Entregáveis dos serviços fora do celular, menos respiro entre linhas |
+| §6 CTAs contextuais | **Feito** | Faixa de foto, "Quero isso na minha empresa", título do contato em pergunta |
+
 ## 9. Antes do lançamento (dados de exemplo, por decisão do dono)
 - Casos de clientes e seus gráficos, indicadores (47+, 12 TB, 99,97%, < 200 ms) e setores: trocar pelos reais ou ocultar.
 - CNPJ, endereço e telefone (rodapé e dados estruturados).
