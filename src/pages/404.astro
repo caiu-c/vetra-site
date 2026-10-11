@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { HOME_CONTACT_URL, SITE } from '@/config/site';
+---
+
+{/* O Cloudflare Pages serve este 404.html com status 404 real (sem ele, qualquer URL
+    inexistente devolvia a home com 200 — auditoria A13). */}
+<BaseLayout title={`Página não encontrada | ${SITE.name}`} noindex contactOnPage={false}>
+  <section class="bg-canvas">
+    <div class="wrap flex min-h-[80svh] flex-col justify-center gap-8 pb-20 pt-32 md:pt-36">
+      <h1 class="font-expanded max-w-[16ch] text-display font-semibold tracking-display text-ink">
+        Página não encontrada.
+      </h1>
+      <p class="max-w-measure text-lead text-muted">
+        O endereço pode ter mudado ou não existir mais. Siga por um destes caminhos:
+      </p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href="/" class="btn-primary">Voltar para o início</a>
+        <a href={HOME_CONTACT_URL} class="btn-secondary">Agendar diagnóstico</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

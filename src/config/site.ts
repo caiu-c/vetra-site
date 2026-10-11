@@ -12,7 +12,10 @@ export const SITE = {
 // "Agendar diagnóstico" leva ao formulário de contato (assunto pré-selecionado via
 // data-subject="diagnostico"). TODO: trocar pelo link de agendamento (Cal.com /
 // Google Agenda) quando existir.
+// Âncora do formulário na própria página. Páginas sem o formulário (404, privacidade)
+// passam `contactOnPage={false}` ao BaseLayout, e o cabeçalho/rodapé usam HOME_CONTACT_URL.
 export const BOOKING_URL = '#contato';
+export const HOME_CONTACT_URL = '/#contato';
 
 // Formulário de contato via Web3Forms (https://web3forms.com): a chave é pública por
 // desenho do serviço e define para qual e-mail as mensagens vão.
@@ -48,10 +51,12 @@ export const ADDRESS = {
   addressCountry: 'BR',
 } as const;
 
+// Seções da home com href absoluto: funcionam também nas outras páginas (na própria
+// home, "/#x" é navegação no mesmo documento e rola suave).
 export const NAV = [
-  { label: 'Sistemas', href: '#sistemas' },
-  { label: 'Metodologia', href: '#metodologia' },
-  { label: 'Diagnóstico', href: '#diagnostico' },
-  { label: 'Casos', href: '#casos' },
-  { label: 'Sobre', href: '#sobre' },
+  { label: 'Sistemas', href: '/#sistemas' },
+  { label: 'Metodologia', href: '/#metodologia' },
+  { label: 'Diagnóstico', href: '/#diagnostico' },
+  { label: 'Casos', href: '/#casos' },
+  { label: 'Sobre', href: '/#sobre' },
 ] as const;

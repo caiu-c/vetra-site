@@ -5,14 +5,27 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import Preloader from '@/components/Preloader.astro';
 import Cursor from '@/components/Cursor.astro';
-import { SITE, ADDRESS, CONTACT } from '@/config/site';
+import { SITE, ADDRESS, CONTACT, BOOKING_URL, HOME_CONTACT_URL } from '@/config/site';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Páginas que não devem ir para o índice (ex.: 404). */
+  noindex?: boolean;
+  /** false em páginas sem o formulário de contato: os CTAs do layout levam ao da home. */
+  contactOnPage?: boolean;
 }
 
-const { title = SITE.title, description = SITE.description } = Astro.props;
+const {
+  title = SITE.title,
+  description = SITE.description,
+  noindex = false,
+  contactOnPage = true,
+} = Astro.props;
+const contactHref = contactOnPage ? BOOKING_URL : HOME_CONTACT_URL;
+
+// URL canônica autorreferente (uma só versão indexável; o www redireciona no painel).
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
 
 /* JSON-LD Organization (schema.org) — campos TODO ficam visíveis no source para
    sinalizar pendências antes do go-live: telephone (formato E.164), email,
@@ -49,6 +62,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -74,7 +88,7 @@ const jsonLd = {
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content={SITE.name} />
-    <meta property="og:url" content={SITE.url} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={`${SITE.url}/og-image.png`} />
@@ -95,11 +109,11 @@ const jsonLd = {
   <body>
     <Preloader />
     <Cursor />
-    <Header />
+    <Header contactHref={contactHref} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer contactHref={contactHref} />
 
     <script>
       import '@/scripts/main';

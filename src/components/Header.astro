@@ -2,6 +2,13 @@
 import { NAV, BOOKING_URL, SITE } from '@/config/site';
 import MobileMenu from './MobileMenu.astro';
 import ApertureSymbol from './ApertureSymbol.astro';
+
+interface Props {
+  /** Destino dos CTAs de contato (âncora local ou o formulário da home). */
+  contactHref?: string;
+}
+
+const { contactHref = BOOKING_URL } = Astro.props;
 ---
 
 {/*
@@ -36,9 +43,9 @@ import ApertureSymbol from './ApertureSymbol.astro';
     </div>
 
     <div class="flex items-center gap-2">
-      <a href="#contato" class="btn-outline-inverse btn-sm hidden lg:inline-flex">Contato</a>
+      <a href={contactHref} class="btn-outline-inverse btn-sm hidden lg:inline-flex">Contato</a>
       <a
-        href={BOOKING_URL}
+        href={contactHref}
         class="btn-inverse btn-sm hidden md:inline-flex"
         data-subject="diagnostico"
         data-magnetic="0.25"
@@ -57,4 +64,4 @@ import ApertureSymbol from './ApertureSymbol.astro';
   </div>
 </header>
 
-<MobileMenu />
+<MobileMenu contactHref={contactHref} />

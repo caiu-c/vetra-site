@@ -1,6 +1,13 @@
 ---
 import { NAV, BOOKING_URL } from '@/config/site';
 import ApertureSymbol from './ApertureSymbol.astro';
+
+interface Props {
+  /** Destino dos CTAs de contato (âncora local ou o formulário da home). */
+  contactHref?: string;
+}
+
+const { contactHref = BOOKING_URL } = Astro.props;
 ---
 
 <dialog
@@ -40,14 +47,14 @@ import ApertureSymbol from './ApertureSymbol.astro';
 
     <div class="mt-auto flex flex-col gap-3">
       <a
-        href={BOOKING_URL}
+        href={contactHref}
         data-action="close-menu"
         data-subject="diagnostico"
         class="btn-primary w-full"
       >
         Agendar diagnóstico
       </a>
-      <a href="#contato" data-action="close-menu" class="btn-secondary w-full">Contato</a>
+      <a href={contactHref} data-action="close-menu" class="btn-secondary w-full">Contato</a>
     </div>
   </div>
 </dialog>
