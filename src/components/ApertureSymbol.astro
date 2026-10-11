@@ -24,8 +24,9 @@ const {
   width={size}
   height={size}
   class={className}
-  aria-label={ariaLabel}
-  role="img"
+  aria-label={ariaLabel || undefined}
+  aria-hidden={ariaLabel ? undefined : 'true'}
+  role={ariaLabel ? 'img' : undefined}
 >
   <g
     stroke="currentColor"

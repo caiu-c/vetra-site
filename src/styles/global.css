@@ -3,70 +3,65 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --container-max: 1280px;
-    --panel-max: 1100px;
-    --gutter: 24px;
-    --pad-x: 64px;
-    --pad-x-mobile: 24px;
-    --pad-inner: 48px;
-  }
-
-  /* Instrument Serif — headlines */
-  @font-face {
-    font-family: 'Instrument Serif';
-    src: url('/fonts/instrument-serif-regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'Instrument Serif';
-    src: url('/fonts/instrument-serif-italic.woff2') format('woff2');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-  }
-
-  /* Inter Tight — body */
-  @font-face {
-    font-family: 'Inter Tight';
-    src: url('/fonts/inter-tight-regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'Inter Tight';
-    src: url('/fonts/inter-tight-medium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  /* JetBrains Mono — labels, CTAs, metadata */
-  @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('/fonts/jetbrains-mono-regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'JetBrains Mono';
-    src: url('/fonts/jetbrains-mono-medium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-
   html {
-    @apply bg-paper text-ink;
+    @apply bg-canvas text-ink;
     font-family: theme('fontFamily.sans');
+    font-stretch: 100%;
+    /* Âncoras não ficam escondidas sob o header fixo (ver HEADER_OFFSET em motion/lenis.ts) */
+    scroll-padding-top: 88px;
   }
 
   body {
     @apply min-h-screen antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand text-white;
+  }
+}
+
+@layer components {
+  /* Container de conteúdo: o fundo de cada seção vai de ponta a ponta; só o
+     conteúdo respeita esta largura. */
+  .wrap {
+    @apply mx-auto w-full max-w-[1600px] px-6 md:px-10 xl:px-16;
+  }
+
+  /* Títulos: Archivo levemente expandida (placa de engenharia) */
+  .font-expanded {
+    font-stretch: 112%;
+  }
+
+  /* Botões pill */
+  .btn {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-body font-medium transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-white hover:bg-brand;
+  }
+  .btn-secondary {
+    @apply btn border border-line-strong bg-canvas text-ink hover:border-ink;
+  }
+  .btn-sm {
+    @apply h-10 px-4 text-meta;
+  }
+  /* Variantes para fundos escuros (Tinta) */
+  .btn-inverse {
+    @apply btn bg-white text-ink hover:bg-brand-soft;
+  }
+  .btn-outline-inverse {
+    @apply btn border border-white/30 text-white hover:border-white;
+  }
+
+  /* Campos de formulário (base do @tailwindcss/forms + identidade) */
+  .field-label {
+    @apply mb-2 block text-meta font-medium text-ink;
+  }
+  .field-input {
+    @apply block h-12 w-full rounded-xl border border-line-strong bg-canvas px-4 text-body text-ink placeholder:text-subtle focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25;
+  }
+  .field-input:user-invalid {
+    @apply border-danger focus:ring-danger/25;
   }
 }
 
@@ -85,125 +80,237 @@ html.lenis body {
   overflow: clip;
 }
 
-/* Stagger de entrada do Hero (PRD §6.3) */
-@keyframes vetra-rise {
+/* Feixes do diagrama de pipeline: traço curto percorrendo o caminho */
+.beam {
+  stroke-dasharray: 18 220;
+  animation: beam-flow 2.8s linear infinite;
+}
+@keyframes beam-flow {
   from {
-    opacity: 0;
-    transform: translateY(20px);
+    stroke-dashoffset: 238;
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    stroke-dashoffset: 0;
   }
-}
-
-.stagger {
-  animation: vetra-rise 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.stagger-1 {
-  animation-delay: 0ms;
-}
-.stagger-2 {
-  animation-delay: 60ms;
-}
-.stagger-3 {
-  animation-delay: 120ms;
-}
-.stagger-4 {
-  animation-delay: 180ms;
-}
-.stagger-5 {
-  animation-delay: 240ms;
-}
-.stagger-6 {
-  animation-delay: 300ms;
-}
-
-/* Reveal-on-scroll — só ativa se JS detectou !reduced-motion e marcou <html> */
-.js-reveal-enabled [data-reveal] {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 600ms ease-out,
-    transform 600ms ease-out;
-}
-.js-reveal-enabled [data-reveal].is-revealed {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stagger {
+  .beam {
     animation: none !important;
   }
-  .js-reveal-enabled [data-reveal],
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+  .beam {
+    display: none;
   }
 }
 
-/* Paper grain — textura sutil de papel impresso aplicada SÓ no body (paper).
-   Painel canvas continua liso. SVG inline com fractalNoise, ~5% de opacidade. */
-body {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  background-attachment: fixed;
-  background-size: 200px 200px;
-}
-
-/* Craft tipográfico — detalhes editoriais discretos */
 .text-balance {
   text-wrap: balance;
 }
-.tracking-display {
-  letter-spacing: -0.015em;
+.text-pretty {
+  text-wrap: pretty;
 }
 .numerals-tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Hero backdrop fade-in — única ocorrência, no carregamento da página */
-.hero-backdrop {
-  opacity: 0;
-  animation: hero-backdrop-in 1s 0.2s ease-out forwards;
-}
-@keyframes hero-backdrop-in {
-  to {
-    opacity: 0.15;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-backdrop {
-    animation: none;
-    opacity: 0.15;
-  }
-}
+/* ───────── Motion (main.ts) ─────────
+   `.js` e `.preloaded` vêm do script inline no <head>; `*-armed` são adicionadas
+   por main.ts quando assume o controle. Sem JS (ou se o script falhar), os
+   failsafes por animação liberam a página. */
 
-/* Microinterações — underline animado nos links de navegação */
-.nav-link {
-  position: relative;
+/* Preloader */
+#preloader {
+  display: none;
 }
-.nav-link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 1px;
-  background: theme('colors.azure');
+.js:not(.preloaded) #preloader {
+  display: flex;
+}
+.js:not(.preloader-armed) #preloader {
+  animation: failsafe-hide 0s 6s forwards;
+}
+.preloader-bar {
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 200ms ease-out;
-}
-.nav-link:hover::after,
-.nav-link:focus-visible::after {
-  transform: scaleX(1);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .nav-link::after {
-    transition: none;
+/* Intro do hero */
+.js:not(.intro-armed) [data-intro] {
+  visibility: hidden;
+  animation: failsafe-show 0s 5s forwards;
+}
+
+@keyframes failsafe-hide {
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+@keyframes failsafe-show {
+  to {
+    visibility: visible;
   }
 }
 
+/* Linhas do SplitText: folga vertical para a máscara não cortar acentos e descendentes */
+.split-line {
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+
+/* Cursor customizado — branco + difference: escuro sobre claro, claro sobre escuro */
+.cursor-on,
+.cursor-on * {
+  cursor: none !important;
+}
+#cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+#cursor[data-visible='true'] {
+  opacity: 1;
+}
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  translate: -50% -50%;
+  border-radius: 9999px;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  transition: scale 250ms ease;
+}
+.cursor-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  transition:
+    width 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+.cursor-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+#cursor[data-state='link'] .cursor-ring {
+  width: 64px;
+  height: 64px;
+  background: rgb(255 255 255 / 0.12);
+  border-color: rgb(255 255 255 / 0.3);
+}
+#cursor[data-state='link'] .cursor-dot,
+#cursor[data-state='view'] .cursor-dot,
+#cursor[data-state='drag'] .cursor-dot {
+  scale: 0;
+}
+#cursor[data-state='view'] .cursor-ring,
+#cursor[data-state='drag'] .cursor-ring {
+  width: 96px;
+  height: 96px;
+  background: #fff;
+  border-color: transparent;
+}
+#cursor[data-state='view'] .cursor-label,
+#cursor[data-state='drag'] .cursor-label {
+  opacity: 1;
+}
+#cursor.is-pressed .cursor-ring {
+  scale: 0.85;
+}
+
+/* Lente 3D do hero: o canvas entra por cima do SVG de fallback no primeiro quadro */
+[data-lens-canvas] {
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+[data-lens-fallback] {
+  transition: opacity 900ms ease-out;
+}
+[data-lens-anchor].is-live [data-lens-canvas] {
+  opacity: 1;
+}
+[data-lens-anchor].is-live [data-lens-fallback] {
+  opacity: 0;
+}
+
+/* Indicador de scroll do hero */
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.scroll-cue {
+  animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue {
+    animation: none;
+  }
+  /* Marquee parado: mostra tudo quebrando linha e esconde a cópia duplicada */
+  [data-marquee] {
+    width: auto !important;
+    flex-wrap: wrap;
+  }
+  [data-marquee] > ul {
+    flex-wrap: wrap;
+  }
+  [data-marquee] > [aria-hidden='true'] {
+    display: none;
+  }
+}
+
+/* Carrossel (src/scripts/motion/carousel.ts). Sem JS: scroll horizontal nativo com
+   snap. Com JS (.carousel-js no root do carrossel): a trilha anda por transform e o
+   arraste é tratado por pointer events, mantendo o scroll vertical da página. */
+[data-carousel-track] {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+[data-carousel-track]::-webkit-scrollbar {
+  display: none;
+}
+[data-carousel-track] > * {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+.carousel-js [data-carousel-viewport] {
+  overflow: hidden;
+}
+.carousel-js [data-carousel-track] {
+  overflow: visible;
+  scroll-snap-type: none;
+  touch-action: pan-y;
+  user-select: none;
+}

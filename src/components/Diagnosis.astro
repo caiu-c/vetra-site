@@ -1,0 +1,77 @@
+---
+import { BOOKING_URL } from '@/config/site';
+import SectionHeader from './SectionHeader.astro';
+
+/* Formato "dores + entregáveis" (referência: GEI da Genux, ADR-006).
+   TODO: validar as listas (rascunho do redesign). Os entregáveis vêm da fase 01 da
+   Metodologia ("Mapa do sistema, gargalos").
+   TODO: quando o time definir duração, formato e investimento do diagnóstico,
+   acrescentar aqui — não publicar valores inventados. */
+const signals = [
+  'Relatórios montados à mão em planilhas',
+  'O mesmo indicador com números diferentes em cada área',
+  'Dados em sistemas que não conversam entre si',
+  'Decisões esperando dias por um relatório',
+  'Projetos de IA que não saem do piloto',
+] as const;
+
+const deliverables = [
+  'Mapa do seu sistema de dados',
+  'Gargalos priorizados por impacto',
+  'Plano de fundação com etapas',
+] as const;
+---
+
+<section id="diagnostico" class="bg-surface">
+  <div
+    class="wrap grid grid-cols-1 gap-12 py-24 md:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16"
+  >
+    <div class="flex flex-col gap-8">
+      {/* TODO: validar texto (novo do redesign, não aprovado) */}
+      <SectionHeader
+        title="Como funciona o diagnóstico."
+        description="O primeiro passo de todo projeto: um levantamento técnico do seu sistema de dados antes de qualquer proposta de construção."
+      />
+      <a
+        href={BOOKING_URL}
+        class="btn-primary self-start"
+        data-subject="diagnostico"
+        data-magnetic
+      >
+        Agendar diagnóstico
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+      <div class="flex flex-col gap-6 rounded-[20px] bg-canvas p-6 md:p-8">
+        <h3 class="font-expanded text-h4 font-semibold tracking-heading text-ink">
+          Sinais de que é hora de um diagnóstico
+        </h3>
+        <ul class="flex flex-col gap-4">
+          {
+            signals.map((s) => (
+              <li class="flex items-baseline gap-3 text-body text-ink">
+                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
+                {s}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="flex flex-col gap-6 rounded-[20px] bg-ink p-6 text-white md:p-8">
+        <h3 class="font-expanded text-h4 font-semibold tracking-heading">O que você recebe</h3>
+        <ul class="flex flex-col gap-4">
+          {
+            deliverables.map((d) => (
+              <li class="flex items-baseline gap-3 text-body">
+                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand-light" aria-hidden="true" />
+                {d}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

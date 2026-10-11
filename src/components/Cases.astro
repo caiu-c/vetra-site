@@ -1,74 +1,117 @@
 ---
-import SectionLabel from './SectionLabel.astro';
-import ApertureWatermark from './ApertureWatermark.astro';
+import { CASES } from '@/data/cases';
+import SectionHeader from './SectionHeader.astro';
+import CaseChart from './CaseChart.astro';
 
-/* TODO: substituir por casos reais, com aprovação do cliente para cada peça */
-const cases = [
-  {
-    sector: 'VAREJO · NORDESTE',
-    title: 'Pipeline analítico unificado',
-    impact:
-      'Migração de 14 fontes para data lake centralizado, com SLA de freshness de 5 minutos.',
-    highlight: '14×',
-    highlightLabel: 'fontes consolidadas',
-  },
-  {
-    sector: 'INDÚSTRIA · SUDESTE',
-    title: 'Agentes de IA em logística',
-    impact:
-      'Roteirização autônoma com guardrails humanos para exceções operacionais.',
-    highlight: '32%',
-    highlightLabel: 'redução em custo de frete',
-  },
-  {
-    sector: 'SERVIÇOS · BRASIL',
-    title: 'Camada semântica + dashboards executivos',
-    impact:
-      'Camada semântica em dbt + Streamlit para 7 áreas de negócio.',
-    highlight: '07',
-    highlightLabel: 'áreas atendidas',
-  },
-] as const;
+/*
+  Carrossel de casos (referência Genux: um caso por vez, métrica em destaque e
+  Desafio / Solução / Resultado). O visual de cada caso é o gráfico do próprio
+  resultado (CaseChart), não uma foto. Comportamento: src/scripts/motion/carousel.ts.
+*/
+const total = CASES.length;
 ---
 
-<section
-  id="casos"
-  data-reveal
-  class="relative overflow-hidden px-6 py-20 md:px-12"
->
-  <ApertureWatermark />
+<section id="casos" class="overflow-hidden bg-ink text-white">
+  <div
+    class="wrap py-24 md:py-32"
+    role="region"
+    aria-roledescription="carrossel"
+    aria-label="Casos de clientes"
+    data-carousel
+  >
+    <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      {/* TODO: validar description (texto do redesign, não aprovado) */}
+      <SectionHeader
+        title="Casos de clientes."
+        description="Projetos em que a arquitetura de dados virou resultado operacional mensurável."
+        variant="deep"
+      />
+      <div class="hidden items-center gap-3 [.carousel-js_&]:flex" data-carousel-controls>
+        <span
+          class="numerals-tabular mr-2 text-meta text-on-deep-muted"
+          aria-live="polite"
+          data-carousel-status
+        >
+          1 / {total}
+        </span>
+        {
+          [
+            { attr: 'data-carousel-prev', label: 'Caso anterior', d: 'M15 6l-6 6 6 6' },
+            { attr: 'data-carousel-next', label: 'Próximo caso', d: 'M9 6l6 6-6 6' },
+          ].map(({ attr, label, d }) => (
+            <button
+              type="button"
+              class="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 text-white transition-colors hover:border-white disabled:cursor-default disabled:opacity-30 disabled:hover:border-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-light"
+              aria-label={label}
+              {...{ [attr]: '' }}
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+                <path d={d} stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          ))
+        }
+      </div>
+    </div>
 
-  <div class="relative z-10">
-    <SectionLabel number="06" name="CASOS" counterpart="03 / EXEMPLOS" />
+    <div class="mt-12 md:mt-14" data-carousel-viewport>
+      <ul data-carousel-track>
+        {
+          CASES.map((c, i) => (
+            <li
+              class="pr-4"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Caso ${i + 1} de ${total}`}
+              data-cursor="drag"
+              data-cursor-label="Arraste"
+            >
+              <article class="grid h-full grid-cols-1 gap-12 rounded-3xl bg-white/[0.04] p-6 ring-1 ring-inset ring-white/10 md:p-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-14 xl:p-14">
+                <div class="flex flex-col gap-8">
+                  <div class="flex flex-col gap-2">
+                    <p class="text-meta text-on-deep-muted">{c.sector}</p>
+                    <h3 class="font-expanded text-balance text-h3 font-semibold tracking-heading">
+                      {c.title}
+                    </h3>
+                  </div>
 
-    <h2
-      class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
-    >
-      Trabalhos selecionados.
-    </h2>
+                  <p class="flex flex-col gap-1">
+                    <span class="font-expanded text-metric font-semibold tracking-display">{c.metric}</span>
+                    <span class="text-lead text-on-deep-muted">{c.metricLabel}</span>
+                  </p>
 
-    <ul class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-    {
-      cases.map(({ sector, title, impact, highlight, highlightLabel }) => (
-        <li class="flex flex-col gap-6 border border-rule p-8">
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-            {sector}
-          </span>
-          <h3 class="text-balance font-serif text-[24px] leading-tight text-ink">
-            {title}
-          </h3>
-          <p class="font-sans text-[14px] leading-relaxed text-muted">{impact}</p>
-          <div class="mt-auto flex items-baseline gap-3">
-            <span class="numerals-tabular tracking-display font-serif text-[48px] leading-none text-ink">
-              {highlight}
-            </span>
-            <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-              {highlightLabel}
-            </span>
-          </div>
-        </li>
-      ))
-    }
-    </ul>
+                  <dl class="mt-auto grid grid-cols-1 gap-6 border-t border-line-deep pt-6 sm:grid-cols-3">
+                    {[
+                      ['Desafio', c.challenge],
+                      ['Solução', c.solution],
+                      ['Resultado', c.result],
+                    ].map(([term, text]) => (
+                      <div class="flex flex-col gap-2">
+                        <dt class="text-meta font-semibold text-white">{term}</dt>
+                        <dd class="text-meta text-on-deep-muted">{text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <div class="lg:self-center">
+                  <CaseChart chart={c.chart} id={`caso-${i + 1}`} />
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {/* TODO: validar texto (novo do redesign, não aprovado) */}
+    <div class="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <p class="max-w-[32rem] text-body text-on-deep-muted">
+        Quer um resultado assim na sua operação? Conte o seu cenário.
+      </p>
+      <a href="#contato" class="btn-inverse self-start sm:self-auto" data-magnetic>
+        Falar sobre meu projeto
+      </a>
+    </div>
   </div>
 </section>

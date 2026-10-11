@@ -1,0 +1,163 @@
+---
+import { CONTACT, CONTACT_FORM, CONTACT_SUBJECTS, SITE } from '@/config/site';
+
+/*
+  Contato + formulário (Web3Forms, ADR-006). Sem JS, o formulário faz POST direto para o
+  serviço; com JS (src/scripts/contact-form.ts) o envio é inline, com estados de envio,
+  sucesso e erro. CTAs com data-subject pré-selecionam o assunto.
+*/
+---
+
+<section id="contato" class="bg-ink text-white">
+  <div
+    class="wrap grid grid-cols-1 gap-12 py-24 md:py-32 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16"
+  >
+    <div class="flex flex-col gap-8">
+      <h2
+        data-split
+        class="font-expanded text-balance max-w-[14ch] text-cta font-semibold tracking-display"
+      >
+        Comece pelo diagnóstico.
+      </h2>
+      {/* TODO: validar texto (novo do redesign, não aprovado) */}
+      <p class="text-pretty max-w-measure text-lead text-on-deep-muted">
+        Conte o que está travando os seus dados. Respondemos com os próximos passos e, se
+        fizer sentido, marcamos o diagnóstico.
+      </p>
+
+      <dl class="flex flex-col gap-5 border-t border-line-deep pt-8 lg:mt-auto">
+        <div class="flex flex-col gap-1">
+          <dt class="text-meta text-on-deep-muted">E-mail</dt>
+          <dd>
+            {/* TODO: o domínio ainda não tem MX — ativar Cloudflare Email Routing antes do go-live */}
+            <a href={`mailto:${CONTACT.email}`} class="text-body transition-colors hover:text-brand-light">
+              {CONTACT.email}
+            </a>
+          </dd>
+        </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-meta text-on-deep-muted">LinkedIn</dt>
+          <dd>
+            <a
+              href={CONTACT.linkedin}
+              class="text-body transition-colors hover:text-brand-light"
+              target="_blank"
+              rel="noopener"
+            >
+              {SITE.name}
+            </a>
+          </dd>
+        </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-meta text-on-deep-muted">Base</dt>
+          <dd class="text-body">{SITE.city}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="rounded-3xl bg-canvas p-6 text-ink md:p-10">
+      <form
+        action={CONTACT_FORM.endpoint}
+        method="POST"
+        class="flex flex-col gap-5"
+        data-contact-form
+      >
+        <input type="hidden" name="access_key" value={CONTACT_FORM.accessKey} />
+        <input type="hidden" name="subject" value="Novo contato pelo site" data-contact-subject-field />
+        <input type="hidden" name="from_name" value={`Site ${SITE.name}`} />
+        {/* Honeypot do Web3Forms: robôs preenchem, pessoas não veem */}
+        <input
+          type="checkbox"
+          name="botcheck"
+          class="hidden"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label for="cf-name" class="field-label">Nome</label>
+            <input id="cf-name" name="name" type="text" autocomplete="name" required class="field-input" />
+          </div>
+          <div>
+            <label for="cf-company" class="field-label">Empresa</label>
+            <input
+              id="cf-company"
+              name="company"
+              type="text"
+              autocomplete="organization"
+              required
+              class="field-input"
+            />
+          </div>
+          <div>
+            <label for="cf-email" class="field-label">E-mail corporativo</label>
+            <input
+              id="cf-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              placeholder="voce@empresa.com.br"
+              class="field-input"
+            />
+          </div>
+          <div>
+            <label for="cf-phone" class="field-label">
+              Telefone ou WhatsApp <span class="font-normal text-muted">(opcional)</span>
+            </label>
+            <input
+              id="cf-phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              placeholder="(85) 90000-0000"
+              class="field-input"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="cf-topic" class="field-label">Assunto</label>
+          <select id="cf-topic" name="topic" class="field-input pr-10" data-contact-topic>
+            {
+              CONTACT_SUBJECTS.map((s) => (
+                <option value={s.label} data-key={s.value}>
+                  {s.label}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="cf-message" class="field-label">
+            Mensagem <span class="font-normal text-muted">(opcional)</span>
+          </label>
+          <textarea
+            id="cf-message"
+            name="message"
+            rows="4"
+            placeholder="Conte em poucas linhas o desafio"
+            class="field-input h-auto min-h-[128px] py-3"></textarea>
+        </div>
+
+        {/* TODO: linkar a política de privacidade (LGPD) quando a página existir */}
+        <p class="text-meta text-muted">Usamos seus dados só para responder a este contato.</p>
+
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <button type="submit" class="btn-primary self-start" data-contact-submit>
+            Enviar mensagem
+          </button>
+          <p class="text-meta text-muted" role="status" aria-live="polite" data-contact-status></p>
+        </div>
+      </form>
+
+      <div class="hidden flex-col gap-3 outline-none" tabindex="-1" data-contact-success>
+        <h3 class="font-expanded text-h3 font-semibold tracking-heading">Mensagem enviada.</h3>
+        <p class="max-w-measure text-body text-muted">Vamos responder no e-mail informado.</p>
+      </div>
+    </div>
+  </div>
+</section>

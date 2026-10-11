@@ -1,0 +1,30 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+/* TODO: confirmar setores atendidos. Lista derivada dos casos (também placeholders);
+   `focus` descreve o tipo de problema típico de cada setor e precisa de validação. */
+const sectors = [
+  { name: 'Varejo', focus: 'Unificação de vendas, estoque e canais em uma base analítica única.' },
+  { name: 'Indústria', focus: 'Logística, manutenção e planejamento com agentes e previsão.' },
+  { name: 'Serviços', focus: 'Indicadores executivos e camada semântica para várias áreas.' },
+] as const;
+---
+
+<section id="setores" class="bg-canvas">
+  <div class="wrap grid grid-cols-1 gap-12 py-24 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-16 md:py-32">
+    <SectionHeader title="Setores que atendemos." />
+
+    <ul class="border-t border-line">
+      {
+        sectors.map(({ name, focus }) => (
+          <li class="grid grid-cols-1 gap-2 border-b border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:items-baseline md:gap-10">
+            <h3 class="font-expanded text-[clamp(28px,3vw,36px)] font-semibold leading-tight tracking-heading text-ink">
+              {name}
+            </h3>
+            <p class="max-w-measure text-body text-muted">{focus}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

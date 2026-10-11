@@ -1,46 +1,61 @@
 ---
-import { NAV, SITE, CONTACT } from '@/config/site';
+import { NAV, SITE, CONTACT, BOOKING_URL } from '@/config/site';
 import ApertureSymbol from './ApertureSymbol.astro';
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-rule bg-paper py-12">
-  <div class="mx-auto flex max-w-container flex-col gap-8 px-6 md:px-16">
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div class="flex items-center gap-3 text-ink">
-        <ApertureSymbol size={20} ariaLabel="" />
-        <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+{/* Continua o bloco Tinta do Contato, separado por uma linha. */}
+<footer class="bg-ink text-white">
+  <div class="wrap">
+    <div class="grid grid-cols-2 gap-10 border-t border-line-deep py-16 md:grid-cols-[2fr_1fr_1fr]">
+      <div class="col-span-2 flex flex-col gap-4 md:col-span-1">
+        <div class="flex items-center gap-2.5">
+          <ApertureSymbol size={24} ariaLabel="" class="text-brand-light" />
+          <span class="font-expanded text-body font-semibold tracking-heading">{SITE.name}</span>
+        </div>
+        <p class="max-w-[22rem] text-meta text-on-deep-muted">
+          Engenharia de Dados e IA com rigor institucional. {SITE.city}, Brasil.
+        </p>
       </div>
-      <p class="max-w-md font-sans text-sm text-muted">
-        Engenharia de Dados e IA com rigor institucional. {SITE.city}.
-      </p>
+
+      <nav class="flex flex-col gap-3" aria-label="Navegação rodapé">
+        <p class="text-meta font-medium">Empresa</p>
+        {
+          NAV.map((item) => (
+            <a href={item.href} class="text-meta text-on-deep-muted transition-colors hover:text-white">
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex flex-col gap-3">
+        <p class="text-meta font-medium">Contato</p>
+        <a
+          href={BOOKING_URL}
+          class="text-meta text-on-deep-muted transition-colors hover:text-white"
+          data-subject="diagnostico"
+        >
+          Agendar diagnóstico
+        </a>
+        <a
+          href={`mailto:${CONTACT.email}`}
+          class="text-meta text-on-deep-muted transition-colors hover:text-white">E-mail</a
+        >
+        <a
+          href={CONTACT.linkedin}
+          class="text-meta text-on-deep-muted transition-colors hover:text-white"
+          rel="noopener"
+          target="_blank">LinkedIn</a
+        >
+      </div>
     </div>
 
-    <nav
-      class="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted"
-      aria-label="Navegação rodapé"
-    >
-      {
-        NAV.map((item) => (
-          <a href={item.href} class="hover:text-ink">
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
-
     <div
-      class="flex flex-col gap-3 border-t border-rule pt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted md:flex-row md:items-center md:justify-between"
+      class="flex flex-col gap-2 border-t border-line-deep py-6 text-xs text-on-deep-muted md:flex-row md:items-center md:justify-between"
     >
-      <p>
-        © {year} VETRA SOLUTIONS · CNPJ {CONTACT.cnpj} · FORTALEZA / CE
-      </p>
-      <div class="flex gap-4">
-        <a href={CONTACT.linkedin} class="hover:text-ink" rel="noopener" target="_blank">
-          LINKEDIN ↗
-        </a>
-        <a href={`mailto:${CONTACT.email}`} class="hover:text-ink">EMAIL ↗</a>
-      </div>
+      <p>© {year} {SITE.name}, CNPJ {CONTACT.cnpj}</p>
+      <p>{SITE.domain}</p>
     </div>
   </div>
 </footer>

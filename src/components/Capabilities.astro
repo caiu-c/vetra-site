@@ -1,64 +1,157 @@
 ---
-import SectionLabel from './SectionLabel.astro';
+import { BOOKING_URL } from '@/config/site';
+import SectionHeader from './SectionHeader.astro';
+import PipelineDiagram from './PipelineDiagram.astro';
 
+/*
+  Cada capacidade é uma das 4 peças do símbolo aperture (coordenadas de
+  ApertureSymbol.astro): do chevron externo, mais amplo, até o ponto de convergência.
+  O glifo destaca a peça correspondente — e a Fase D usa o mesmo mapeamento na vista
+  explodida da lente 3D.
+*/
+const pieces = [
+  { kind: 'path', d: 'M8 10 L28 46 L48 10' },
+  { kind: 'path', d: 'M14 10 L28 38 L42 10' },
+  { kind: 'path', d: 'M20 10 L28 30 L36 10' },
+  { kind: 'dot' },
+] as const;
+
+/* Serviço descrito por resultado + entregáveis (referência Genux, ADR-006).
+   TODO: validar `outcome` e `deliverables` (rascunho do redesign a partir da stack). */
 const capabilities = [
   {
-    n: '01',
     title: 'Bancos de dados',
+    outcome: 'Uma base única e confiável para a empresa inteira.',
     desc: 'Modelagem, ETL/ELT, infraestrutura confiável.',
+    deliverables: [
+      'Modelagem de dados',
+      'Pipelines ETL/ELT com dbt e Airflow',
+      'Data warehouse em Snowflake ou PostgreSQL',
+    ],
   },
   {
-    n: '02',
     title: 'Dashboards',
+    outcome: 'Indicadores que viram decisão, não planilha.',
     desc: 'Camada analítica que vira decisão acionável.',
+    deliverables: [
+      'Camada semântica com métricas únicas',
+      'Dashboards executivos e operacionais',
+      'Acesso por área com governança',
+    ],
   },
   {
-    n: '03',
     title: 'Agentes de IA',
+    outcome: 'IA em produção, com supervisão humana.',
     desc: 'Sistemas autônomos com guardrails e observabilidade.',
+    deliverables: [
+      'Agentes com LangChain',
+      'Guardrails e revisão humana',
+      'Monitoramento de custo e qualidade',
+    ],
   },
   {
-    n: '04',
     title: 'Automações',
+    outcome: 'Menos trabalho manual entre sistemas.',
     desc: 'RPA, orquestração, integração de sistemas.',
+    deliverables: [
+      'Integrações via API',
+      'Orquestração de rotinas',
+      'RPA para tarefas repetitivas',
+    ],
   },
 ] as const;
 ---
 
-<section
-  id="sistemas"
-  data-reveal
-  class="px-6 py-20 md:px-12"
->
-  <SectionLabel number="02" name="CAPACIDADES" counterpart="04 / SISTEMAS" />
+<section id="sistemas" class="bg-canvas">
+  <div class="wrap py-24 md:py-32">
+    {/* TODO: validar description (texto novo do redesign, não aprovado) */}
+    <SectionHeader
+      title="Quatro camadas. Um sistema."
+      description="Da infraestrutura ao agente autônomo: cada camada é projetada para sustentar a seguinte."
+    />
 
-  <h2 class="text-balance mt-8 font-serif text-[38px] leading-tight text-ink">
-    Quatro camadas. Um sistema.
-  </h2>
-
-  {/*
-    Container dos 4 cards: borda externa 1px solid rule (rect 1004x220 do mockup) +
-    divisores internos verticais entre os cards (em md:) ou horizontais (em mobile).
-  */}
-  <ul
-    class="mt-12 grid grid-cols-1 divide-y divide-rule border border-rule md:grid-cols-4 md:divide-x md:divide-y-0"
-  >
-    {
-      capabilities.map(({ n, title, desc }) => (
-        <li class="group flex flex-col justify-between gap-12 px-0 py-8 transition-colors hover:bg-paper/40 md:px-6 md:py-10">
-          <span class="font-mono text-[11px] uppercase tracking-[0.24em] text-accent transition-colors duration-200 group-hover:text-ink">
-            {n}
-          </span>
-          <div class="flex flex-col gap-2">
-            <h3 class="font-serif text-[20px] leading-tight text-ink">
-              {title}
-            </h3>
-            <p class="font-sans text-[12px] leading-relaxed text-muted">
-              {desc}
+    <ul class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" data-layers>
+      {
+        capabilities.map(({ title, outcome, desc, deliverables }, i) => (
+          <li
+            class="flex flex-col gap-5 rounded-[20px] border border-line p-6 md:p-10"
+            data-layer={i}
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                viewBox="0 0 56 56"
+                width="40"
+                height="40"
+                fill="none"
+                class="shrink-0"
+                aria-hidden="true"
+              >
+                {pieces.map((p, k) =>
+                  p.kind === 'path' ? (
+                    <path
+                      d={p.d}
+                      stroke={k === i ? '#1640D6' : '#DCE1EA'}
+                      stroke-width={k === i ? 2.4 : 1.6}
+                      stroke-linecap="square"
+                    />
+                  ) : (
+                    <circle
+                      cx="28"
+                      cy="46"
+                      r={k === i ? 3.4 : 2.2}
+                      fill={k === i ? '#1640D6' : '#DCE1EA'}
+                    />
+                  ),
+                )}
+              </svg>
+              <h3 class="text-body font-semibold text-ink">{title}</h3>
+            </div>
+            <p class="font-expanded text-balance text-h3 font-semibold tracking-heading text-ink">
+              {outcome}
             </p>
-          </div>
-        </li>
-      ))
-    }
-  </ul>
+            <p class="max-w-[28rem] text-body text-muted">{desc}</p>
+            <ul class="mt-auto flex flex-col gap-2.5 border-t border-line pt-5">
+              {deliverables.map((d) => (
+                <li class="flex items-baseline gap-3 text-meta text-ink">
+                  <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* TODO: validar texto (novo do redesign, não aprovado) */}
+    <div
+      class="mt-6 flex flex-col gap-6 rounded-[20px] bg-surface p-6 md:flex-row md:items-center md:justify-between md:p-10"
+    >
+      <p class="max-w-[40rem] text-lead text-ink">
+        Não sabe por onde começar? O diagnóstico mapeia o seu sistema e aponta qual camada
+        construir primeiro.
+      </p>
+      <a
+        href={BOOKING_URL}
+        class="btn-primary shrink-0 self-start md:self-auto"
+        data-subject="diagnostico"
+        data-magnetic
+      >
+        Agendar diagnóstico
+      </a>
+    </div>
+
+    {/* TODO: validar título (novo do redesign, não aprovado) */}
+    <div class="mt-24 flex flex-col gap-10 md:mt-32">
+      <h3
+        data-split
+        class="font-expanded text-balance max-w-[28rem] text-h3 font-semibold tracking-heading text-ink"
+      >
+        Da fonte bruta à decisão automatizada.
+      </h3>
+      <div class="w-full max-w-[1040px]">
+        <PipelineDiagram />
+      </div>
+    </div>
+  </div>
 </section>

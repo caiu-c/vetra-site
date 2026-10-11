@@ -9,8 +9,28 @@ export const SITE = {
   founded: 2026,
 } as const;
 
-// TODO: substituir pelo link real de agendamento (Cal.com / Google Calendar)
-export const BOOKING_URL = '#';
+// "Agendar diagnóstico" leva ao formulário de contato (assunto pré-selecionado via
+// data-subject="diagnostico"). TODO: trocar pelo link de agendamento (Cal.com /
+// Google Agenda) quando existir.
+export const BOOKING_URL = '#contato';
+
+// Formulário de contato via Web3Forms (https://web3forms.com): a chave é pública por
+// desenho do serviço e define para qual e-mail as mensagens vão.
+// TODO: criar a chave grátis com o e-mail que vai receber os contatos. Enquanto for
+// 'TODO', o envio mostra o erro com o link mailto: como alternativa.
+export const CONTACT_FORM = {
+  endpoint: 'https://api.web3forms.com/submit',
+  accessKey: 'TODO',
+} as const;
+
+export const CONTACT_SUBJECTS = [
+  { value: 'diagnostico', label: 'Diagnóstico de dados' },
+  { value: 'engenharia', label: 'Engenharia de dados' },
+  { value: 'dashboards', label: 'Dashboards' },
+  { value: 'agentes', label: 'Agentes de IA' },
+  { value: 'automacoes', label: 'Automações' },
+  { value: 'outro', label: 'Outro' },
+] as const;
 
 // TODO: confirmar dados antes do go-live
 export const CONTACT = {
@@ -29,8 +49,9 @@ export const ADDRESS = {
 } as const;
 
 export const NAV = [
-  { label: 'SISTEMAS', href: '#sistemas' },
-  { label: 'METODOLOGIA', href: '#metodologia' },
-  { label: 'CASOS', href: '#casos' },
-  { label: 'SOBRE', href: '#sobre' },
+  { label: 'Sistemas', href: '#sistemas' },
+  { label: 'Metodologia', href: '#metodologia' },
+  { label: 'Diagnóstico', href: '#diagnostico' },
+  { label: 'Casos', href: '#casos' },
+  { label: 'Sobre', href: '#sobre' },
 ] as const;

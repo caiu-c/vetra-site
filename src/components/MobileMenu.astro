@@ -5,45 +5,50 @@ import ApertureSymbol from './ApertureSymbol.astro';
 
 <dialog
   id="mobile-menu"
-  class="m-0 h-full max-h-screen w-full max-w-full bg-paper text-ink backdrop:bg-ink/60"
+  class="m-0 h-full max-h-screen w-full max-w-full bg-canvas text-ink backdrop:bg-ink/40"
   aria-label="Menu de navegação"
 >
-  <div class="flex h-full flex-col px-6 py-6">
-    <div class="flex h-[60px] items-center justify-between">
-      <div class="flex items-center gap-3 text-ink">
-        <ApertureSymbol size={24} ariaLabel="" />
-        <span class="font-serif text-[14px] tracking-wide">VETRA SOLUTIONS</span>
+  <div class="flex h-full flex-col px-6 pb-8">
+    <div class="flex h-16 items-center justify-between border-b border-line">
+      <div class="flex items-center gap-2.5 text-ink">
+        <ApertureSymbol size={24} ariaLabel="" class="text-brand" />
+        <span class="font-expanded text-body font-semibold tracking-heading">Vetra Solutions</span>
       </div>
       <button
         type="button"
         data-action="close-menu"
-        class="font-mono text-[11px] uppercase tracking-[0.18em] text-ink"
+        class="btn-secondary btn-sm"
         aria-label="Fechar menu"
       >
-        FECHAR ✕
+        Fechar
       </button>
     </div>
 
-    <nav
-      class="mt-12 flex flex-col gap-6 font-serif text-[28px] leading-tight"
-      aria-label="Navegação mobile"
-    >
+    <nav class="mt-4 flex flex-col" aria-label="Navegação mobile">
       {
         NAV.map((item) => (
-          <a href={item.href} data-action="close-menu" class="hover:text-accent">
+          <a
+            href={item.href}
+            data-action="close-menu"
+            class="font-expanded border-b border-line py-4 text-h4 font-medium tracking-heading"
+          >
             {item.label}
           </a>
         ))
       }
     </nav>
 
-    <a
-      href={BOOKING_URL}
-      class="mt-auto inline-flex h-[46px] w-full items-center justify-center gap-1 bg-ink font-mono text-[12px] uppercase tracking-[0.18em] text-canvas hover:bg-accent"
-    >
-      <span>AGENDAR DIAGNÓSTICO</span>
-      <span class="text-azure" aria-hidden="true">↗</span>
-    </a>
+    <div class="mt-auto flex flex-col gap-3">
+      <a
+        href={BOOKING_URL}
+        data-action="close-menu"
+        data-subject="diagnostico"
+        class="btn-primary w-full"
+      >
+        Agendar diagnóstico
+      </a>
+      <a href="#contato" data-action="close-menu" class="btn-secondary w-full">Contato</a>
+    </div>
   </div>
 </dialog>
 

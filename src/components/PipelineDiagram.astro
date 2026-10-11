@@ -1,0 +1,134 @@
+---
+/*
+  Diagrama do sistema completo (seção Capacidades): fontes → pipeline → produtos de dados.
+  Geometria fixa (colunas de 232px de altura) para que os conectores SVG entre as
+  colunas não precisem esticar: centros das fontes em 22/84.7/147.3/210, das saídas
+  em 32/116/200, e o pipeline central em 116. Em mobile as colunas empilham e os
+  conectores somem.
+*/
+const H = 232;
+/* TODO: confirmar fontes, etapas e ferramentas com o time — rótulos ilustrativos */
+const sources = ['ERP', 'CRM', 'APIs', 'Planilhas'] as const;
+const sourceY = sources.map((_, i) => 22 + i * ((H - 44) / (sources.length - 1)));
+
+const outputs = [
+  { title: 'Data warehouse', meta: 'Snowflake, PostgreSQL' },
+  { title: 'Dashboards', meta: 'Camada semântica, Streamlit' },
+  { title: 'Agentes de IA', meta: 'LangChain, guardrails' },
+] as const;
+const outputY = outputs.map((_, i) => 32 + i * ((H - 64) / (outputs.length - 1)));
+
+const steps = [
+  { label: 'Ingestão', meta: 'CDC e batch' },
+  { label: 'Modelagem', meta: 'dbt' },
+  { label: 'Orquestração', meta: 'Airflow' },
+  { label: 'Qualidade', meta: 'testes e alertas' },
+] as const;
+
+const mid = H / 2;
+const leftPaths = sourceY.map((y) => `M0 ${y} C36 ${y} 36 ${mid} 72 ${mid}`);
+const rightPaths = outputY.map((y) => `M0 ${mid} C36 ${mid} 36 ${y} 72 ${y}`);
+---
+
+<div
+  class="relative overflow-hidden rounded-xl border border-line bg-surface p-4 md:p-8"
+  aria-label="Diagrama: fontes de dados passam por um pipeline e viram data warehouse, dashboards e agentes de IA"
+  role="img"
+>
+  <div
+    class="relative grid grid-cols-1 gap-4 md:grid-cols-[1fr_72px_1.25fr_72px_1.2fr] md:gap-0"
+    aria-hidden="true"
+  >
+    {/* Fontes */}
+    <div class="flex flex-col gap-2 md:h-[232px] md:justify-between md:gap-0">
+      <span class="text-meta font-medium text-muted md:hidden">
+        Fontes
+      </span>
+      <div class="grid grid-cols-2 gap-2 md:contents">
+        {
+          sources.map((s) => (
+            <div class="flex h-11 items-center gap-2.5 rounded-lg border border-line bg-canvas px-3 text-meta text-ink">
+              <span class="h-1.5 w-1.5 rounded-full bg-line-strong" />
+              {s}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <svg class="hidden md:block" width="72" height={H} viewBox={`0 0 72 ${H}`} fill="none">
+      {leftPaths.map((d) => <path d={d} stroke="#E0E0E0" stroke-width="1" />)}
+      {
+        leftPaths.map((d, i) => (
+          <path
+            d={d}
+            class="beam"
+            stroke="url(#beam-grad)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            style={`animation-delay:${i * 0.45}s`}
+          />
+        ))
+      }
+      <defs>
+        <linearGradient id="beam-grad" x1="0" x2="72" y1="0" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#1640D6" stop-opacity="0" />
+          <stop offset="1" stop-color="#1640D6" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    {/* Pipeline */}
+    <div
+      class="flex flex-col rounded-lg border border-ink/90 bg-ink p-4 text-white md:h-[232px]"
+    >
+      <div class="flex items-center justify-between">
+        <span class="text-meta font-medium">Pipeline Vetra</span>
+      </div>
+      <ul class="mt-3 flex flex-1 flex-col justify-between gap-2 md:gap-0">
+        {
+          steps.map(({ label, meta }, i) => (
+            <li class="flex items-center justify-between rounded-md border border-white/10 bg-white/[0.04] px-3 py-2">
+              <span class="flex items-center gap-2.5 text-meta">
+                <span class="numerals-tabular text-xs text-white/50">{i + 1}</span>
+                {label}
+              </span>
+              <span class="text-xs text-white/60">{meta}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <svg class="hidden md:block" width="72" height={H} viewBox={`0 0 72 ${H}`} fill="none">
+      {rightPaths.map((d) => <path d={d} stroke="#E0E0E0" stroke-width="1" />)}
+      {
+        rightPaths.map((d, i) => (
+          <path
+            d={d}
+            class="beam"
+            stroke="#1640D6"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            style={`animation-delay:${1.2 + i * 0.5}s`}
+          />
+        ))
+      }
+    </svg>
+
+    {/* Produtos de dados */}
+    <div class="flex flex-col gap-2 md:h-[232px] md:justify-between md:gap-0">
+      <span class="text-meta font-medium text-muted md:hidden">
+        Entregas
+      </span>
+      {
+        outputs.map(({ title, meta }) => (
+          <div class="flex h-16 flex-col justify-center rounded-lg border border-line bg-canvas px-4">
+            <span class="text-meta font-medium text-ink">{title}</span>
+            <span class="text-xs text-muted">{meta}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

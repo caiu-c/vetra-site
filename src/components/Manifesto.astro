@@ -1,29 +1,22 @@
 ---
-/*
-  Seção Manifesto — full-width dentro do painel, bg-ink (mesma escolha de
-  Methodology, mantém o ritmo institucional sem inflar com bg-azure que daria
-  tom "vendedor"). Headline serif grande centralizada + tagline mono abaixo.
-  Ambos textos placeholder TODO até aprovação final.
-*/
+import { SITE } from '@/config/site';
 ---
 
-<section
-  data-reveal
-  class="bg-ink px-6 py-20 text-canvas md:px-12 md:py-28"
->
-  <div class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-    {/* TODO: validar texto definitivo do manifesto */}
-    <h2
-      class="text-balance tracking-display font-serif text-[clamp(32px,5vw,52px)] leading-[1.1]"
-    >
-      Engenharia de dados não é commodity — é <em class="italic">fundação</em>.
-    </h2>
+{/* Sobre / manifesto: bloco editorial de duas colunas. Textos placeholder TODO até aprovação final. */}
+<section id="sobre" class="bg-canvas">
+  <div class="wrap">
+    <div class="grid grid-cols-1 gap-6 py-24 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-16 md:py-32">
+      <p class="text-meta text-muted">{SITE.name}, {SITE.city}</p>
 
-    {/* TODO: confirmar tagline (atualmente repete a tagline canônica do Hero) */}
-    <p
-      class="font-mono text-[11px] uppercase tracking-[0.24em] text-muted-on-dark"
-    >
-      A coluna vertebral dos seus dados.
-    </p>
+      {/* TODO: validar texto definitivo do manifesto */}
+      <p
+        data-split
+        class="font-expanded max-w-[30ch] text-[clamp(24px,2.8vw,36px)] font-medium leading-[1.2] tracking-heading text-ink"
+      >
+        Engenharia de dados não é commodity — é fundação. Por isso tratamos cada pipeline,
+        modelo e agente como infraestrutura crítica: com arquitetura, testes e operação
+        contínua.
+      </p>
+    </div>
   </div>
 </section>

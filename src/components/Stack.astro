@@ -1,5 +1,5 @@
 ---
-import SectionLabel from './SectionLabel.astro';
+import ApertureSymbol from './ApertureSymbol.astro';
 
 const techs = [
   'PostgreSQL',
@@ -15,31 +15,37 @@ const techs = [
 ] as const;
 ---
 
-<section
-  id="stack"
-  data-reveal
-  class="border-b border-rule px-6 py-20 md:px-12"
->
-  <SectionLabel number="03" name="STACK" counterpart="10 / TECNOLOGIAS" />
+{/*
+  Faixa de transição em Tinta logo após o hero (ritmo por blocos de cor, ADR-006).
+  Marquee (src/scripts/motion/marquee.ts): a lista se repete duas vezes e anda -50%
+  em loop. A primeira cópia é a lista acessível; a segunda é aria-hidden.
+*/}
+<section id="stack" class="overflow-hidden bg-ink text-white">
+  <div class="wrap pt-8">
+    {/* TODO: validar frase (nova do redesign, não aprovada) */}
+    <p class="text-meta text-on-deep-muted">
+      Construímos sobre a stack que sustenta operações de dados modernas
+    </p>
+  </div>
 
-  <h2
-    class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
-  >
-    Stack técnica.
-  </h2>
-
-  <p
-    class="mt-12 flex max-w-[900px] flex-wrap items-baseline gap-x-3 gap-y-2"
-  >
-    {
-      techs.map((t, i) => (
-        <>
-          <span class="font-serif text-[24px] leading-none text-ink">{t}</span>
-          {i < techs.length - 1 && (
-            <span class="font-mono text-[18px] leading-none text-muted">·</span>
-          )}
-        </>
-      ))
-    }
-  </p>
+  <div class="py-8 md:py-10">
+    <div class="flex w-max" data-marquee>
+      {
+        [0, 1].map((copy) => (
+          <ul
+            class="flex shrink-0"
+            aria-hidden={copy === 1 ? 'true' : undefined}
+            aria-label={copy === 0 ? 'Tecnologias' : undefined}
+          >
+            {techs.map((t) => (
+              <li class="font-expanded flex items-center gap-6 pr-6 text-[clamp(24px,3vw,36px)] font-medium leading-none tracking-heading md:gap-10 md:pr-10">
+                {t}
+                <ApertureSymbol size={18} ariaLabel="" class="shrink-0 text-brand-light" />
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
 </section>

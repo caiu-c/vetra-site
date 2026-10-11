@@ -1,0 +1,355 @@
+---
+/*
+  Gráfico do resultado de um caso (seção Casos, fundo Tinta). Segue a skill dataviz:
+  - marcas: linha 2px; colunas ≤ 24px com topo arredondado de 4px; ponto final ≥ 8px
+    com anel de 2px na cor da superfície; área a 10% de opacidade;
+  - grade em linha fina sólida (line-deep), rótulo direto só no ponto que importa;
+  - texto sempre em tokens de texto, nunca na cor do dado;
+  - hover e teclado mostram o mesmo: o gráfico é um `role="slider"` que percorre os
+    meses com ←/→ e anuncia "Mês 8: índice 82" (src/scripts/charts.ts); "Ver dados"
+    abre a tabela equivalente.
+  Cores validadas com o script da skill: brand-light (série) e chart-context (contexto).
+  Marcas em SVG com viewBox 0–100 e stroke que não escala; rótulos em HTML posicionado
+  por %, para continuarem legíveis em qualquer largura.
+*/
+import type { CaseChart } from '@/data/cases';
+
+interface Props {
+  chart: CaseChart;
+  id: string;
+}
+
+const { chart, id } = Astro.props;
+
+/** Posição vertical (% a partir do topo) de um valor no domínio. */
+const top = (v: number, [min, max]: [number, number]) => (1 - (v - min) / (max - min)) * 100;
+const height = (v: number, [min, max]: [number, number]) => ((v - min) / (max - min)) * 100;
+const f = (n: number) => n.toFixed(2);
+
+const scrubClass =
+  'rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-brand-light/60 focus-visible:ring-offset-4 focus-visible:ring-offset-ink';
+
+let line: {
+  n: number;
+  xs: number[];
+  ys: number[];
+  prePath: string;
+  postPath: string;
+  areaPath: string;
+  eventX: number;
+  texts: string[];
+  summary: string;
+} | null = null;
+
+if (chart.kind === 'line') {
+  const n = chart.values.length;
+  const xs = chart.values.map((_, i) => (i / (n - 1)) * 100);
+  const ys = chart.values.map((v) => top(v, chart.domain));
+  const path = (from: number, to: number) =>
+    xs
+      .slice(from, to + 1)
+      .map((x, k) => `${k ? 'L' : 'M'}${f(x)} ${f(ys[from + k])}`)
+      .join(' ');
+  const pivot = chart.eventIndex - 1;
+  const postPath = path(pivot, n - 1);
+  const unit = chart.unit.toLowerCase();
+  line = {
+    n,
+    xs,
+    ys,
+    prePath: path(0, pivot),
+    postPath,
+    areaPath: `${postPath} L100 100 L${f(xs[pivot])} 100 Z`,
+    eventX: ((chart.eventIndex - 0.5) / (n - 1)) * 100,
+    texts: chart.values.map((v, i) => `${chart.labels[i]}: ${unit} ${v}`),
+    summary: `${chart.values[0]} no ${chart.labels[0]} e ${chart.values[n - 1]} no ${chart.labels[n - 1]} (${chart.endLabel}). ${chart.eventLabel} no ${chart.labels[chart.eventIndex]}. Use as setas para ler cada mês.`,
+  };
+}
+
+const columnTexts =
+  chart.kind === 'columns'
+    ? chart.values.map(
+        (v, i) =>
+          `${chart.labels[i]}: ${v} ${(v === 1 ? chart.unitSingular : chart.unit).toLowerCase()}`,
+      )
+    : [];
+
+const convergencePaths =
+  chart.kind === 'convergence'
+    ? Array.from({ length: chart.sources }, (_, i) => {
+        const y = 20 + i * (260 / (chart.sources - 1));
+        return { y, d: `M40 ${f(y)} C200 ${f(y)} 220 150 360 150` };
+      })
+    : [];
+---
+
+<figure class="flex flex-col gap-4" aria-labelledby={`${id}-caption`}>
+  <figcaption id={`${id}-caption`} class="text-meta text-on-deep-muted">{chart.caption}</figcaption>
+
+  {
+    chart.kind === 'convergence' && (
+      <div>
+        <div
+          class="relative aspect-[5/3] w-full"
+          role="img"
+          aria-label={`${chart.sources} fontes de dados convergem para ${chart.targetLabel}, ${chart.targetDetail}.`}
+        >
+          <svg viewBox="0 0 500 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
+            {convergencePaths.map(({ d }) => (
+              <path d={d} class="stroke-chart-context" stroke-width="1.5" />
+            ))}
+            {convergencePaths.map(({ y }) => (
+              <circle cx="40" cy={f(y)} r="4" class="fill-chart-context" />
+            ))}
+            <path d="M360 150 H470" class="stroke-brand-light" stroke-width="3" stroke-linecap="round" />
+            <circle cx="360" cy="150" r="9" class="fill-brand-light" stroke="#0C1838" stroke-width="3" />
+          </svg>
+        </div>
+        <div class="relative mt-3 h-11" aria-hidden="true">
+          <span class="absolute left-[8%] text-meta font-semibold text-white">{chart.sourceLabel}</span>
+          <span class="absolute left-[72%] flex flex-col">
+            <span class="text-meta font-semibold text-white">{chart.targetLabel}</span>
+            <span class="text-xs text-on-deep-muted">{chart.targetDetail}</span>
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    chart.kind === 'line' && line && (
+      <div class="grid grid-cols-[auto_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_auto] gap-x-3 gap-y-2">
+        <div class="relative w-8" aria-hidden="true">
+          {chart.yTicks.map((t) => (
+            <span
+              class="numerals-tabular absolute right-0 -translate-y-1/2 text-xs text-on-deep-muted"
+              style={`top:${f(top(t, chart.domain))}%`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <div
+          class:list={['group relative aspect-[16/10] min-h-[180px]', scrubClass]}
+          role="slider"
+          tabindex="0"
+          aria-label={chart.caption}
+          aria-describedby={`${id}-summary`}
+          aria-valuemin={1}
+          aria-valuemax={line.n}
+          aria-valuenow={line.n}
+          aria-valuetext={line.texts[line.n - 1]}
+          data-chart-scrub="line"
+          data-values={JSON.stringify(chart.values)}
+          data-labels={JSON.stringify(chart.labels)}
+          data-valuetexts={JSON.stringify(line.texts)}
+          data-domain={JSON.stringify(chart.domain)}
+          data-cursor="default"
+        >
+          <span id={`${id}-summary`} class="sr-only">{line.summary}</span>
+          {chart.yTicks.map((t) => (
+            <span
+              class="absolute inset-x-0 h-px bg-line-deep"
+              style={`top:${f(top(t, chart.domain))}%`}
+              aria-hidden="true"
+            />
+          ))}
+          <span
+            class="absolute inset-y-0 w-px bg-on-deep-muted/40"
+            style={`left:${f(line.eventX)}%`}
+            aria-hidden="true"
+          />
+          <span
+            class="absolute top-0 ml-2 whitespace-nowrap text-xs text-on-deep-muted"
+            style={`left:${f(line.eventX)}%`}
+            aria-hidden="true"
+          >
+            {chart.eventLabel}
+          </span>
+
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            class="absolute inset-0 h-full w-full overflow-visible"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d={line.areaPath} class="fill-brand-light/10" />
+            <path
+              d={line.prePath}
+              class="stroke-chart-context"
+              stroke-width="2"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              vector-effect="non-scaling-stroke"
+            />
+            <path
+              d={line.postPath}
+              class="stroke-brand-light"
+              stroke-width="2"
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              vector-effect="non-scaling-stroke"
+            />
+          </svg>
+
+          <span
+            class="absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-light shadow-[0_0_0_2px_#0C1838]"
+            style={`left:100%;top:${f(line.ys[line.n - 1])}%`}
+            aria-hidden="true"
+          />
+          <span
+            class="absolute right-0 flex flex-col items-end transition-opacity group-data-[active=true]:opacity-0"
+            style={`top:calc(${f(line.ys[line.n - 1])}% - 3.75rem)`}
+            aria-hidden="true"
+          >
+            <span class="font-expanded text-h4 font-semibold text-white">{chart.endLabel}</span>
+            <span class="numerals-tabular text-xs text-on-deep-muted">
+              {chart.unit} {chart.values[line.n - 1]}
+            </span>
+          </span>
+
+          {/* Crosshair + tooltip (posicionados por src/scripts/charts.ts) */}
+          <span
+            class="pointer-events-none absolute inset-y-0 w-px bg-white/50 opacity-0 group-data-[active=true]:opacity-100"
+            data-cross
+            aria-hidden="true"
+          />
+          <span
+            class="pointer-events-none absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-[0_0_0_2px_#0C1838] group-data-[active=true]:opacity-100"
+            data-cross-dot
+            aria-hidden="true"
+          />
+          <span
+            class="pointer-events-none absolute z-10 whitespace-nowrap rounded-lg bg-canvas px-3 py-2 text-ink opacity-0 group-data-[active=true]:opacity-100"
+            data-cross-tip
+            aria-hidden="true"
+          >
+            <span class="numerals-tabular block text-body font-semibold" data-tip-value />
+            <span class="block text-xs text-muted" data-tip-label />
+          </span>
+        </div>
+
+        <span aria-hidden="true" />
+        <div class="relative h-4" aria-hidden="true">
+          {[0, chart.eventIndex, line.n - 1].map((i, k) => (
+            <span
+              class:list={[
+                'absolute whitespace-nowrap text-xs text-on-deep-muted',
+                k === 0 ? '' : k === 2 ? '-translate-x-full' : '-translate-x-1/2',
+              ]}
+              style={`left:${f(line.xs[i])}%`}
+            >
+              {chart.labels[i]}
+            </span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    chart.kind === 'columns' && (
+      <div class="grid grid-cols-[auto_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_auto] gap-x-3 gap-y-2">
+        <div class="relative w-8" aria-hidden="true">
+          {chart.yTicks.map((t) => (
+            <span
+              class="numerals-tabular absolute right-0 -translate-y-1/2 text-xs text-on-deep-muted"
+              style={`top:${f(top(t, chart.domain))}%`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <div
+          class:list={['relative aspect-[16/10] min-h-[180px]', scrubClass]}
+          role="slider"
+          tabindex="0"
+          aria-label={chart.caption}
+          aria-valuemin={1}
+          aria-valuemax={chart.values.length}
+          aria-valuenow={chart.values.length}
+          aria-valuetext={columnTexts[columnTexts.length - 1]}
+          data-chart-scrub="columns"
+          data-valuetexts={JSON.stringify(columnTexts)}
+          data-cursor="default"
+        >
+          {chart.yTicks.map((t) => (
+            <span
+              class:list={[
+                'absolute inset-x-0 h-px',
+                t === chart.domain[0] ? 'bg-chart-context' : 'bg-line-deep',
+              ]}
+              style={`top:${f(top(t, chart.domain))}%`}
+              aria-hidden="true"
+            />
+          ))}
+          <ul class="absolute inset-0 flex items-end justify-around" aria-hidden="true">
+            {chart.values.map((v, i) => {
+              const h = height(v, chart.domain);
+              const last = i === chart.values.length - 1;
+              return (
+                <li class="group/bar relative flex h-full flex-1 items-end justify-center" data-bar>
+                  <span
+                    class="w-[60%] max-w-[24px] rounded-t-[4px] bg-brand-light transition-opacity group-hover/bar:opacity-80 group-data-[active=true]/bar:opacity-80"
+                    style={`height:${f(h)}%`}
+                  />
+                  {last && (
+                    <span
+                      class="numerals-tabular absolute left-1/2 -translate-x-1/2 text-meta font-semibold text-white transition-opacity group-hover/bar:opacity-0 group-data-[active=true]/bar:opacity-0"
+                      style={`bottom:calc(${f(h)}% + 8px)`}
+                    >
+                      {v}
+                    </span>
+                  )}
+                  <span
+                    class="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-canvas px-3 py-2 text-ink opacity-0 group-hover/bar:opacity-100 group-data-[active=true]/bar:opacity-100"
+                    style={`bottom:calc(${f(h)}% + 12px)`}
+                  >
+                    <span class="numerals-tabular block text-body font-semibold">{v}</span>
+                    <span class="block text-xs text-muted">{chart.labels[i]}</span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <span aria-hidden="true" />
+        <div class="flex justify-around" aria-hidden="true">
+          {chart.labels.map((_, i) => (
+            <span class="numerals-tabular flex-1 text-center text-xs text-on-deep-muted">{i + 1}</span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    chart.kind !== 'convergence' && (
+      <details class="text-meta text-on-deep-muted">
+        <summary class="w-fit cursor-pointer select-none underline-offset-4 hover:text-white hover:underline">
+          Ver dados
+        </summary>
+        <table class="mt-3 w-full max-w-xs text-left">
+          <thead>
+            <tr>
+              <th scope="col" class="py-1 font-medium text-white">Período</th>
+              <th scope="col" class="py-1 text-right font-medium text-white">{chart.unit}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {chart.values.map((v, i) => (
+              <tr class="border-t border-line-deep">
+                <td class="py-1">{chart.labels[i]}</td>
+                <td class="numerals-tabular py-1 text-right">{v}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </details>
+    )
+  }
+</figure>

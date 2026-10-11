@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  /** Fundo da seção: claro (Papel/Névoa), escuro (Tinta) ou Cobalto. */
+  variant?: 'light' | 'deep' | 'brand';
+}
+
+const { title, description, variant = 'light' } = Astro.props;
+const titleColor = variant === 'light' ? 'text-ink' : 'text-white';
+const descColor = {
+  light: 'text-muted',
+  deep: 'text-on-deep-muted',
+  brand: 'text-on-brand-muted',
+}[variant];
+---
+
+<div class="flex max-w-[44rem] flex-col gap-5">
+  <h2
+    data-split
+    class:list={[
+      'font-expanded text-balance text-h2 font-semibold tracking-heading',
+      titleColor,
+    ]}
+  >
+    {title}
+  </h2>
+  {
+    description && (
+      <p class:list={['text-pretty max-w-measure text-lead', descColor]}>{description}</p>
+    )
+  }
+</div>

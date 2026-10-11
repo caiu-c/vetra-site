@@ -1,40 +1,41 @@
 ---
-import SectionLabel from './SectionLabel.astro';
+import SectionHeader from './SectionHeader.astro';
 
-/* TODO: validar números reais com cliente antes do go-live. Placeholders abaixo. */
+/* TODO: validar números reais com cliente antes do go-live. Placeholders abaixo.
+   `value` anima de 0 até o número (src/scripts/motion/counters.ts). */
 const indicators = [
-  { value: '12 TB', label: 'PROCESSADOS / MÊS' },
-  { value: '04', label: 'INDÚSTRIAS ATENDIDAS' },
-  { value: '99.97%', label: 'UPTIME SLA' },
-  { value: '<200ms', label: 'LATÊNCIA MÉDIA' },
+  { prefix: '', value: '47', unit: '+', label: 'Projetos entregues' },
+  { prefix: '', value: '12', unit: ' TB', label: 'Processados por mês' },
+  { prefix: '', value: '99.97', unit: '%', label: 'Uptime contratado em SLA' },
+  { prefix: '<', value: '200', unit: ' ms', label: 'Latência média de consulta' },
 ] as const;
 ---
 
-<section
-  id="indicadores"
-  data-reveal
-  class="border-b border-rule px-6 py-20 md:px-12"
->
-  <SectionLabel number="04" name="INDICADORES" counterpart="04 / MÉTRICAS" />
+{/* Faixa única em Cobalto: o bloco de destaque do ritmo de cores (ADR-006). */}
+<section id="indicadores" class="bg-brand text-white">
+  <div class="wrap py-20 md:py-28">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeader title="Resultado que se mede." variant="brand" />
+      {/* TODO: validar texto (novo do redesign, não aprovado) */}
+      <p class="max-w-[22rem] text-body text-on-brand-muted">
+        Indicadores de operação acompanhados em cada contrato, do primeiro diagnóstico ao
+        SLA de produção.
+      </p>
+    </div>
 
-  <h2
-    class="text-balance tracking-display mt-8 font-serif text-[38px] leading-tight text-ink"
-  >
-    Resultado em números.
-  </h2>
-
-  <ul class="mt-12 grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4">
-    {
-      indicators.map(({ value, label }) => (
-        <li class="flex flex-col gap-3">
-          <span class="numerals-tabular tracking-display font-serif text-[clamp(48px,8vw,96px)] leading-none text-ink">
-            {value}
-          </span>
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
-            {label}
-          </span>
-        </li>
-      ))
-    }
-  </ul>
+    <dl class="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-white/20 pt-10 md:grid-cols-4">
+      {
+        indicators.map(({ prefix, value, unit, label }) => (
+          <div class="flex flex-col gap-3">
+            <dt class="order-2 text-meta text-on-brand-muted">{label}</dt>
+            <dd class="numerals-tabular font-expanded order-1 text-stat font-semibold tracking-display">
+              {prefix}
+              <span data-count={value}>{value}</span>
+              {unit}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
 </section>
