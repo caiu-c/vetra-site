@@ -7,12 +7,13 @@ import ApertureSymbol from './ApertureSymbol.astro';
 {/*
   Barra flutuante fixa (referência Genux): afastada das bordas, sempre visível sobre o
   conteúdo. A altura total ocupada (top + barra, 88px) é o scroll-padding-top do
-  global.css e o padding-top do hero — manter em sincronia. Sem backdrop-blur: com o
-  fundo a 95% ele não aparece e custa caro a cada quadro de scroll.
+  global.css e o padding-top do hero — manter em sincronia. Fundo sólido e sem
+  backdrop-blur: com transparência o texto de trás aparecia em fantasma (auditoria
+  A19), e o blur custa caro a cada quadro de scroll.
 */}
 <header class="fixed inset-x-3 top-3 z-40 md:inset-x-4 md:top-4">
   <div
-    class="mx-auto flex h-16 max-w-[1600px] items-center justify-between rounded-2xl bg-ink/95 pl-5 pr-3 text-white ring-1 ring-white/10 md:pl-7"
+    class="mx-auto flex h-16 max-w-[1600px] items-center justify-between rounded-2xl bg-ink pl-5 pr-3 text-white ring-1 ring-white/10 md:pl-7"
   >
     <div class="flex items-center gap-10">
       <a href="/" class="flex items-center gap-2.5" aria-label={SITE.name}>
