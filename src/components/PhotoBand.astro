@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import armazem from '@/assets/photos/armazem.jpg';
 import { emphasize } from '@/lib/emphasis';
+import { BOOKING_URL } from '@/config/site';
 
 /*
   Faixa de foto de ponta a ponta (ADR-010, o "momento" de imagem grande da ASML e da
@@ -33,5 +34,14 @@ import { emphasize } from '@/lib/emphasis';
       É isso que uma base de dados bem feita entrega: a operação registra, a gestão decide e ninguém
       precisa montar planilha no meio do caminho.
     </p>
+    <a
+      href={BOOKING_URL}
+      target="_blank"
+      rel="noopener"
+      data-booking
+      class="btn-inverse self-start"
+    >
+      Descobrir onde meus dados travam
+    </a>
   </div>
 </section>

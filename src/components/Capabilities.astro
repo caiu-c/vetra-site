@@ -32,7 +32,7 @@ import { emphasize } from '@/lib/emphasis';
           return (
             <li
               id={`servico-${slug}`}
-              class="grid grid-cols-1 items-center gap-10 border-t border-line py-14 md:py-20 lg:grid-cols-2 lg:gap-20"
+              class="grid grid-cols-1 items-center gap-10 border-t border-line py-10 md:py-20 lg:grid-cols-2 lg:gap-20"
             >
               <div class:list={['flex flex-col gap-6', i % 2 === 1 && 'lg:order-2']}>
                 <div class="flex items-center gap-3">
@@ -44,7 +44,8 @@ import { emphasize } from '@/lib/emphasis';
                   set:html={emphasize(outcome)}
                 />
                 <p class="max-w-measure text-lead text-muted" set:html={emphasize(summary)} />
-                <ul class="flex flex-col gap-2.5">
+                {/* No celular a lista fica de fora (a página de serviço detalha): encurta ~1 tela por serviço */}
+                <ul class="hidden flex-col gap-2.5 md:flex">
                   {highlights.map((d) => (
                     <li class="flex items-baseline gap-3 text-body text-ink">
                       <span
@@ -55,12 +56,23 @@ import { emphasize } from '@/lib/emphasis';
                     </li>
                   ))}
                 </ul>
-                <a
-                  href={serviceUrl(slug)}
-                  class="self-start text-body font-medium text-brand underline underline-offset-4 transition-colors hover:text-ink"
-                >
-                  Mais sobre {name}
-                </a>
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <a
+                    href={BOOKING_URL}
+                    target="_blank"
+                    rel="noopener"
+                    data-booking
+                    class="btn-secondary btn-sm"
+                  >
+                    Quero isso na minha empresa
+                  </a>
+                  <a
+                    href={serviceUrl(slug)}
+                    class="text-body font-medium text-brand underline underline-offset-4 transition-colors hover:text-ink"
+                  >
+                    Mais sobre {name}
+                  </a>
+                </div>
               </div>
               <div class:list={[i % 2 === 1 && 'lg:order-1']}>
                 <ServiceMockup slug={slug} />

@@ -34,8 +34,8 @@ const whatsapp = whatsappUrl();
     <div class="flex flex-col gap-8">
       <h2
         data-split
-        class="font-expanded max-w-[14ch] text-balance text-cta font-semibold tracking-display"
-        set:html={emphasize('Comece pelo *diagnóstico*.', 'dark')}
+        class="font-expanded max-w-[16ch] text-balance text-cta font-semibold tracking-display"
+        set:html={emphasize('Vamos descobrir onde seus dados *travam*?', 'dark')}
       />
       {/* TODO: validar texto. Prazo de resposta (1 dia útil) definido pelo dono em 2026-10-11. */}
       <p class="max-w-measure text-pretty text-lead text-on-deep-muted">
@@ -209,6 +209,22 @@ const whatsapp = whatsappUrl();
                 </option>
               ))
             }
+          </select>
+        </div>
+
+        {
+          /* Qualificação opcional (auditoria de conversão C9): não obrigatório para não reduzir envios */
+        }
+        <div>
+          <label for="cf-size" class="field-label">
+            Tamanho da empresa <span class="font-normal text-muted">(opcional)</span>
+          </label>
+          <select id="cf-size" name="company_size" class="field-input pr-10">
+            <option value="">Selecione</option>
+            <option>Até 50 colaboradores</option>
+            <option>51 a 200 colaboradores</option>
+            <option>201 a 500 colaboradores</option>
+            <option>Mais de 500 colaboradores</option>
           </select>
         </div>
 
