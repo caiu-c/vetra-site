@@ -10,7 +10,7 @@ Domínio: [vetrasolutions.com.br](https://vetrasolutions.com.br)
 - **Tailwind 3** — design system
 - **TypeScript strict**
 - **pnpm 10** — package manager
-- Motion: GSAP (ScrollTrigger, SplitText) + Lenis, sem React — ver `ADR-005` em `CLAUDE.md`
+- Motion: GSAP (ScrollTrigger, SplitText) sobre scroll nativo, sem React — ver `ADR-005` e `ADR-008` em `CLAUDE.md`
 - Tipografia: Archivo Variable (eixos de peso e largura) via Fontsource
 - Visuais: SVG inline + tipografia + CSS, sem fotos — ver `ADR-003`
 
@@ -42,7 +42,7 @@ src/
 ├── config/          # site.ts (SITE, ADDRESS, CONTACT, NAV, BOOKING_URL)
 ├── layouts/         # BaseLayout.astro
 ├── pages/           # index.astro
-├── scripts/         # main.ts + motion/ (GSAP, Lenis, preloader, cursor, marquee…)
+├── scripts/         # main.ts + motion/ (GSAP, preloader, cursor, marquee…)
 └── styles/          # global.css (tokens, fonts, keyframes, paper grain)
 
 public/              # assets estáticos (fontes, og-image, favicons, robots.txt, sitemap.xml)

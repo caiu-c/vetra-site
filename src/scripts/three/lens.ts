@@ -77,9 +77,11 @@ export async function initLens(anchor: HTMLElement, env: MotionEnv): Promise<voi
   if (!canvas) return;
 
   const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  // O canvas é grande (~40% da largura): DPR acima de 1,5 e transmissão em resolução
+  // cheia custam caro sem ganho visível na refração do disco.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.toneMapping = ACESFilmicToneMapping;
-  if (env.tier === 'low') renderer.transmissionResolutionScale = 0.5;
+  renderer.transmissionResolutionScale = env.tier === 'low' ? 0.5 : 0.75;
 
   const scene = new Scene();
   const pmrem = new PMREMGenerator(renderer);

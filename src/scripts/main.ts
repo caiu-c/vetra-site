@@ -2,7 +2,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { detectEnv } from './motion/env';
-import { initLenis } from './motion/lenis';
 import { runPreloader } from './motion/preloader';
 import { initSplitReveals, prepareHeroIntro } from './motion/split-reveal';
 import { initCursor, initMagnetic } from './motion/cursor';
@@ -15,11 +14,12 @@ import { initContactForm } from './contact-form';
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const env = detectEnv();
-const lenis = initLenis(env.reducedMotion);
-lenis?.stop();
+// Scroll nativo (ADR-008), travado só enquanto o preloader cobre a página.
+const root = document.documentElement;
+root.classList.add('scroll-locked');
 
 const playIntro = env.reducedMotion ? null : prepareHeroIntro();
-if (!playIntro) document.documentElement.classList.add('intro-armed');
+if (!playIntro) root.classList.add('intro-armed');
 
 const windowLoaded = new Promise<void>((resolve) => {
   if (document.readyState === 'complete') resolve();
@@ -34,7 +34,7 @@ const lensReady =
     : Promise.resolve();
 
 void runPreloader([document.fonts.ready, windowLoaded, lensReady], env.reducedMotion).then(() => {
-  lenis?.start();
+  root.classList.remove('scroll-locked');
   playIntro?.();
 });
 

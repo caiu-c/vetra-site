@@ -7,8 +7,14 @@
     @apply bg-canvas text-ink;
     font-family: theme('fontFamily.sans');
     font-stretch: 100%;
-    /* Âncoras não ficam escondidas sob o header fixo (ver HEADER_OFFSET em motion/lenis.ts) */
+    /* Âncoras não ficam escondidas sob o header fixo (mesmo valor do padding-top do hero) */
     scroll-padding-top: 88px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -65,19 +71,9 @@
   }
 }
 
-/* Lenis (smooth scroll) — recomendações oficiais 1.x */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: clip;
+/* Scroll travado enquanto o preloader cobre a página (main.ts) */
+.scroll-locked {
+  overflow: hidden;
 }
 
 /* Feixes do diagrama de pipeline: traço curto percorrendo o caminho */
@@ -162,31 +158,34 @@ html.lenis body {
 .cursor-on * {
   cursor: none !important;
 }
+/* O blend fica no ponto e no anel, não numa camada de tela cheia: assim o navegador
+   só recompõe ~100px por quadro. Por isso a opacidade também fica neles (opacidade
+   no pai isolaria o blend). */
 #cursor {
-  position: fixed;
-  inset: 0;
-  z-index: 95;
   pointer-events: none;
-  mix-blend-mode: difference;
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-#cursor[data-visible='true'] {
-  opacity: 1;
 }
 .cursor-dot,
 .cursor-ring {
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 95;
   translate: -50% -50%;
   border-radius: 9999px;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+#cursor[data-visible='true'] .cursor-dot,
+#cursor[data-visible='true'] .cursor-ring {
+  opacity: 1;
 }
 .cursor-dot {
   width: 6px;
   height: 6px;
   background: #fff;
-  transition: scale 250ms ease;
+  transition:
+    scale 250ms ease,
+    opacity 300ms ease;
 }
 .cursor-ring {
   display: flex;
@@ -199,7 +198,8 @@ html.lenis body {
     width 400ms cubic-bezier(0.16, 1, 0.3, 1),
     height 400ms cubic-bezier(0.16, 1, 0.3, 1),
     background-color 300ms ease,
-    border-color 300ms ease;
+    border-color 300ms ease,
+    opacity 300ms ease;
 }
 .cursor-label {
   font-size: 12px;

@@ -17,7 +17,7 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 ## Arquitetura
 - `src/pages/index.astro` só compõe as seções em ordem; cada seção é um componente em `src/components/`.
 - `src/layouts/BaseLayout.astro` concentra `<head>` (meta, OG/Twitter, JSON-LD `Organization`, script inline que marca `.js`/`.preloaded` antes do primeiro paint), import da fonte Archivo, `Preloader`, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Não há moldura no layout: cada seção desenha a sua (ver Convenções → Grid).
-- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText, Lenis dirigido pelo `gsap.ticker`). Hooks por atributo: `data-split` (título revelado linha a linha), `data-intro`/`data-intro-title` (intro do hero após o preloader), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
+- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText sobre scroll nativo, ver ADR-008). Hooks por atributo: `data-split` (título revelado linha a linha), `data-intro`/`data-intro-title` (intro do hero após o preloader), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
 - Dados institucionais (SITE, CONTACT, ADDRESS, NAV, BOOKING_URL, CONTACT_FORM, CONTACT_SUBJECTS) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Os casos de clientes (texto + dados do gráfico) ficam em `src/data/cases.ts`.
 - Fonte do site: Archivo Variable (`@fontsource-variable/archivo/wdth.css`, eixos de peso e largura), empacotada pelo Vite. `public/og-image.png`, `favicon.ico` e `apple-touch-icon.png` são gerados por scripts (ver Comandos), não editados à mão.
 - Import alias `@/*` → `src/*`.
@@ -28,7 +28,7 @@ Sempre consulte o PRD antes de tomar decisões de implementação — **exceto e
 - Tipografia: só Archivo. Títulos com `.font-expanded` (`font-stretch: 112%`) + `font-semibold` + `tracking-display`/`tracking-heading`. Tamanhos pela escala de Bringhurst (12 · 14 · 16 · 18 · 21 · 24 · 36 · 48 · 60 · 72) via utilitários `text-meta`, `text-body`, `text-lead`, `text-h4`, `text-h3`, `text-h2`, `text-cta`, `text-display`, `text-stat`. Nada acima de 72px.
 - **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só Metodologia e etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
 - **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta e uma única faixa Cobalto (Indicadores); a ordem está no ADR-006. Ao criar uma seção, escolher o fundo para manter a alternância.
-- **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em três lugares: `HEADER_OFFSET` (`motion/lenis.ts`), `scroll-padding-top` (`global.css`) e o padding-top do hero.
+- **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em dois lugares: `scroll-padding-top` (`global.css`) e o padding-top do hero. Sem `backdrop-blur` (ver ADR-008).
 - **CTAs:** a ação principal se chama sempre "Agendar diagnóstico" e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject="diagnostico"` para pré-selecionar o assunto. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
 - Componentes de UI em `global.css` (`@layer components`): `.wrap`, `.btn-primary`, `.btn-secondary`, `.btn-inverse` e `.btn-outline-inverse` (fundos Tinta), `.btn-sm`, `.font-expanded`, `.field-label`/`.field-input` (formulário). Cabeçalho de seção padrão: `SectionHeader.astro` (título com `data-split` + descrição opcional; `variant` light/deep/brand conforme o fundo).
 - Gráficos dos casos (`CaseChart.astro`): seguir a skill `dataviz` (carregar antes de mexer). A série usa `brand-light` e o contexto `chart-context`, ambos validados com o script da skill contra o fundo Tinta; qualquer cor nova de gráfico precisa passar pelo validador.
@@ -164,7 +164,7 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 **Contexto.** O dono pediu padrão Awwwards (preloader, texto revelado por linha, cursor customizado, marquee, scroll horizontal, depois uma lente 3D em Three.js). Ao ver o resultado, achou as fontes grandes demais e pediu para aplicar a skill frontend-design. A skill apontou o cromo de template (eyebrows em caixa alta, mono em labels, separadores "·", setas em botões, frase do título colorida) e a fonte padrão (Geist).
 
 **Decisão.**
-- Motion em GSAP 3.13+ (ScrollTrigger e SplitText, gratuitos inclusive para uso comercial), sem React. O Lenis é dirigido pelo `gsap.ticker`. Fallbacks: reduced motion, sem JS e failsafes por animação CSS.
+- Motion em GSAP 3.13+ (ScrollTrigger e SplitText, gratuitos inclusive para uso comercial), sem React. O Lenis era dirigido pelo `gsap.ticker` (removido no ADR-008). Fallbacks: reduced motion, sem JS e failsafes por animação CSS.
 - Archivo com eixo de largura no lugar da Geist: títulos levemente expandidos (placa de engenharia), uma família só.
 - Paleta com tinta azul-marinho (#0C1838) no lugar do quase-preto, Cobalto como único acento.
 - Escala tipográfica de Bringhurst, com no máximo 72px.
@@ -208,3 +208,23 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 **Consequências.**
 - JS inicial ~57 kB gz (meta < 60 kB); chunk da lente ~142 kB gz, baixado depois.
 - Fallbacks: sem WebGL ou se o import falhar, fica o SVG do hero. Com reduced motion, um quadro estático. O loop pausa com o hero fora da tela ou a aba oculta; no tier baixo, transmissão em meia resolução e menos segmentos.
+
+### ADR-008 — Scroll nativo no lugar do Lenis
+
+**Status:** aceito (2026-10-11). Ajusta o ADR-005.
+
+**Contexto.** Com o site no ar, o dono notou o scroll travado, "como se tivesse poucos fps", no Safari de um MacBook Pro (tela de 120 Hz). O Lenis calcula cada quadro do scroll em JS, e o Safari limita o `requestAnimationFrame` a 60 fps, enquanto o scroll nativo roda a 120. Além disso, o Lenis dividia o `gsap.ticker` com a renderização da lente 3D, então um quadro pesado da lente atrasava o scroll. Dois efeitos agravavam o problema: `backdrop-blur` no header fixo e `mix-blend-mode` numa camada de cursor do tamanho da tela.
+
+**Decisão.**
+- Scroll nativo. O que o Lenis fazia passou para:
+  - rolagem suave das âncoras: `scroll-behavior: smooth` (só sem reduced motion);
+  - desconto do header nas âncoras: `scroll-padding-top`;
+  - trava durante o preloader: classe `.scroll-locked` no `<html>`, posta e tirada pelo `main.ts`.
+- Header sem `backdrop-blur`: com o fundo a 95%, o blur não aparecia.
+- Cursor com `mix-blend-mode` no ponto e no anel, e não numa camada `fixed; inset: 0`.
+- Lente com DPR máximo de 1,5 e `transmissionResolutionScale` 0,75 no tier alto.
+
+**Consequências.**
+- O scroll roda no compositor, sem depender da thread principal, e o JS inicial perde o Lenis (~5 kB gz).
+- Some a inércia extra do Lenis; o trackpad e o mouse mantêm a inércia nativa do sistema.
+- **Não reintroduzir smooth scroll em JS** (Lenis, Locomotive etc.) nem `backdrop-filter`/`mix-blend-mode` em elementos fixos grandes sem medir no Safari com tela de 120 Hz.
