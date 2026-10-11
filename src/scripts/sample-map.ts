@@ -6,9 +6,10 @@ export function initSampleMapGates(): void {
   document.querySelectorAll<HTMLFormElement>('[data-sample-gate]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-sample-status]');
     const submit = form.querySelector<HTMLButtonElement>('[data-sample-submit]');
-    const target =
-      (form.elements.namedItem('redirect') as HTMLInputElement | null)?.value ??
-      '/diagnostico/exemplo/';
+    // O campo `redirect` é absoluto (o Web3Forms exige, no envio sem JS); aqui basta o
+    // caminho, para funcionar também em previews e no ambiente local.
+    const redirect = (form.elements.namedItem('redirect') as HTMLInputElement | null)?.value;
+    const target = redirect ? new URL(redirect).pathname : '/diagnostico/exemplo/';
 
     const release = () => {
       track('exemplo_mapa_liberado');
