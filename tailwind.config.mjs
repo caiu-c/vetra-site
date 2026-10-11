@@ -14,7 +14,8 @@ export default {
         muted: '#586178', // Aço — texto secundário (6.2:1 em Papel)
         subtle: '#8A93A6', // só decorativo ou texto ≥24px (3.1:1)
         line: '#DCE1EA', // Linha
-        'line-strong': '#C5CCD8',
+        'line-strong': '#C5CCD8', // bordas decorativas (1.6:1) — nunca como único limite de campo
+        'line-input': '#586178', // borda de campo de formulário (6.2:1; WCAG 1.4.11 pede ≥ 3:1)
         'brand-deep': '#0C1838',
         'brand-soft': '#E8EDFB',
         'on-deep-muted': '#A9B6DA', // texto secundário sobre Tinta (8.6:1)
