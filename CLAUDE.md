@@ -1,32 +1,53 @@
-# CLAUDE.md — Vetra Solutions Site
+# CLAUDE.md
 
-Este projeto segue o PRD em ./docs/PRD-vetra-solutions-site.md.
-Sempre consulte o PRD antes de tomar decisões de implementação.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+# Vetra Solutions Site
+
+Este projeto segue o PRD em `.llm/prd.MD`. Planos de fase em `docs/superpowers/plans/`.
+Sempre consulte o PRD antes de tomar decisões de implementação — **exceto em identidade visual**: desde o redesign de 2026-10 (ADR-004 a ADR-006), o visual segue este arquivo, não o PRD §4, o brand book (`Insumos/SVG/10-cor-tipografia.svg`) nem o mockup `Insumos/SVG/14-mockup-site.svg`.
 
 ## Stack
-- Astro 4.x + TypeScript strict
-- Tailwind CSS 3.x
-- React (apenas para ilhas interativas)
+- Astro 4.x (site estático, uma rota) + TypeScript strict
+- Tailwind CSS 3.x (`applyBaseStyles: false` — estilos base vivem em `src/styles/global.css`)
+- React instalado mas **não usado em runtime** (ver ADR-001); usar só se surgir ilha realmente interativa
 - pnpm como package manager
+- Manter-se em Astro 4: integrações de versões mais novas (`@astrojs/react@5`, `@astrojs/sitemap@3.7`) são incompatíveis
+
+## Arquitetura
+- `src/pages/index.astro` só compõe as seções em ordem; cada seção é um componente em `src/components/`.
+- `src/layouts/BaseLayout.astro` concentra `<head>` (meta, OG/Twitter, JSON-LD `Organization`, script inline que marca `.js`/`.preloaded` antes do primeiro paint), import da fonte Archivo, `Preloader`, `Cursor` e o único `<script>` client-side (`src/scripts/main.ts`). Não há moldura no layout: cada seção desenha a sua (ver Convenções → Grid).
+- JS client-side: `src/scripts/main.ts` orquestra os módulos de `src/scripts/motion/` (GSAP + ScrollTrigger + SplitText, Lenis dirigido pelo `gsap.ticker`). Hooks por atributo: `data-split` (título revelado linha a linha), `data-intro`/`data-intro-title` (intro do hero após o preloader), `data-magnetic`, `data-cursor="view|drag|default"` + `data-cursor-label`, `data-marquee`, `data-carousel` (+ `-viewport`/`-track`/`-prev`/`-next`/`-status`, em `motion/carousel.ts`), `data-count`, `data-subject` (CTA que pré-seleciona o assunto do formulário). A lente 3D do hero fica em `src/scripts/three/` (`lens.ts` + `aperture-geometry.ts`), carregada por `import()` dinâmico. Fora de `motion/`: `src/scripts/charts.ts` (gráficos dos casos como `role="slider"`) e `src/scripts/contact-form.ts` (envio do formulário). Para animar algo novo, usar um desses atributos em vez de JS novo. Com `prefers-reduced-motion`, sem JS ou se o script falhar, tudo aparece estático (failsafes em `global.css`).
+- Dados institucionais (SITE, CONTACT, ADDRESS, NAV, BOOKING_URL, CONTACT_FORM, CONTACT_SUBJECTS) ficam em `src/config/site.ts` — fonte única usada por layout, header, footer, formulário e JSON-LD. Os casos de clientes (texto + dados do gráfico) ficam em `src/data/cases.ts`.
+- Fonte do site: Archivo Variable (`@fontsource-variable/archivo/wdth.css`, eixos de peso e largura), empacotada pelo Vite. `public/og-image.png`, `favicon.ico` e `apple-touch-icon.png` são gerados por scripts (ver Comandos), não editados à mão.
+- Import alias `@/*` → `src/*`.
 
 ## Convenções
 - Componentes Astro têm extensão .astro; React só quando há interatividade.
-- Cores: usar tokens do tailwind.config (canvas, paper, ink, accent, azure, bone, muted, rule, rule-dark, muted-on-dark). Semântica conforme `Insumos/SVG/10-cor-tipografia.svg`:
-  - **`accent` (Steel Blue #1E4D8C)** — institucional/técnico: numeração de SectionLabel, símbolo aperture em watermarks, elementos de marca.
-  - **`azure` (#4A90E2)** — *highlight interativo*: setas ↗ de CTA (sobre fundo `ink`), underline animado de nav (decorativo, 1px), focus rings. **Nunca usar como texto pequeno (<18px) sobre fundo claro** — ratio com `canvas` é 2.75:1, falha AA. Para eyebrows/labels em fundo claro, usar `accent` (Steel Blue, ratio 8.29:1). Também nunca como fundo de bloco grande (vira tom "vendedor", oposto ao registro institucional).
-  - **`bone` (#FAFAF7)** — *surface light*: terceira camada de profundidade quando `canvas` e `paper` não bastam (ex.: card destacado dentro de Indicadores; modal sobre canvas). Usar com parcimônia — as duas camadas paper+canvas já cobrem 95% dos casos.
-  - **TODO — alinhamento de nomenclatura com brand book:** o manual em `Insumos/SVG/10-cor-tipografia.svg` usa `paper`=#F5F3EE e `paper-2`=#E8E4DA, enquanto nossa config Tailwind usa `canvas`=#F5F3EE e `paper`=#E8E4DA — **trocados**. Mexer cascata por toda a base de componentes (~30 arquivos, regressão visual provável). Reservado para uma fase dedicada de "naming alignment" com checkpoint visual obrigatório.
-- Tipografia: classes utilitárias font-serif, font-sans, font-mono.
+- Cores: usar os tokens do `tailwind.config.mjs` — `canvas` (Papel #FFF), `surface` (Névoa #F2F4F8), `ink` (Tinta #0C1838: texto e faixa escura), `brand` (Cobalto #1640D6: único acento), `muted` (Aço #586178: texto secundário), `line`/`line-strong` (bordas), `subtle` (#8A93A6: só decorativo ou texto ≥24px, falha AA em texto pequeno); na faixa escura, `line-deep` e `on-deep-muted`.
+- Tipografia: só Archivo. Títulos com `.font-expanded` (`font-stretch: 112%`) + `font-semibold` + `tracking-display`/`tracking-heading`. Tamanhos pela escala de Bringhurst (12 · 14 · 16 · 18 · 21 · 24 · 36 · 48 · 60 · 72) via utilitários `text-meta`, `text-body`, `text-lead`, `text-h4`, `text-h3`, `text-h2`, `text-cta`, `text-display`, `text-stat`. Nada acima de 72px.
+- **Regras da revisão frontend-design (ADR-005), não reintroduzir:** eyebrow em caixa alta acima de título, fonte mono para labels, "·" ou "—" como separador de metadados, "→" em botões, frase do título em outra cor, numeração em conteúdo que não é sequência (só Metodologia e etapas do pipeline são numeradas), gradiente/sombra como decoração, fade-up genérico em parágrafos e cards. Alinhamento à esquerda em toda a página.
+- **Layout de ponta a ponta (ADR-006):** toda seção é `<section class="bg-…">` com fundo de borda a borda e o conteúdo dentro de `<div class="wrap">` (container de 1600px com padding lateral, sem bordas). Não há moldura, linhas verticais nem cruzes. O ritmo vem da alternância de fundos — Papel, Névoa, Tinta e uma única faixa Cobalto (Indicadores); a ordem está no ADR-006. Ao criar uma seção, escolher o fundo para manter a alternância.
+- **Header fixo flutuante:** `Header.astro` é `fixed` (barra Tinta arredondada, afastada das bordas). A área que ele ocupa (88px) precisa bater em três lugares: `HEADER_OFFSET` (`motion/lenis.ts`), `scroll-padding-top` (`global.css`) e o padding-top do hero.
+- **CTAs:** a ação principal se chama sempre "Agendar diagnóstico" e leva ao formulário (`BOOKING_URL = '#contato'` até existir um link de agendamento); use `data-subject="diagnostico"` para pré-selecionar o assunto. Cada seção pode ter um CTA contextual (ex.: "Falar sobre meu projeto" nos casos).
+- Componentes de UI em `global.css` (`@layer components`): `.wrap`, `.btn-primary`, `.btn-secondary`, `.btn-inverse` e `.btn-outline-inverse` (fundos Tinta), `.btn-sm`, `.font-expanded`, `.field-label`/`.field-input` (formulário). Cabeçalho de seção padrão: `SectionHeader.astro` (título com `data-split` + descrição opcional; `variant` light/deep/brand conforme o fundo).
+- Gráficos dos casos (`CaseChart.astro`): seguir a skill `dataviz` (carregar antes de mexer). A série usa `brand-light` e o contexto `chart-context`, ambos validados com o script da skill contra o fundo Tinta; qualquer cor nova de gráfico precisa passar pelo validador.
+- Conteúdo placeholder (casos e seus gráficos, indicadores, setores, textos de serviço, FAQ, chave do Web3Forms) está marcado com `TODO` e precisa ser substituído ou ocultado antes de ligar o domínio.
 - Não adicionar dependências sem justificar a escolha.
 - Commits em português, formato: "tipo: descrição curta" (ex: "feat: hero section").
 - **Validação obrigatória antes de cada commit:** rodar `pnpm typecheck && pnpm lint && pnpm build` antes de `git commit`, sem exceção — inclui commits de scripts e infra. Pular qualquer um é fonte conhecida de débito que vaza para commits posteriores (incidente da Fase 5: lint não rodou em commits de geração de assets em `scripts/`, erros surgiram em commit subsequente).
-- **Estrutura visual de duas camadas (PRD §4.3 + ADR-002):** seção clara nunca renderiza direto sobre `paper`. Toda seção clara (Header, MetaLine, Hero, Capabilities) vive **dentro** do painel `canvas` (1100px max, com borda 1px solid `rule`). Methodology também fica dentro do painel mas com fundo `ink` edge-to-edge. Footer é a única exceção: fica fora do painel, sobre `paper`. Cantos do painel são retos (sem `rounded-*`) e sem `shadow-*`.
 - **Sitemap:** gerado manualmente em `public/sitemap.xml`. Quando o site tiver 5+ rotas, considerar `src/pages/sitemap.xml.ts` dinâmico (com data do build e listagem de routes via `import.meta.glob`). `@astrojs/sitemap` foi avaliado e descartado em 2026-05-06: 3.7.2 incompatível com Astro 4 (mesmo padrão do `@astrojs/react@5`), e a alternativa manual cobre 100% do caso atual sem dependência.
 
 ## Comandos
-- pnpm dev — ambiente local
-- pnpm build — build de produção
-- pnpm preview — testar build localmente
+- `pnpm dev` — ambiente local (porta 4321)
+- `pnpm build` — build de produção em `dist/`
+- `pnpm preview` — testar build localmente
+- `pnpm typecheck` — `astro check && tsc --noEmit`
+- `pnpm lint` — ESLint (inclui `.astro` e `scripts/`)
+- `pnpm format` / `pnpm format:check` — Prettier (com plugins astro e tailwind)
+- `pnpm gen:og` — regenera `public/og-image.png` (rodar quando título/descrição mudarem)
+- `pnpm gen:icons` — regenera `favicon.ico` e `apple-touch-icon.png` a partir de `public/favicon.svg`
+- Não há suíte de testes; a validação é typecheck + lint + build (+ checagem visual).
 
 ## Ao implementar
 - Pare nos checkpoints definidos no roadmap (seção 10 do PRD).
@@ -64,7 +85,7 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 
 ### ADR-002 — Estrutura visual de duas camadas (paper externo + painel canvas)
 
-**Status:** aceito (correção pós-Fase 4, 2026-05-06).
+**Status:** substituído pelo ADR-004 (2026-10-10). Mantido como histórico.
 
 **Contexto.** O mockup canônico `Insumos/SVG/14-mockup-site.svg` é explícito: o site é renderizado como um painel canvas centralizado com borda 1px sobre um fundo paper. Até o final da Fase 4, a implementação tinha `bg-paper` no body mas **nenhum painel canvas envolvendo o conteúdo** — todas as seções claras renderizavam direto sobre paper. O resultado visual era "fundo bege uniforme" em vez do "catálogo dentro de uma capa" pretendido. A divergência era estrutural (camada inteira faltando), não cosmética.
 
@@ -87,7 +108,7 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 
 ### ADR-003 — Densidade visual sem fotos: SVG inline + tipografia + CSS
 
-**Status:** aceito (correção pré-Fase 5, 2026-05-06).
+**Status:** parcialmente substituído pelo ADR-004 (2026-10-10). Continua valendo: sem fotos, visuais em SVG inline, placeholders TODO em números e casos. Os elementos visuais específicos (backdrop, ruler, paper grain, serif) foram removidos.
 
 **Contexto.** Após a correção da estrutura de duas camadas (ADR-002), o site estava estruturalmente correto mas visualmente esparso comparado a referências B2B premium (ASML, IBM, Siemens). Restrições do projeto: sem fotos próprias disponíveis, sem stock photos genéricas (descaracterizam a marca técnica), sem libs de runtime adicionais.
 
@@ -119,3 +140,71 @@ Estimativa de bundle do caminho literal do PRD (gzipped):
 - Se Lighthouse mobile cair abaixo das metas (≥95) por causa de qualquer um dos 8 elementos sobreviventes, isolar e remover. Ruler ticks é o primeiro candidato por ser puramente decorativo.
 - Se o paper grain causar issues de print/screen reader (não deveria — é background-image), desativar via `@media print { body { background-image: none; } }`.
 - Se o backdrop SVG do Hero atrapalhar contraste de leitura em algum tema futuro (ex.: alto contraste forçado), reduzir opacity ou desativar.
+
+### ADR-004 — Redesign: grid Vercel + registro institucional ASML, tema claro
+
+**Status:** aceito (2026-10-10). Substitui ADR-002 e a parte visual do ADR-003.
+
+**Contexto.** O dono do projeto avaliou o site no ar e pediu um visual que misturasse o Vercel e a ASML, descartando explicitamente as definições visuais anteriores (paleta paper/canvas, Instrument Serif, painel com moldura). Escolheu tema claro e substituição completa da identidade, mantendo apenas o símbolo aperture.
+
+**Decisão.**
+- Do Vercel: fundo branco, grid de linhas de 1px com cruzes nos cantos, botões pill, diagrama de pipeline (`PipelineDiagram.astro`) com feixes animados em CSS.
+- Da ASML: azul institucional (`brand`) como única cor de destaque, faixa full-bleed `brand-deep` na Metodologia, seção de números em destaque (Indicadores, que absorveu os antigos Stats do Hero), bloco editorial "Sobre".
+- Nova seção `CallToAction` (`#contato`) no fim da página.
+
+**Consequências.**
+- JS inalterado (~5.3 kB gz; só Lenis + reveal + menu). Fontes carregam só o subset latin via `unicode-range`.
+- `scripts/generate-og.mjs` converte todo texto em paths via `fontkit` (`getVariation({ wght, wdth })`), porque o resvg ignora peso/largura em fonte variável. Tipografia e cores foram depois substituídas pelo ADR-005.
+- `Insumos/SVG/` (brand book e mockup) deixou de ser referência visual.
+
+### ADR-005 — Motion com GSAP e revisão pela skill frontend-design
+
+**Status:** aceito (2026-10-11). Ajusta o ADR-004 (tipografia e cor) e o orçamento de bundle do ADR-001.
+
+**Contexto.** O dono pediu padrão Awwwards (preloader, texto revelado por linha, cursor customizado, marquee, scroll horizontal, depois uma lente 3D em Three.js). Ao ver o resultado, achou as fontes grandes demais e pediu para aplicar a skill frontend-design. A skill apontou o cromo de template (eyebrows em caixa alta, mono em labels, separadores "·", setas em botões, frase do título colorida) e a fonte padrão (Geist).
+
+**Decisão.**
+- Motion em GSAP 3.13+ (ScrollTrigger e SplitText, gratuitos inclusive para uso comercial), sem React. O Lenis é dirigido pelo `gsap.ticker`. Fallbacks: reduced motion, sem JS e failsafes por animação CSS.
+- Archivo com eixo de largura no lugar da Geist: títulos levemente expandidos (placa de engenharia), uma família só.
+- Paleta com tinta azul-marinho (#0C1838) no lugar do quase-preto, Cobalto como único acento.
+- Escala tipográfica de Bringhurst, com no máximo 72px.
+- Seções novas inspiradas nos concorrentes (Indicium, A3Data, BIX): Setores, Como funciona o diagnóstico, Perguntas frequentes. Logos e depoimentos só quando houver clientes autorizando.
+
+**Consequências.**
+- JS inicial: ~55 kB gz (GSAP + plugins + Lenis), contra ~5 kB antes. A meta passa a ser JS inicial < 60 kB gz; o Three.js (fase seguinte) entra só via `import()` dinâmico.
+- `@fontsource-variable/archivo` substitui Geist e Geist Mono; as fontes da identidade antiga (`public/fonts/` e pacotes `@fontsource/*`) foram removidas.
+
+### ADR-006 — Layout de ponta a ponta e ritmo por blocos de cor (referência Genux)
+
+**Status:** aceito (2026-10-11). Substitui o "grid estilo Vercel" do ADR-004 (moldura de 1200px, linhas verticais, cruzes) e o scroll horizontal fixado dos casos do ADR-005.
+
+**Contexto.** O dono mandou a genuxconsult.com.br como referência: transições por blocos de cor, header fixo, um CTA por seção, serviços descritos por resultado e casos em Dor/Solução/Resultado. Ele também reprovou as margens laterais em todo o site, o bloco do diagnóstico ("parece formulário"), a falta de um formulário de contato e a seção de casos.
+
+**Decisão.**
+- Fundos de ponta a ponta com conteúdo no `.wrap` (1600px). Ordem: Hero (Papel) → Stack (Tinta) → Capacidades (Papel) → Indicadores (Cobalto) → Setores (Papel) → Metodologia (Tinta) → Diagnóstico (Névoa) → Casos (Tinta) → Sobre (Papel) → FAQ (Névoa) → Contato + Rodapé (Tinta).
+- Header fixo flutuante em Tinta.
+- Serviços com título de resultado + entregáveis; diagnóstico no formato "sinais + o que você recebe"; CTA "Agendar diagnóstico" consistente, levando ao formulário.
+- Casos em carrossel (setas, teclado, arraste; slides inativos `inert`), com métrica de destaque (`text-metric`, exceção documentada à escala) e o gráfico do próprio resultado no lugar de foto.
+- Formulário de contato via Web3Forms (grátis até 250 envios/mês, sem servidor; chave pública em `CONTACT_FORM.accessKey`). Sem JS, POST direto; com JS, envio inline com estados de sucesso e erro.
+- Não copiamos o cromo da Genux (caixa alta, rótulos amarelos, setas, nomes com ®, fotos de banco); as regras do ADR-005 continuam valendo.
+
+**Consequências.**
+- JS inicial ~57 kB gz (carrossel e formulário substituem o pin do ScrollTrigger), dentro da meta de 60 kB.
+- Removidos `.frame`, `.frame-deep`, `.corners`, `motion/horizontal.ts` e `CallToAction.astro`.
+- A lente 3D (fases seguintes) precisa ser replanejada: com seções de fundo opaco, ela só aparece no hero e entre blocos claros.
+
+### ADR-007 — Lente 3D em Three.js só no hero
+
+**Status:** aceito (2026-10-11). Substitui a "cena contínua" planejada e ajusta a meta de bundle do ADR-005.
+
+**Contexto.** O dono pediu Three.js e uma lente 3D (o símbolo aperture em vidro). O plano inicial era um canvas fixo atrás da página inteira, mas desde o ADR-006 quase todas as seções têm fundo opaco de ponta a ponta, que esconderia o canvas.
+
+**Decisão.**
+- A lente vive só no hero (`[data-lens-anchor]`), como o único gesto ousado da página. Ao rolar para fora do hero, o grupo gira e as 4 peças se afastam em profundidade, antecipando as "Quatro camadas" das Capacidades.
+- Geometria a partir das mesmas coordenadas do `ApertureSymbol.astro` (manter em sincronia): traço com miter extrudado, mais uma esfera para o ponto.
+- Vidro com `MeshPhysicalMaterial` (transmissão) sobre `RoomEnvironment`; um disco desenhado em canvas atrás da lente dá o que refratar.
+- Three num chunk assíncrono (`import('./three/lens')`), que entra como tarefa do preloader (teto de 2,5s).
+
+**Consequências.**
+- JS inicial ~57 kB gz (meta < 60 kB); chunk da lente ~142 kB gz, baixado depois.
+- Fallbacks: sem WebGL ou se o import falhar, fica o SVG do hero. Com reduced motion, um quadro estático. O loop pausa com o hero fora da tela ou a aba oculta; no tier baixo, transmissão em meia resolução e menos segmentos.
