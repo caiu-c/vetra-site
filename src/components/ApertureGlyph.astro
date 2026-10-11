@@ -1,0 +1,47 @@
+---
+/*
+  Símbolo aperture com uma peça em destaque: cada serviço é uma das 4 peças
+  (coordenadas de ApertureSymbol.astro; do chevron externo ao ponto de convergência).
+  Mesmo mapeamento da vista explodida da lente 3D. Usado nos cards da home e no topo
+  das páginas de serviço.
+*/
+interface Props {
+  /** Índice da peça em destaque (0–3, na ordem de SERVICES). */
+  active: number;
+  size?: number;
+  class?: string;
+}
+
+const { active, size = 40, class: className } = Astro.props;
+
+const pieces = [
+  { kind: 'path', d: 'M8 10 L28 46 L48 10' },
+  { kind: 'path', d: 'M14 10 L28 38 L42 10' },
+  { kind: 'path', d: 'M20 10 L28 30 L36 10' },
+  { kind: 'dot' },
+] as const;
+---
+
+<svg
+  viewBox="0 0 56 56"
+  width={size}
+  height={size}
+  fill="none"
+  class:list={['shrink-0', className]}
+  aria-hidden="true"
+>
+  {
+    pieces.map((p, k) =>
+      p.kind === 'path' ? (
+        <path
+          d={p.d}
+          stroke={k === active ? '#1640D6' : '#DCE1EA'}
+          stroke-width={k === active ? 2.4 : 1.6}
+          stroke-linecap="square"
+        />
+      ) : (
+        <circle cx="28" cy="46" r={k === active ? 3.4 : 2.2} fill={k === active ? '#1640D6' : '#DCE1EA'} />
+      ),
+    )
+  }
+</svg>

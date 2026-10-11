@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
 import Phases from '@/components/Phases.astro';
 import Contact from '@/components/Contact.astro';
+import ApertureGlyph from '@/components/ApertureGlyph.astro';
 import { BOOKING_URL } from '@/config/site';
 import { SERVICES, serviceUrl, type Service } from '@/data/services';
 
@@ -20,33 +21,47 @@ interface Props {
 }
 
 const { service } = Astro.props;
+const index = SERVICES.indexOf(service);
 const others = SERVICES.filter((s) => s.slug !== service.slug);
 ---
 
 <BaseLayout title={service.seoTitle} description={service.seoDescription}>
   <section class="bg-canvas">
-    <div class="wrap flex flex-col gap-8 pb-20 pt-32 md:pb-28 md:pt-40">
-      <a
-        href="/#servicos"
-        class="self-start text-meta text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
-      >
-        Todos os serviços
-      </a>
-      <h1 class="flex max-w-[20ch] flex-col gap-4">
-        <span class="text-h4 font-semibold text-brand">{service.name}</span>
-        <span class="font-expanded text-balance text-display font-semibold tracking-display text-ink">
-          {service.outcome}
-        </span>
-      </h1>
-      <p class="text-pretty max-w-measure text-lead text-muted">
-        {service.audience}
-        {service.summary}
-      </p>
-      <div class="flex flex-col gap-3 sm:flex-row">
-        <a href={BOOKING_URL} class="btn-primary" data-subject={service.subject} data-magnetic>
-          Agendar diagnóstico gratuito
+    <div
+      class="wrap grid grid-cols-1 items-center gap-12 pb-20 pt-32 md:pb-28 md:pt-40 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16"
+    >
+      <div class="flex flex-col gap-8">
+        <a
+          href="/#servicos"
+          class="self-start text-meta text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+        >
+          Todos os serviços
         </a>
-        <a href="#entregas" class="btn-secondary">O que entregamos</a>
+        <h1 class="flex flex-col gap-4">
+          <span class="text-h4 font-semibold text-brand">{service.name}</span>
+          <span
+            class="font-expanded text-balance max-w-[18ch] text-display font-semibold tracking-display text-ink"
+          >
+            {service.outcome}
+          </span>
+        </h1>
+        <p class="text-pretty max-w-measure text-lead text-muted">
+          {service.audience}
+          {service.summary}
+        </p>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <a href={BOOKING_URL} class="btn-primary" data-subject={service.subject} data-magnetic>
+            Agendar diagnóstico gratuito
+          </a>
+          <a href="#entregas" class="btn-secondary">O que entregamos</a>
+        </div>
+      </div>
+
+      {/* A peça do símbolo aperture que corresponde a este serviço (mesmo mapeamento dos cards) */}
+      <div
+        class="hidden aspect-square w-full max-w-[28rem] items-center justify-center justify-self-end rounded-full bg-surface lg:flex"
+      >
+        <ApertureGlyph active={index} size={240} />
       </div>
     </div>
   </section>
