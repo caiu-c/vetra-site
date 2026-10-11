@@ -1,0 +1,72 @@
+---
+import { FOUNDER } from '@/config/site';
+import SectionHeader from './SectionHeader.astro';
+
+/*
+  Quem conduz (auditoria A5): numa consultoria pequena, o cliente compra a pessoa.
+  Aparece na home no lugar do manifesto quando FOUNDER.name é preenchido em
+  src/config/site.ts. Sem foto, mostra as iniciais.
+*/
+const { name, role, photo, linkedin, credentials } = FOUNDER;
+const parts = name.trim().split(/\s+/);
+const initials = (parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1][0] : '');
+---
+
+<section id="sobre" class="bg-canvas">
+  <div
+    class="wrap grid grid-cols-1 gap-10 py-24 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] md:gap-16 md:py-32"
+  >
+    {
+      photo ? (
+        <img
+          src={photo}
+          alt={`Retrato de ${name}`}
+          width="800"
+          height="1000"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/5] w-full max-w-[18rem] rounded-[20px] bg-surface object-cover"
+        />
+      ) : (
+        <div
+          class="font-expanded flex aspect-[4/5] w-full max-w-[18rem] items-center justify-center rounded-[20px] bg-surface text-[clamp(56px,6vw,96px)] font-semibold tracking-display text-ink"
+          aria-hidden="true"
+        >
+          {initials}
+        </div>
+      )
+    }
+
+    <div class="flex flex-col gap-8">
+      <SectionHeader title="Quem conduz o seu projeto." />
+      <div class="flex flex-col gap-1">
+        <p class="font-expanded text-h3 font-semibold tracking-heading text-ink">{name}</p>
+        {role && <p class="text-lead text-muted">{role}</p>}
+      </div>
+      {
+        credentials.length > 0 && (
+          <ul class="flex max-w-measure flex-col gap-3 border-t border-line pt-6">
+            {credentials.map((c) => (
+              <li class="flex items-baseline gap-3 text-body text-ink">
+                <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
+                {c}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        linkedin && (
+          <a
+            href={linkedin}
+            class="self-start text-body font-medium text-brand underline underline-offset-4 hover:text-ink"
+            target="_blank"
+            rel="noopener"
+          >
+            Perfil de {name} no LinkedIn
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

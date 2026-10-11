@@ -63,6 +63,27 @@ export const ADDRESS = {
   addressCountry: 'BR',
 } as const;
 
+// Bloco "Quem conduz" (auditoria A5): substitui o manifesto na home assim que `name`
+// for preenchido. TODO: preencher com os dados reais.
+// - photo: retrato em WebP (~800×1000 px) dentro de public/, ex.: '/fundador.webp'.
+//   Fundo neutro, luz natural, olhar para a câmera (auditoria-ux/identidade-proposta.md).
+//   Sem foto, entram as iniciais.
+// - credentials: 3 ou 4 fatos verificáveis (formação, certificações, anos de
+//   experiência, setores), sem nomear ex-empregadores sem autorização.
+export const FOUNDER: {
+  name: string;
+  role: string;
+  photo: string;
+  linkedin: string;
+  credentials: readonly string[];
+} = {
+  name: '',
+  role: '',
+  photo: '',
+  linkedin: '',
+  credentials: [],
+};
+
 // Seções da home com href absoluto: funcionam também nas outras páginas (na própria
 // home, "/#x" é navegação no mesmo documento e rola suave).
 export const NAV = [

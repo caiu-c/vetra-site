@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { FOUNDER } from '@/config/site';
 import Hero from '@/components/Hero.astro';
 import Diagnosis from '@/components/Diagnosis.astro';
 import Capabilities from '@/components/Capabilities.astro';
@@ -8,6 +9,7 @@ import Indicators from '@/components/Indicators.astro';
 import Sectors from '@/components/Sectors.astro';
 import Cases from '@/components/Cases.astro';
 import Manifesto from '@/components/Manifesto.astro';
+import Founder from '@/components/Founder.astro';
 import Contact from '@/components/Contact.astro';
 ---
 
@@ -21,6 +23,7 @@ import Contact from '@/components/Contact.astro';
   <Indicators />
   <Sectors />
   <Cases />
-  <Manifesto />
+  {/* Quem conduz aparece quando FOUNDER.name for preenchido (auditoria A5). */}
+  {FOUNDER.name ? <Founder /> : <Manifesto />}
   <Contact />
 </BaseLayout>
