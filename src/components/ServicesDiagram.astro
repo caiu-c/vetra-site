@@ -1,0 +1,80 @@
+---
+import ApertureGlyph from './ApertureGlyph.astro';
+import { SERVICES } from '@/data/services';
+
+/*
+  "Quatro serviços, uma base só" em diagrama (ADR-011): os sistemas da empresa entram
+  na base (Engenharia de dados) e os outros três serviços se apoiam nela. Cada bloco
+  leva à linha do serviço logo abaixo (#servico-{slug}). Feixes subindo pelas linhas
+  (.flow-line em global.css), desligados com reduced motion.
+  TODO: validar a lista de fontes com o que os clientes costumam ter.
+*/
+const [base, ...top] = SERVICES;
+const sources = ['ERP', 'CRM', 'Loja online', 'Planilhas'] as const;
+---
+
+<nav class="rounded-[20px] bg-surface p-5 md:p-8" aria-label="Como os quatro serviços se encaixam">
+  <ul class="grid grid-cols-3 gap-2 md:gap-3">
+    {
+      top.map((s, i) => (
+        <li>
+          <a
+            href={`#servico-${s.slug}`}
+            class="group flex h-full flex-col gap-3 rounded-xl border border-line bg-canvas p-3 transition-colors hover:border-brand md:p-4"
+          >
+            <ApertureGlyph active={i + 1} size={28} />
+            <span class="text-meta font-semibold leading-tight text-ink group-hover:text-brand">
+              {s.name}
+            </span>
+            <span class="text-xs leading-snug text-muted">{s.tagline}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="grid grid-cols-3" aria-hidden="true">
+    {
+      top.map((_, i) => (
+        <span class="flow-line mx-auto h-8 md:h-10" style={`--delay:${i * 0.4}s`} />
+      ))
+    }
+  </div>
+
+  <a
+    href={`#servico-${base.slug}`}
+    class="group flex items-center justify-between gap-4 rounded-xl bg-ink px-4 py-4 text-white transition-colors hover:bg-brand md:px-5 md:py-5"
+  >
+    <span class="flex items-center gap-3">
+      <ApertureGlyph active={0} size={32} tone="dark" class="group-hover:[&_*]:stroke-white" />
+      <span class="flex flex-col">
+        <span class="font-expanded text-body font-semibold md:text-h4">{base.name}</span>
+        <span class="text-xs text-on-deep-muted group-hover:text-white"
+          >A base que sustenta os outros três</span
+        >
+      </span>
+    </span>
+    <span class="shrink-0 rounded-full border border-white/25 px-3 py-1 text-xs font-medium"
+      >base única</span
+    >
+  </a>
+
+  <div class="grid grid-cols-4" aria-hidden="true">
+    {
+      sources.map((_, i) => (
+        <span class="flow-line mx-auto h-8 md:h-10" style={`--delay:${0.2 + i * 0.35}s`} />
+      ))
+    }
+  </div>
+
+  <ul class="grid grid-cols-4 gap-2" aria-label="Sistemas que já existem na empresa">
+    {
+      sources.map((s) => (
+        <li class="rounded-full border border-line-strong bg-canvas px-2 py-1.5 text-center text-xs text-ink">
+          {s}
+        </li>
+      ))
+    }
+  </ul>
+  <p class="mt-3 text-center text-xs text-muted">Os sistemas que a sua empresa já usa</p>
+</nav>

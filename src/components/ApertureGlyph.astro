@@ -9,10 +9,14 @@ interface Props {
   /** Índice da peça em destaque (0–3, na ordem de SERVICES). */
   active: number;
   size?: number;
+  /** Fundo claro (padrão) ou Tinta: no escuro, peça em brand-light e o resto em line-deep. */
+  tone?: 'light' | 'dark';
   class?: string;
 }
 
-const { active, size = 40, class: className } = Astro.props;
+const { active, size = 40, tone = 'light', class: className } = Astro.props;
+const on = tone === 'dark' ? '#6A8CF7' : '#1640D6';
+const off = tone === 'dark' ? '#3A4A78' : '#DCE1EA';
 
 const pieces = [
   { kind: 'path', d: 'M8 10 L28 46 L48 10' },
@@ -35,12 +39,12 @@ const pieces = [
       p.kind === 'path' ? (
         <path
           d={p.d}
-          stroke={k === active ? '#1640D6' : '#DCE1EA'}
+          stroke={k === active ? on : off}
           stroke-width={k === active ? 2.4 : 1.6}
           stroke-linecap="square"
         />
       ) : (
-        <circle cx="28" cy="46" r={k === active ? 3.4 : 2.2} fill={k === active ? '#1640D6' : '#DCE1EA'} />
+        <circle cx="28" cy="46" r={k === active ? 3.4 : 2.2} fill={k === active ? on : off} />
       ),
     )
   }

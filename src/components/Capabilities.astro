@@ -2,6 +2,7 @@
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
 import ApertureGlyph from './ApertureGlyph.astro';
+import ServicesDiagram from './ServicesDiagram.astro';
 import { SERVICES, serviceUrl } from '@/data/services';
 import ServiceMockup from './mockups/ServiceMockup.astro';
 import { emphasize } from '@/lib/emphasis';
@@ -16,16 +17,23 @@ import { emphasize } from '@/lib/emphasis';
 <section id="servicos" class="bg-canvas">
   <div class="wrap py-24 md:py-32">
     {/* TODO: validar texto (auditoria A11) */}
-    <SectionHeader
-      title="Quatro serviços, *uma base só*."
-      description="Começamos pela base de dados e, sobre ela, entregamos indicadores, IA e automações. Cada serviço funciona sozinho e rende mais com o anterior."
-    />
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <SectionHeader
+        title="Quatro serviços, *uma base só*."
+        description="Começamos pela **base de dados** e, sobre ela, entregamos indicadores, IA e automações. Cada serviço funciona sozinho e rende mais com o anterior."
+      />
+      {/* O "uma base só" desenhado (ADR-011) */}
+      <ServicesDiagram />
+    </div>
 
     <ul class="mt-16 flex flex-col">
       {
         SERVICES.map(({ slug, name, outcome, summary, highlights }, i) => {
           return (
-            <li class="grid grid-cols-1 items-center gap-10 border-t border-line py-14 md:py-20 lg:grid-cols-2 lg:gap-20">
+            <li
+              id={`servico-${slug}`}
+              class="grid grid-cols-1 items-center gap-10 border-t border-line py-14 md:py-20 lg:grid-cols-2 lg:gap-20"
+            >
               <div class:list={['flex flex-col gap-6', i % 2 === 1 && 'lg:order-2']}>
                 <div class="flex items-center gap-3">
                   <ApertureGlyph active={i} size={32} />

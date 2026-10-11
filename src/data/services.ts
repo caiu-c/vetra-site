@@ -23,6 +23,8 @@ export interface Service {
   pain: string;
   /** O que a Vetra faz, em uma frase, sem jargão. `**…**` = negrito (ADR-011). */
   summary: string;
+  /** Rótulo curto do que entrega (diagrama da home, ServicesDiagram.astro). */
+  tagline: string;
   /** Para quem é (subtítulo da página). */
   audience: string;
   /** Três entregáveis em palavras simples (card da home). */
@@ -47,6 +49,7 @@ export const SERVICES: readonly Service[] = [
     pain: 'Os números de cada área vêm de planilhas e sistemas diferentes, e ninguém sabe qual está certo.',
     summary:
       'Reunimos os dados de todos os sistemas numa base só, atualizada **sozinha** e com testes que avisam quando algo sai do padrão.',
+    tagline: 'Base única e confiável',
     audience:
       'Para empresas que já têm ERP, CRM e planilhas, mas gastam horas conciliando números antes de cada reunião.',
     highlights: [
@@ -91,6 +94,7 @@ export const SERVICES: readonly Service[] = [
     pain: 'Os relatórios chegam atrasados e cada reunião começa discutindo qual número está certo.',
     summary:
       'Definimos os indicadores com cada área e entregamos painéis que se atualizam sozinhos, com a **mesma regra para todos**.',
+    tagline: 'Indicadores prontos',
     audience:
       'Para gestores que precisam acompanhar o negócio sem esperar alguém montar o relatório da semana.',
     highlights: [
@@ -135,6 +139,7 @@ export const SERVICES: readonly Service[] = [
     pain: 'A empresa testou IA, mas os pilotos não viraram rotina porque ninguém confia no resultado.',
     summary:
       'Colocamos a IA para executar tarefas reais, com regras claras, **revisão humana** nos pontos críticos e custo acompanhado.',
+    tagline: 'Tarefas com aprovação humana',
     audience:
       'Para operações com tarefas de texto, triagem ou consulta que tomam horas da equipe toda semana.',
     highlights: [
@@ -179,6 +184,7 @@ export const SERVICES: readonly Service[] = [
     pain: 'A equipe copia dados de um sistema para outro e confere tudo à mão.',
     summary:
       'Ligamos os sistemas entre si e automatizamos as rotinas repetitivas, com **aviso quando algo falha**.',
+    tagline: 'Rotinas sem digitação',
     audience:
       'Para equipes que passam parte do dia movendo informação entre ERP, planilhas, e-mail e outros sistemas.',
     highlights: [
