@@ -2,6 +2,7 @@
 import { BOOKING_URL } from '@/config/site';
 import SectionHeader from './SectionHeader.astro';
 import PipelineDiagram from './PipelineDiagram.astro';
+import { SERVICES } from '@/data/services';
 
 /*
   Cada capacidade é uma das 4 peças do símbolo aperture (coordenadas de
@@ -16,63 +17,22 @@ const pieces = [
   { kind: 'dot' },
 ] as const;
 
-/* Serviço descrito por resultado + entregáveis (referência Genux, ADR-006).
-   TODO: validar `outcome` e `deliverables` (rascunho do redesign a partir da stack). */
-const capabilities = [
-  {
-    title: 'Bancos de dados',
-    outcome: 'Uma base única e confiável para a empresa inteira.',
-    desc: 'Modelagem, ETL/ELT, infraestrutura confiável.',
-    deliverables: [
-      'Modelagem de dados',
-      'Pipelines ETL/ELT com dbt e Airflow',
-      'Data warehouse em Snowflake ou PostgreSQL',
-    ],
-  },
-  {
-    title: 'Dashboards',
-    outcome: 'Indicadores que viram decisão, não planilha.',
-    desc: 'Camada analítica que vira decisão acionável.',
-    deliverables: [
-      'Camada semântica com métricas únicas',
-      'Dashboards executivos e operacionais',
-      'Acesso por área com governança',
-    ],
-  },
-  {
-    title: 'Agentes de IA',
-    outcome: 'IA em produção, com supervisão humana.',
-    desc: 'Sistemas autônomos com guardrails e observabilidade.',
-    deliverables: [
-      'Agentes com LangChain',
-      'Guardrails e revisão humana',
-      'Monitoramento de custo e qualidade',
-    ],
-  },
-  {
-    title: 'Automações',
-    outcome: 'Menos trabalho manual entre sistemas.',
-    desc: 'RPA, orquestração, integração de sistemas.',
-    deliverables: [
-      'Integrações via API',
-      'Orquestração de rotinas',
-      'RPA para tarefas repetitivas',
-    ],
-  },
-] as const;
+/* Serviços em linguagem de negócio (auditoria A11): resultado → o que fazemos →
+   três entregáveis em palavras simples. Os dados vêm de src/data/services.ts, a mesma
+   fonte das páginas /servicos/[slug]. */
 ---
 
 <section id="servicos" class="bg-canvas">
   <div class="wrap py-24 md:py-32">
-    {/* TODO: validar description (texto novo do redesign, não aprovado) */}
+    {/* TODO: validar texto (auditoria A11) */}
     <SectionHeader
-      title="Quatro camadas. Um sistema."
-      description="Da infraestrutura ao agente autônomo: cada camada é projetada para sustentar a seguinte."
+      title="Quatro serviços, uma base só."
+      description="Começamos pela base de dados e, sobre ela, entregamos indicadores, IA e automações. Cada serviço funciona sozinho e rende mais com o anterior."
     />
 
     <ul class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6" data-layers>
       {
-        capabilities.map(({ title, outcome, desc, deliverables }, i) => (
+        SERVICES.map(({ name, outcome, summary, highlights }, i) => (
           <li
             class="flex flex-col gap-5 rounded-[20px] border border-line p-6 md:p-10"
             data-layer={i}
@@ -104,15 +64,15 @@ const capabilities = [
                   ),
                 )}
               </svg>
-              <h3 class="text-body font-semibold text-ink">{title}</h3>
+              <h3 class="text-body font-semibold text-ink">{name}</h3>
             </div>
             <p class="font-expanded text-balance text-h3 font-semibold tracking-heading text-ink">
               {outcome}
             </p>
-            <p class="max-w-[28rem] text-body text-muted">{desc}</p>
+            <p class="max-w-[30rem] text-body text-muted">{summary}</p>
             <ul class="mt-auto flex flex-col gap-2.5 border-t border-line pt-5">
-              {deliverables.map((d) => (
-                <li class="flex items-baseline gap-3 text-meta text-ink">
+              {highlights.map((d) => (
+                <li class="flex items-baseline gap-3 text-body text-ink">
                   <span class="h-1.5 w-1.5 shrink-0 -translate-y-0.5 rounded-full bg-brand" aria-hidden="true" />
                   {d}
                 </li>
@@ -123,13 +83,12 @@ const capabilities = [
       }
     </ul>
 
-    {/* TODO: validar texto (novo do redesign, não aprovado) */}
+    {/* TODO: validar texto (auditoria A11/A12: só referencia o diagnóstico, explicado em Diagnosis.astro) */}
     <div
       class="mt-6 flex flex-col gap-6 rounded-[20px] bg-surface p-6 md:flex-row md:items-center md:justify-between md:p-10"
     >
       <p class="max-w-[40rem] text-lead text-ink">
-        Não sabe por onde começar? O diagnóstico mapeia o seu sistema e aponta qual camada
-        construir primeiro.
+        Não sabe qual serviço vem primeiro? É isso que o diagnóstico gratuito responde.
       </p>
       <a
         href={BOOKING_URL}
